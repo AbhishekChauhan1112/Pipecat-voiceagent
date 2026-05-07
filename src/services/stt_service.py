@@ -9,7 +9,7 @@ orchestrator stays provider-agnostic.
 
 from loguru import logger
 
-from pipecat.services.deepgram import DeepgramSTTService
+from pipecat.services.deepgram.stt import DeepgramSTTService
 from pipecat.transcriptions.language import Language
 
 from src.config import AgentConfig

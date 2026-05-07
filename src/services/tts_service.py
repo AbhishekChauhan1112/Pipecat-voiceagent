@@ -15,7 +15,7 @@ Latency strategy:
 
 from loguru import logger
 
-from pipecat.services.elevenlabs import ElevenLabsTTSService
+from pipecat.services.elevenlabs.tts import ElevenLabsTTSService
 
 from src.config import AgentConfig
 
