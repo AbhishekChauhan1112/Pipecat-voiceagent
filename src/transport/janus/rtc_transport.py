@@ -19,13 +19,15 @@ class ToneAudioTrack(AudioStreamTrack):
         self.samples_per_frame = 960
 
         self.phase = 0
+        self._pts = 0
 
         self.frequency = 440.0
 
         print("[TONE_TRACK] initialized")
 
     async def recv(self):
-        pts, time_base = await self.next_timestamp()
+        # Use aiortc scheduler for pacing only — override pts manually
+        await self.next_timestamp()
 
         t = (
             np.arange(self.samples_per_frame)
@@ -46,6 +48,7 @@ class ToneAudioTrack(AudioStreamTrack):
             mono * 32767
         ).astype(np.int16)
 
+        # stereo shape: (samples, 2) — packed interleaved stereo for PyAV
         stereo = np.column_stack(
             [mono, mono]
         )
@@ -57,15 +60,21 @@ class ToneAudioTrack(AudioStreamTrack):
         )
 
         frame.sample_rate = self.sample_rate
+        frame.pts = self._pts
+        frame.time_base = Fraction(1, self.sample_rate)
 
-        frame.pts = pts
-        frame.time_base = time_base
-
+        self._pts += self.samples_per_frame
         self.phase += self.samples_per_frame
 
         print(
-            f"[TONE_FRAME] pts={frame.pts}"
+            "[FRAME_INFO]",
+            frame.layout.name,
+            frame.format.name,
+            frame.samples,
+            frame.sample_rate,
+            frame.pts,
         )
+        print(f"[TONE_FRAME] pts={frame.pts}")
 
         return frame
 
