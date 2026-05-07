@@ -99,6 +99,12 @@ class FreeSwitchAudioSerializer(FrameSerializer):
                 f"bytes={len(out_audio)}"
             )
 
+            if getattr(frame, "sample_rate", 16000) != 16000:
+                logger.error(
+                    f"INVALID SAMPLE RATE {getattr(frame, 'sample_rate')} "
+                    f"EXPECTED 16000"
+                )
+
             self._tx_packets += 1
             self._tx_bytes += len(out_audio)
             
