@@ -78,16 +78,13 @@ class FreeSwitchAudioSerializer(FrameSerializer):
 
     async def serialize(self, frame: Frame) -> bytes | str | None:
         """Convert a Pipecat audio frame → raw PCM bytes for FreeSWITCH."""
-        if isinstance(frame, AudioRawFrame):
-            out_audio = frame.audio
-
+        out_audio = getattr(frame, "audio", None)
+        if out_audio is not None and isinstance(out_audio, bytes):
             # FreeSWITCH in 'stereo' mode REQUIRES stereo interleaved audio for write-back.
-            # Since pipecat.lua bypasses the JSON handshake, we forcefully apply stereo 
-            # duplication here to ensure FreeSWITCH media bug receives valid frames.
             if len(out_audio) >= 2:
                 # Fast mono->stereo duplication: copy each 2-byte sample
                 pairs = [out_audio[i:i+2] for i in range(0, len(out_audio), 2)]
-                out_audio = b''.join(p + p for p in pairs)
+                out_audio = b"".join(p + p for p in pairs)
 
             self._tx_packets += 1
             self._tx_bytes += len(out_audio)
@@ -96,11 +93,11 @@ class FreeSwitchAudioSerializer(FrameSerializer):
                 logger.info(
                     "Serializer: first audio OUT packet sent to FreeSWITCH",
                     bytes=len(out_audio),
-                    sample_rate=frame.sample_rate,
+                    sample_rate=getattr(frame, "sample_rate", 16000),
                     channels=self._num_channels,
                 )
             elif self._tx_packets % 200 == 0:
-                logger.debug(
+                logger.info(
                     "Serializer: audio OUT stats",
                     packets=self._tx_packets,
                     total_bytes=self._tx_bytes,

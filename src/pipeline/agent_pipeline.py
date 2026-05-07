@@ -96,7 +96,7 @@ class DebugFrameLogger(FrameProcessor):
         elif isinstance(frame, TTSStoppedFrame):
             logger.info(f"[{self._label}] 🔇 TTS STOPPED")
         elif isinstance(frame, TTSAudioRawFrame):
-            logger.debug(
+            logger.info(
                 f"[{self._label}] 🎵 TTS AUDIO: {len(frame.audio)} bytes "
                 f"rate={frame.sample_rate}"
             )
@@ -234,9 +234,9 @@ class TelephonyAgentPipeline:
                 llm,                    # 5. Groq LLM
                 dbg_after_llm,          #    ← debug: LLM token stream
                 tts,                    # 6. ElevenLabs TTS
-                ctx.assistant(),        # 7. store bot reply (passes audio through)
                 dbg_after_tts,          #    ← debug: TTS audio reaching transport
                 transport.output(),     # 8. raw PCM → FreeSWITCH → caller
+                ctx.assistant(),        # 7. store bot reply (passes audio through)
             ]
         )
         logger.debug(f"[{sid}] Pipeline assembled with 8 stages + 5 debug observers")
