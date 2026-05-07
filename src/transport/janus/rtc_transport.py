@@ -26,6 +26,7 @@ class RTCTransport:
         if self.pc and self.pc.connectionState != "closed":
             return
         self.pc = RTCPeerConnection()
+        self.pc.addTransceiver("audio", direction="recvonly")
         self._setup_events()
 
     def _setup_events(self):
@@ -129,7 +130,7 @@ class RTCTransport:
                 return
 
         logger.info("Adding local track: %s", track.kind)
-        self.pc.addTrack(track)
+        # self.pc.addTrack(track)
 
     async def create_offer(self) -> dict:
         """Create an SDP offer to send to Janus."""
