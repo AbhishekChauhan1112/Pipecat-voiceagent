@@ -46,6 +46,7 @@ def build_elevenlabs_tts(config: AgentConfig) -> ElevenLabsTTSService:
             model=config.elevenlabs_model,
             stability=config.elevenlabs_stability,
             similarity_boost=config.elevenlabs_similarity_boost,
+            output_format="pcm_16000",
         ),
         # auto_mode=True is optimal for sentence-aggregated input
         # (disables server-side chunk scheduling for lower latency)

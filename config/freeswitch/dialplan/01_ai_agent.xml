@@ -39,23 +39,8 @@
         <!-- Brief pause so Linphone's RTP negotiation settles before streaming starts -->
         <action application="sleep" data="500"/>
 
-        <!--
-          Start mod_audio_stream.
-          Syntax: audio_stream <websocket_url> <sample_rate> <channels>
-          
-          - ws://127.0.0.1:8765/ws  : Pipecat WebSocket on same server (loopback)
-          - 16000                   : 16 kHz — best quality for Deepgram
-          - mono                    : single channel (phone calls are always mono)
-          
-          mod_audio_stream BLOCKS here until:
-            a) The WebSocket disconnects (Pipecat server stops)
-            b) Linphone hangs up
-            c) FreeSWITCH executes a hangup action
-        -->
-        <action application="audio_stream" data="ws://127.0.0.1:8765/ws 16000 mono"/>
-
-        <!-- After audio_stream returns, hang up the call cleanly -->
-        <action application="hangup"/>
+        <!-- Execute the pipecat.lua script which uses uuid_audio_stream API -->
+        <action application="lua" data="pipecat.lua"/>
 
       </condition>
     </extension>

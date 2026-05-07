@@ -81,9 +81,10 @@ class FreeSwitchAudioSerializer(FrameSerializer):
         if isinstance(frame, AudioRawFrame):
             out_audio = frame.audio
 
-            # If FreeSWITCH expects stereo, we must duplicate the mono TTS audio
-            # into left and right channels for playback
-            if self._num_channels == 2 and len(out_audio) >= 2:
+            # FreeSWITCH in 'stereo' mode REQUIRES stereo interleaved audio for write-back.
+            # Since pipecat.lua bypasses the JSON handshake, we forcefully apply stereo 
+            # duplication here to ensure FreeSWITCH media bug receives valid frames.
+            if len(out_audio) >= 2:
                 # Fast mono->stereo duplication: copy each 2-byte sample
                 pairs = [out_audio[i:i+2] for i in range(0, len(out_audio), 2)]
                 out_audio = b''.join(p + p for p in pairs)
