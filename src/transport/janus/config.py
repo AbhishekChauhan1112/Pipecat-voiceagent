@@ -20,3 +20,10 @@ DISPLAY_NAME = os.getenv("JANUS_DISPLAY_NAME", "pipecat-voiceagent")
 
 # Keepalive interval in seconds
 KEEPALIVE_INTERVAL = int(os.getenv("JANUS_KEEPALIVE_INTERVAL", "30"))
+
+# SIP plugin orchestration settings
+SIP_REGISTER_ENABLED = os.getenv("SIP_REGISTER_ENABLED", "false").lower() == "true"
+SIP_GUEST_MODE = os.getenv("SIP_GUEST_MODE", "true").lower() == "true"
+SIP_USERNAME = os.getenv("SIP_USERNAME", "")
+SIP_SECRET = os.getenv("SIP_SECRET", "")
+SIP_PROXY = os.getenv("SIP_PROXY", "")

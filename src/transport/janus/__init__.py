@@ -1,12 +1,16 @@
 """Janus WebRTC transport integration."""
 
-from .janus_client import JanusClient
+from .audiobridge_controller import AudioBridgeController
+from .janus_orchestrator import JanusOrchestrator
 from .media_bridge import MediaBridge, MediaBridgeOutputProcessor, PipecatTTSAudioTrack
 from .rtc_transport import RTCTransport
+from .sip_controller import SipController
 from .transport_manager import JanusTransportManager
 
 __all__ = [
-    "JanusClient",
+    "JanusOrchestrator",
+    "SipController",
+    "AudioBridgeController",
     "MediaBridge",
     "MediaBridgeOutputProcessor",
     "PipecatTTSAudioTrack",
