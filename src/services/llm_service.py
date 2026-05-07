@@ -1,44 +1,27 @@
 """
-Groq LLM Service wrapper.
+Groq LLM Service wrapper — Pipecat 0.0.108 compatible.
 
-Factory layer that constructs a ``GroqLLMService`` and injects
-the agent's system prompt as the first message in every conversation.
+Factory that constructs a GroqLLMService and an OpenAI-style context
+aggregator pair for conversation memory.
 
-Design decisions:
-- Context aggregators (OpenAI-style) are created here and returned alongside
-  the LLM service so the pipeline can wire them correctly around the LLM.
-- Temperature and max_tokens are passed through OpenAI-compat kwargs.
-- A custom ``LLMUserResponseAggregator`` captures user speech and a
-  ``LLMAssistantResponseAggregator`` captures bot responses for memory.
+In Pipecat >=0.0.105, create_context_aggregator() returns a single
+aggregator pair object with .user() and .assistant() methods.
 """
 
 from loguru import logger
 
-from pipecat.services.groq import GroqLLMService
-from pipecat.processors.aggregators.openai_llm_context import (
-    OpenAILLMContext,
-    OpenAILLMContextAggregator,
-)
+from pipecat.services.groq.llm import GroqLLMService
+from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
 
 from src.config import AgentConfig
 
 
-def build_groq_llm(
-    config: AgentConfig,
-) -> tuple[GroqLLMService, OpenAILLMContextAggregator, OpenAILLMContextAggregator]:
-    """Construct a GroqLLMService plus paired context aggregators.
-
-    The context aggregators maintain conversation history (user + assistant
-    turns) so the LLM always has the full conversation in its context window.
-
-    Args:
-        config: Validated agent configuration object.
+def build_groq_llm(config: AgentConfig):
+    """Construct a GroqLLMService plus a context aggregator pair.
 
     Returns:
-        Tuple of:
-          - ``llm``: configured GroqLLMService
-          - ``user_aggregator``: aggregates user speech turns
-          - ``assistant_aggregator``: aggregates assistant response turns
+        Tuple of (llm, context_aggregator) where context_aggregator
+        exposes .user() and .assistant() pipeline processors.
     """
     logger.debug(
         "Building Groq LLM service",
@@ -49,32 +32,21 @@ def build_groq_llm(
 
     llm = GroqLLMService(
         api_key=config.groq_api_key,
-        settings=GroqLLMService.Settings(
-            model=config.groq_model,
-            temperature=config.llm_temperature,
-            max_tokens=config.llm_max_tokens,
-        ),
+        model=config.groq_model,
     )
 
-    # Initialise conversation context with the system prompt.
-    # OpenAILLMContext is the standard Pipecat context object; it tracks
-    # all messages and is automatically passed between aggregators and LLM.
-    messages = [
-        {
-            "role": "system",
-            "content": config.system_prompt,
-        }
-    ]
+    # Seed the conversation with the system prompt.
+    messages = [{"role": "system", "content": config.system_prompt}]
     context = OpenAILLMContext(messages=messages)
 
-    # Create paired aggregators. These act as Frame Processors in the pipeline:
-    #   user_aggregator   → collects TranscriptionFrames → emits LLMMessagesFrame
-    #   assistant_aggregator → collects LLM text tokens → stores them in context
-    user_aggregator, assistant_aggregator = llm.create_context_aggregator(context)
+    # create_context_aggregator returns a pair object (not a tuple).
+    # Use  ctx.user()      in the pipeline before the LLM.
+    # Use  ctx.assistant() in the pipeline after the LLM.
+    context_aggregator = llm.create_context_aggregator(context)
 
     logger.info(
         "Groq LLM service ready",
         model=config.groq_model,
         system_prompt_chars=len(config.system_prompt),
     )
-    return llm, user_aggregator, assistant_aggregator
+    return llm, context_aggregator

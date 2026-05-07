@@ -38,7 +38,7 @@ from pipecat.frames.frames import LLMMessagesFrame
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
-from pipecat.transports.network.fastapi_websocket import (
+from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketParams,
     FastAPIWebsocketTransport,
 )
@@ -120,7 +120,7 @@ class TelephonyAgentPipeline:
 
         # ── AI Services ──────────────────────────────────────────────────────
         stt = build_deepgram_stt(self.config)
-        llm, user_ctx, assistant_ctx = build_groq_llm(self.config)
+        llm, ctx = build_groq_llm(self.config)
         tts = build_elevenlabs_tts(self.config)
 
         # ── Pipeline ─────────────────────────────────────────────────────────
@@ -128,10 +128,10 @@ class TelephonyAgentPipeline:
             [
                 transport.input(),       # 1. raw PCM from FreeSWITCH
                 stt,                     # 2. Deepgram streaming STT
-                user_ctx.user(),         # 3. accumulate turns → LLM context
+                ctx.user(),              # 3. accumulate turns → LLM context
                 llm,                     # 4. Groq streaming LLM
                 tts,                     # 5. ElevenLabs streaming TTS
-                assistant_ctx.assistant(),  # 6. store bot reply in memory
+                ctx.assistant(),         # 6. store bot reply in memory
                 transport.output(),      # 7. raw PCM back to FreeSWITCH
             ]
         )
