@@ -3,13 +3,13 @@ import logging
 import signal
 import sys
 
-from pipecat.frames.frames import InputAudioRawFrame
+from pipecat.frames.frames import EndFrame, InputAudioRawFrame
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
 
 from src.config import AgentConfig
 from src.pipeline.agent_pipeline import TelephonyAgentPipeline
-from .config import AUDIO_CHANNELS, AUDIO_SAMPLE_RATE
+from .config import AUDIO_CHANNELS, AUDIO_SAMPLE_RATE, ROOM_ID
 from .janus_client import JanusClient
 from .media_bridge import MediaBridge, PipecatTTSAudioTrack
 from .rtc_transport import RTCTransport
@@ -20,40 +20,105 @@ logger = logging.getLogger(__name__)
 class JanusTransportManager:
     def __init__(self, config: AgentConfig) -> None:
         self.config = config
+
         self.media_bridge = MediaBridge(
             sample_rate=self.config.sample_rate,
             channels=AUDIO_CHANNELS,
         )
         self.rtc = RTCTransport(media_bridge=self.media_bridge)
         self.client = JanusClient(self.rtc)
-        self.pipeline = TelephonyAgentPipeline(config=self.config, media_bridge=self.media_bridge)
 
         self._pipeline_task = None
         self._runner_task = None
         self._feed_task = None
+
         self._stop_event = asyncio.Event()
+        self._state_lock = asyncio.Lock()
+        self._call_active = False
 
     async def start(self) -> None:
-        await self._start_pipeline()
-        await self._start_janus()
+        # Signaling is initialized at startup, but media is call-driven.
+        await self.client.connect()
+        await self.client.create_session()
+        await self.client.attach_plugin()
+        logger.info("[IDLE] waiting for caller in room %s", ROOM_ID)
+
+        await self._monitor_loop()
 
     async def stop(self) -> None:
         self._stop_event.set()
-        if self._feed_task:
-            self._feed_task.cancel()
-        if self._runner_task:
-            self._runner_task.cancel()
-        await self.media_bridge.stop()
+        await self._disconnect_call()
         await self.client.close()
-        await self.rtc.close()
 
     async def wait_for_shutdown(self) -> None:
         await self._stop_event.wait()
 
+    async def _monitor_loop(self) -> None:
+        while not self._stop_event.is_set():
+            try:
+                participants = await self.client.list_participants()
+                participant_count = len(participants)
+            except Exception as exc:
+                logger.warning("Participant polling failed: %s", exc)
+                await asyncio.sleep(1.0)
+                continue
+
+            # Before join, any participant means caller exists.
+            if not self._call_active and participant_count > 0:
+                logger.info("[CALL_DETECTED] participant joined room (count=%s)", participant_count)
+                await self._connect_call()
+            # After join, room usually contains caller + this agent.
+            elif self._call_active and participant_count <= 1:
+                logger.info("[CALL_ENDED] participants remaining=%s", participant_count)
+                await self._disconnect_call()
+
+            await asyncio.sleep(1.0)
+
+    async def _connect_call(self) -> None:
+        async with self._state_lock:
+            if self._call_active:
+                return
+
+            logger.info("[CONNECTING] joining Janus room and starting media")
+
+            # Fresh PeerConnection per call.
+            self.rtc.initialize()
+            outbound_track = PipecatTTSAudioTrack(self.media_bridge)
+            self.rtc.add_track(outbound_track)
+
+            await self.client.join_room()
+            await self.client.configure_webrtc()
+            self._call_active = True
+            await self._start_pipeline()
+            logger.info("[CONNECTED] media active")
+
+    async def _disconnect_call(self) -> None:
+        async with self._state_lock:
+            if not self._call_active and not self._pipeline_task:
+                return
+
+            logger.info("[DISCONNECTING] cleaning up transport")
+
+            await self._stop_pipeline()
+
+            try:
+                await self.client.leave_room()
+            except Exception as exc:
+                logger.warning("Leave room failed: %s", exc)
+
+            await self.media_bridge.stop()
+            self._drain_queue(self.media_bridge.inbound_queue)
+            self._drain_queue(self.media_bridge.outbound_queue)
+
+            await self.rtc.close()
+
+            self._call_active = False
+            logger.info("[IDLE] waiting for caller in room %s", ROOM_ID)
+
     async def _start_pipeline(self) -> None:
-        pipeline = self.pipeline.build_pipeline()
+        pipeline = TelephonyAgentPipeline(config=self.config, media_bridge=self.media_bridge)
         task = PipelineTask(
-            pipeline,
+            pipeline.build_pipeline(),
             params=PipelineParams(
                 allow_interruptions=True,
                 enable_metrics=True,
@@ -67,17 +132,30 @@ class JanusTransportManager:
         self._feed_task = asyncio.create_task(self._feed_inbound_audio())
         logger.info("Pipeline runner started")
 
-    async def _start_janus(self) -> None:
-        await self.client.connect()
-        await self.client.create_session()
-        await self.client.attach_plugin()
+    async def _stop_pipeline(self) -> None:
+        if self._pipeline_task:
+            try:
+                await self._pipeline_task.queue_frames([EndFrame()])
+            except Exception:
+                pass
 
-        outbound_track = PipecatTTSAudioTrack(self.media_bridge)
-        self.rtc.add_track(outbound_track)
+        if self._feed_task:
+            self._feed_task.cancel()
+            try:
+                await self._feed_task
+            except asyncio.CancelledError:
+                pass
+            self._feed_task = None
 
-        await self.client.join_room()
-        await self.client.configure_webrtc()
-        logger.info("Janus AudioBridge connected")
+        if self._runner_task:
+            self._runner_task.cancel()
+            try:
+                await self._runner_task
+            except asyncio.CancelledError:
+                pass
+            self._runner_task = None
+
+        self._pipeline_task = None
 
     async def _feed_inbound_audio(self) -> None:
         while not self._stop_event.is_set():
@@ -87,7 +165,18 @@ class JanusTransportManager:
                 num_channels=1,
                 sample_rate=AUDIO_SAMPLE_RATE,
             )
-            await self._pipeline_task.queue_frames([frame])
+            if not self._call_active:
+                continue
+            if self._pipeline_task:
+                await self._pipeline_task.queue_frames([frame])
+
+    @staticmethod
+    def _drain_queue(queue: asyncio.Queue) -> None:
+        while not queue.empty():
+            try:
+                queue.get_nowait()
+            except asyncio.QueueEmpty:
+                break
 
 
 async def run_manager(config: AgentConfig) -> None:
@@ -107,9 +196,8 @@ async def run_manager(config: AgentConfig) -> None:
         pass
 
     try:
-        await manager.start()
         logger.info("Janus transport manager running")
-        await manager.wait_for_shutdown()
+        await manager.start()
     except Exception as exc:
         logger.error("Transport manager error: %s", exc, exc_info=True)
     finally:

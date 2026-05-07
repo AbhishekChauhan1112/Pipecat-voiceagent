@@ -17,6 +17,7 @@ from loguru import logger
 
 from src.config import get_config
 from src.logging_utils import setup_logging
+from src.transport.janus.config import ROOM_ID
 from src.transport.janus.transport_manager import run_manager
 
 
@@ -57,7 +58,7 @@ def main() -> None:
     logger.info(f"  TTS          : ElevenLabs {config.elevenlabs_model}")
     logger.info(f"  Sample rate  : {config.sample_rate} Hz")
     logger.info("  Transport    : Janus AudioBridge via aiortc")
-    logger.info("  Room         : 7007")
+    logger.info(f"  Room         : {ROOM_ID}")
     logger.info("")
     logger.info("  Waiting for Linphone to call via FreeSWITCH…")
 

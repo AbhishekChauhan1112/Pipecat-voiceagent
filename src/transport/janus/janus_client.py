@@ -28,6 +28,7 @@ class JanusClient:
         self.receive_task = None
         self.running = False
         self._joined_event = asyncio.Event()
+        self.participant_id = None
 
     async def connect(self):
         """Connect to Janus WebSocket and start receive loop."""
@@ -125,6 +126,7 @@ class JanusClient:
 
         event_type = data.get("audiobridge")
         if event_type == "joined":
+            self.participant_id = data.get("id")
             logger.info(
                 "Successfully joined AudioBridge room %s as participant %s",
                 data.get("room"),
@@ -202,6 +204,40 @@ class JanusClient:
             await asyncio.wait_for(self._joined_event.wait(), timeout=10.0)
         except asyncio.TimeoutError:
             raise Exception("Timed out waiting for Janus AudioBridge 'joined' event")
+
+    async def list_participants(self) -> list[dict]:
+        """List current participants in the configured AudioBridge room."""
+        payload = {
+            "janus": "message",
+            "body": {
+                "request": "listparticipants",
+                "room": config.ROOM_ID,
+            },
+        }
+        response = await self._send_request(payload)
+        data = response.get("plugindata", {}).get("data", {})
+        participants = data.get("participants", [])
+        if not isinstance(participants, list):
+            return []
+        return participants
+
+    async def leave_room(self) -> None:
+        """Leave the configured AudioBridge room if currently joined."""
+        if not self._joined_event.is_set():
+            return
+
+        payload = {
+            "janus": "message",
+            "body": {
+                "request": "leave",
+                "room": config.ROOM_ID,
+            },
+        }
+        try:
+            await self._send_request(payload)
+        finally:
+            self._joined_event.clear()
+            self.participant_id = None
 
     async def configure_webrtc(self):
         """Send SDP offer to Janus to configure WebRTC media."""

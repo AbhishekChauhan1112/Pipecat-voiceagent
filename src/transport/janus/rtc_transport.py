@@ -11,9 +11,16 @@ logger = logging.getLogger(__name__)
 
 class RTCTransport:
     def __init__(self, media_bridge=None):
-        self.pc = RTCPeerConnection()
+        self.pc = None
         self.audio_receivers = []
         self.media_bridge = media_bridge
+        self.initialize()
+
+    def initialize(self):
+        """Initialize a fresh PeerConnection if one is not active."""
+        if self.pc and self.pc.connectionState != "closed":
+            return
+        self.pc = RTCPeerConnection()
         self._setup_events()
 
     def _setup_events(self):
@@ -51,11 +58,22 @@ class RTCTransport:
 
     def add_track(self, track):
         """Add a local MediaStreamTrack to the PeerConnection."""
+        if not self.pc:
+            raise RuntimeError("PeerConnection not initialized")
+
+        for sender in self.pc.getSenders():
+            if sender.track is track:
+                logger.debug("Track already added, skipping duplicate sender")
+                return
+
         logger.info("Adding local track: %s", track.kind)
         self.pc.addTrack(track)
 
     async def create_offer(self) -> dict:
         """Create an SDP offer to send to Janus."""
+        if not self.pc:
+            raise RuntimeError("PeerConnection not initialized")
+
         logger.info("Creating SDP offer...")
         offer = await self.pc.createOffer()
         await self.pc.setLocalDescription(offer)
@@ -80,12 +98,19 @@ class RTCTransport:
 
     async def set_remote_answer(self, sdp: str, type: str = "answer"):
         """Set the remote description from Janus."""
+        if not self.pc:
+            raise RuntimeError("PeerConnection not initialized")
+
         logger.info("Setting remote description (answer)...")
         answer = RTCSessionDescription(sdp=sdp, type=type)
         await self.pc.setRemoteDescription(answer)
 
     async def add_ice_candidate(self, candidate_info: dict):
         """Add a trickle ICE candidate received from Janus."""
+        if not self.pc:
+            logger.debug("Ignoring ICE candidate because PeerConnection is not initialized")
+            return
+
         if candidate_info.get("completed"):
             logger.info("Remote ICE gathering completed.")
             return
@@ -111,5 +136,7 @@ class RTCTransport:
             await receiver.stop()
         self.audio_receivers.clear()
 
-        await self.pc.close()
+        if self.pc:
+            await self.pc.close()
+            self.pc = None
         logger.info("RTCTransport closed.")
