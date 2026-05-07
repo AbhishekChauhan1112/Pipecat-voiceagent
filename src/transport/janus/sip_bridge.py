@@ -20,6 +20,10 @@ class SipBridge:
         self._incoming_event = asyncio.Event()
         self._accepted_event = asyncio.Event()
         self._hangup_event = asyncio.Event()
+        self._incoming_offer_handler = None
+
+    def set_incoming_offer_handler(self, handler) -> None:
+        self._incoming_offer_handler = handler
 
     async def attach(self) -> int:
         logger.warning("[SIP_ATTACH] attaching janus.plugin.sip")
@@ -104,6 +108,12 @@ class SipBridge:
             self.call_state.active = False
             self._incoming_event.set()
             logger.warning("[SIP_INCOMING_CALL] call_id=%s from=%s", call_id, self.call_state.username)
+
+            jsep = message.get("jsep")
+            if jsep and jsep.get("type") == "offer" and self._incoming_offer_handler:
+                logger.warning("[SIP_INCOMINGCALL_OFFER] call_id=%s offer received, preparing accept", call_id)
+                await self._incoming_offer_handler(call_id, jsep, message)
+
             await self.orchestrator.room_controller.on_sip_call_received(self.call_state)
             return
 

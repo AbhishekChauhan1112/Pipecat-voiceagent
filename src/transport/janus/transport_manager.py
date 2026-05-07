@@ -28,6 +28,7 @@ class JanusTransportManager:
         self.rtc = RTCTransport(media_bridge=self.media_bridge)
 
         self.orchestrator = JanusOrchestrator()
+        self.orchestrator.sip_bridge.set_incoming_offer_handler(self._handle_incoming_sip_offer)
         self.orchestrator.room_controller.set_callbacks(
             on_pipecat_connect=self.connect_pipecat,
             on_pipecat_disconnect=self.disconnect_pipecat,
@@ -71,6 +72,37 @@ class JanusTransportManager:
 
             await self._start_pipeline()
             logger.info("[CONNECTED] media active")
+
+    async def _handle_incoming_sip_offer(self, call_id: str | None, jsep: dict, raw_message: dict) -> None:
+        """Handle incoming SIP JSEP offer, generate answer, and accept call."""
+        async with self._state_lock:
+            logger.info("[SIP_ACCEPT_FLOW] call_id=%s starting incoming call accept flow", call_id)
+
+            self.rtc.initialize()
+            outbound_track = PipecatTTSAudioTrack(self.media_bridge)
+            self.rtc.add_track(outbound_track)
+
+            offer_sdp = jsep.get("sdp")
+            if not offer_sdp:
+                logger.error("[SIP_ACCEPT_FLOW] call_id=%s missing SDP offer", call_id)
+                return
+
+            answer_jsep = await self.rtc.create_audio_only_answer_for_offer(offer_sdp)
+            logger.info("[SIP_ACCEPT_FLOW] call_id=%s SDP answer created", call_id)
+
+            sip_handle = self.orchestrator.sip_bridge.handle_id
+            if not sip_handle:
+                logger.error("[SIP_ACCEPT_FLOW] call_id=%s SIP handle missing", call_id)
+                return
+
+            body = {"request": "accept"}
+            logger.info("[SIP_ACCEPT_FLOW] call_id=%s sending SIP accept request", call_id)
+            response = await self.orchestrator.send_plugin_message(
+                sip_handle,
+                body=body,
+                jsep=answer_jsep,
+            )
+            logger.info("[SIP_ACCEPT_FLOW] call_id=%s SIP accept response=%s", call_id, response)
 
     async def disconnect_pipecat(self) -> None:
         async with self._state_lock:
