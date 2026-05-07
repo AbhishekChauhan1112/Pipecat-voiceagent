@@ -77,6 +77,10 @@ class DebugFrameLogger(FrameProcessor):
         frame_type = type(frame).__name__
         self._frame_counts[frame_type] = self._frame_counts.get(frame_type, 0) + 1
 
+        logger.info(
+            f"[{self._label}] FRAME TYPE: {type(frame).__name__}"
+        )
+
         # Always log important semantic frames
         if isinstance(frame, TranscriptionFrame):
             logger.debug(
