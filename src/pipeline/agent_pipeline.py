@@ -1,16 +1,15 @@
 """
-Voice Agent Pipeline — Telephony Edition (with extensive debug logging).
+Voice Agent Pipeline — Janus WebRTC Edition (with extensive debug logging).
 
 Data flow:
-  Linphone → SIP → FreeSWITCH → mod_audio_stream WebSocket (binary PCM16)
-      → FreeSwitchAudioSerializer → VAD → Groq Whisper STT
-      → User Context Aggregator → Groq LLM → ElevenLabs TTS
-      → Assistant Context Aggregator → transport.output() → FreeSWITCH → Linphone
+    Linphone → SIP → FreeSWITCH → Janus AudioBridge → aiortc inbound track
+            → MediaBridge → VAD → Groq Whisper STT
+            → User Context Aggregator → Groq LLM → ElevenLabs TTS
+            → Assistant Context Aggregator → MediaBridge output → Janus → FreeSWITCH
 """
 
 import time
 import uuid
-from typing import AsyncGenerator
 
 from loguru import logger
 
@@ -23,9 +22,8 @@ from pipecat.frames.frames import (
     Frame,
     InputAudioRawFrame,
     InterimTranscriptionFrame,
-    LLMMessagesUpdateFrame,
     MetricsFrame,
-    StartInterruptionFrame,
+    InterruptionFrame,
     TextFrame,
     TranscriptionFrame,
     TTSAudioRawFrame,
@@ -35,22 +33,14 @@ from pipecat.frames.frames import (
     UserStoppedSpeakingFrame,
 )
 from pipecat.pipeline.pipeline import Pipeline
-from pipecat.pipeline.runner import PipelineRunner
-from pipecat.pipeline.task import PipelineParams, PipelineTask
 from pipecat.processors.audio.vad_processor import VADProcessor
 from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
-from pipecat.transports.websocket.fastapi import (
-    FastAPIWebsocketParams,
-    FastAPIWebsocketTransport,
-)
-from fastapi import WebSocket
-
 from src.config import AgentConfig
 from src.logging_utils import LatencyTracker, get_session_logger
 from src.services.llm_service import build_groq_llm
 from src.services.groq_stt_service import build_groq_stt
 from src.services.tts_service import build_elevenlabs_tts
-from src.transport.freeswitch_serializer import FreeSwitchAudioSerializer
+from src.transport.janus.media_bridge import MediaBridge, MediaBridgeOutputProcessor
 
 
 # ── Debug frame observer ───────────────────────────────────────────────────────
@@ -108,7 +98,7 @@ class DebugFrameLogger(FrameProcessor):
             logger.info(f"[{self._label}] 🎤 USER STARTED SPEAKING")
         elif isinstance(frame, UserStoppedSpeakingFrame):
             logger.info(f"[{self._label}] 🔕 USER STOPPED SPEAKING")
-        elif isinstance(frame, StartInterruptionFrame):
+        elif isinstance(frame, InterruptionFrame):
             logger.warning(f"[{self._label}] ⚡ BARGE-IN / INTERRUPTION")
         elif isinstance(frame, CancelFrame):
             logger.warning(f"[{self._label}] ❌ CANCEL FRAME")
@@ -154,44 +144,15 @@ class DebugFrameLogger(FrameProcessor):
 class TelephonyAgentPipeline:
     """Manages one complete realtime voice pipeline for a single phone call."""
 
-    def __init__(self, websocket: WebSocket, config: AgentConfig) -> None:
-        self.websocket = websocket
+    def __init__(self, config: AgentConfig, media_bridge: MediaBridge) -> None:
         self.config = config
+        self.media_bridge = media_bridge
         self.session_id = str(uuid.uuid4())
         self._log = get_session_logger(self.session_id)
         self._latency = LatencyTracker(self.session_id)
 
-    async def run(self) -> None:
-        self._log.info("Call session started", session_id=self.session_id)
-        self._latency.mark("call_start")
-        try:
-            await self._run_pipeline()
-        except Exception as exc:
-            self._log.exception("Pipeline error", error=str(exc))
-            raise
-        finally:
-            self._latency.record("call_duration", "call_start")
-            self._latency.log_summary()
-            self._log.info("Call session ended", session_id=self.session_id)
-
-    async def _run_pipeline(self) -> None:
+    def build_pipeline(self) -> Pipeline:
         sid = self.session_id
-
-        # ── Serializer ────────────────────────────────────────────────────────
-        serializer = FreeSwitchAudioSerializer(sample_rate=self.config.sample_rate)
-        logger.debug(f"[{sid}] Serializer ready — sample_rate={self.config.sample_rate}")
-
-        # ── Transport ─────────────────────────────────────────────────────────
-        transport = FastAPIWebsocketTransport(
-            websocket=self.websocket,
-            params=FastAPIWebsocketParams(
-                audio_in_enabled=True,
-                audio_out_enabled=True,
-                add_wav_header=False,
-                serializer=serializer,
-            ),
-        )
-        logger.debug(f"[{sid}] Transport created")
 
         # ── VAD ───────────────────────────────────────────────────────────────
         vad = VADProcessor(
@@ -218,20 +179,17 @@ class TelephonyAgentPipeline:
         logger.info(f"[{sid}] TTS ready: ElevenLabs {self.config.elevenlabs_model}")
 
         # ── Debug observers ───────────────────────────────────────────────────
-        # Place probes between each stage to see exactly what's flowing where.
         dbg_after_transport = DebugFrameLogger("AFTER_TRANSPORT", sid, log_audio=True)
-        dbg_after_vad       = DebugFrameLogger("AFTER_VAD",       sid, log_audio=False)
-        dbg_after_stt       = DebugFrameLogger("AFTER_STT",       sid)
-        dbg_after_llm       = DebugFrameLogger("AFTER_LLM",       sid)
-        dbg_after_tts       = DebugFrameLogger("AFTER_TTS",       sid, log_audio=True)
+        dbg_after_vad = DebugFrameLogger("AFTER_VAD", sid, log_audio=False)
+        dbg_after_stt = DebugFrameLogger("AFTER_STT", sid)
+        dbg_after_llm = DebugFrameLogger("AFTER_LLM", sid)
+        dbg_after_tts = DebugFrameLogger("AFTER_TTS", sid, log_audio=True)
 
-        # ── Pipeline ──────────────────────────────────────────────────────────
+        output = MediaBridgeOutputProcessor(self.media_bridge)
+
         pipeline = Pipeline(
             [
-                # 1. Incoming audio from FreeSWITCH websocket
-                transport.input(),
-
-                # Debug raw inbound audio
+                # 1. Inbound audio is injected directly into the pipeline
                 dbg_after_transport,
 
                 # 2. Voice Activity Detection
@@ -256,9 +214,6 @@ class TelephonyAgentPipeline:
                 dbg_after_llm,
 
                 # 6. Store assistant responses BEFORE TTS/output
-                # IMPORTANT:
-                # Assistant aggregator MUST happen before TTS and transport.output()
-                # otherwise TTSAudioRawFrame propagation can fail.
                 ctx.assistant(),
 
                 # 7. Text-to-Speech synthesis
@@ -267,74 +222,9 @@ class TelephonyAgentPipeline:
                 # Debug synthesized audio frames
                 dbg_after_tts,
 
-                # 8. Send audio back to FreeSWITCH caller
-                transport.output(),
+                # 8. Enqueue audio back to Janus RTP output
+                output,
             ]
         )
         logger.debug(f"[{sid}] Pipeline assembled with 8 stages + 5 debug observers")
-
-        # ── Task ──────────────────────────────────────────────────────────────
-        task = PipelineTask(
-            pipeline,
-            params=PipelineParams(
-                allow_interruptions=True,
-                enable_metrics=True,
-                enable_usage_metrics=True,
-            ),
-        )
-
-        # ── Event handlers ────────────────────────────────────────────────────
-        @transport.event_handler("on_client_connected")
-        async def on_connected(transport_obj, client):
-            call_uuid = serializer.call_uuid or "pending"
-            self._log.info(
-                "FreeSWITCH connected",
-                call_uuid=call_uuid,
-                client=str(client),
-            )
-            self._latency.mark("client_connected")
-            
-            from pipecat.frames.frames import TTSAudioRawFrame
-            import numpy as np
-
-            # Generate a 1-second sine-wave test tone
-            sample_rate = 16000
-            duration = 1.0
-            frequency = 440
-
-            t = np.linspace(0, duration, int(sample_rate * duration), False)
-
-            tone = 0.2 * np.sin(2 * np.pi * frequency * t)
-
-            audio = (tone * 32767).astype(np.int16).tobytes()
-
-            logger.warning("=== SENDING TEST AUDIO FRAME TO FREESWITCH ===")
-
-            await task.queue_frames(
-                [
-                    TTSAudioRawFrame(
-                        audio=audio,
-                        sample_rate=16000,
-                        num_channels=1,
-                    )
-                ]
-            )
-
-            logger.warning("=== TEST AUDIO FRAME QUEUED ===")
-
-        @transport.event_handler("on_client_disconnected")
-        async def on_disconnected(transport_obj, client):
-            self._log.info(
-                "FreeSWITCH disconnected",
-                call_uuid=serializer.call_uuid or "unknown",
-            )
-            await task.cancel()
-
-        # ── Run ───────────────────────────────────────────────────────────────
-        runner = PipelineRunner(handle_sigint=False)
-        self._log.info("Pipeline running — waiting for audio from FreeSWITCH")
-        logger.debug(
-            f"[{sid}] WebSocket transport audio_in={True} audio_out={True} "
-            f"sample_rate={self.config.sample_rate}"
-        )
-        await runner.run(task)
+        return pipeline

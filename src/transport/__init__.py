@@ -1,14 +1,8 @@
-"""
-Transport package for the Pipecat Voice Agent.
+"""Transport package for the Pipecat Voice Agent.
 
-This package contains the network transport layer:
-  - FastAPI application factory
-  - WebSocket session routing
-  - Health check and info endpoints
-
-The transport layer is deliberately AI-free — it only handles
-connection management and request routing.
-
-Modules:
-  server  – FastAPI app factory and WebSocket endpoint
+This package contains the Janus WebRTC transport layer:
+  - Janus signaling client
+  - aiortc peer connection integration
+  - Media bridge for Pipecat audio frames
+  - Transport manager orchestration
 """

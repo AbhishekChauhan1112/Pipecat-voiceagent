@@ -11,7 +11,7 @@ aggregator pair object with .user() and .assistant() methods.
 from loguru import logger
 
 from pipecat.services.groq.llm import GroqLLMService
-from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
+from pipecat.processors.aggregators.llm_context import LLMContext
 
 from src.config import AgentConfig
 
@@ -41,7 +41,7 @@ def build_groq_llm(config: AgentConfig):
 
     # Seed the conversation with the system prompt.
     messages = [{"role": "system", "content": config.system_prompt}]
-    context = OpenAILLMContext(messages=messages)
+    context = LLMContext(messages=messages)
 
     # create_context_aggregator returns a pair object (not a tuple).
     # Use  ctx.user()      in the pipeline before the LLM.

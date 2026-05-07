@@ -43,3 +43,7 @@ htmlcov/
 # Pipecat / model caches
 silero_vad.onnx
 *.onnx
+
+# Local Janus transport repo
+janusWebrtctransport/
+freeswitch.md
