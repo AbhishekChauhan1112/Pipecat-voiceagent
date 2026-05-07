@@ -27,4 +27,5 @@ SIP_GUEST_MODE = os.getenv("SIP_GUEST_MODE", "true").lower() == "true"
 SIP_USERNAME = os.getenv("SIP_USERNAME", "")
 SIP_SECRET = os.getenv("SIP_SECRET", "")
 SIP_PROXY = os.getenv("SIP_PROXY", "")
+WEBRTC_AUDIO_TRANSCEIVER_MODE = os.getenv("WEBRTC_AUDIO_TRANSCEIVER_MODE", "recvonly")
 SIP_AUTHUSER = os.getenv("SIP_AUTHUSER", "")

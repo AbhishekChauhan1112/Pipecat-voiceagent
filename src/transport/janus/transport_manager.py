@@ -2,6 +2,7 @@ import asyncio
 import logging
 import signal
 import sys
+import traceback
 
 from pipecat.frames.frames import EndFrame, InputAudioRawFrame
 from pipecat.pipeline.runner import PipelineRunner
@@ -76,33 +77,45 @@ class JanusTransportManager:
     async def _handle_incoming_sip_offer(self, call_id: str | None, jsep: dict, raw_message: dict) -> None:
         """Handle incoming SIP JSEP offer, generate answer, and accept call."""
         async with self._state_lock:
-            logger.info("[SIP_ACCEPT_FLOW] call_id=%s starting incoming call accept flow", call_id)
+            logger.warning("[WEBRTC] incoming SIP offer received call_id=%s", call_id)
+            try:
+                logger.warning("[WEBRTC] creating/initializing RTCPeerConnection")
+                self.rtc.initialize()
+                logger.warning("[WEBRTC] RTCPeerConnection initialized")
 
-            self.rtc.initialize()
-            outbound_track = PipecatTTSAudioTrack(self.media_bridge)
-            self.rtc.add_track(outbound_track)
+                logger.warning("[WEBRTC] adding outbound audio track")
+                outbound_track = PipecatTTSAudioTrack(self.media_bridge)
+                self.rtc.add_track(outbound_track)
+                logger.warning("[WEBRTC] outbound audio track added")
 
-            offer_sdp = jsep.get("sdp")
-            if not offer_sdp:
-                logger.error("[SIP_ACCEPT_FLOW] call_id=%s missing SDP offer", call_id)
-                return
+                offer_sdp = jsep.get("sdp")
+                if not offer_sdp:
+                    logger.error("[WEBRTC] missing SDP offer call_id=%s", call_id)
+                    return
 
-            answer_jsep = await self.rtc.create_audio_only_answer_for_offer(offer_sdp)
-            logger.info("[SIP_ACCEPT_FLOW] call_id=%s SDP answer created", call_id)
+                logger.warning("[WEBRTC] REMOTE SDP OFFER START")
+                logger.warning("%s", offer_sdp)
+                logger.warning("[WEBRTC] REMOTE SDP OFFER END")
 
-            sip_handle = self.orchestrator.sip_bridge.handle_id
-            if not sip_handle:
-                logger.error("[SIP_ACCEPT_FLOW] call_id=%s SIP handle missing", call_id)
-                return
+                answer_jsep = await self.rtc.create_audio_only_answer_for_offer(offer_sdp)
+                logger.warning("[WEBRTC] SDP answer created call_id=%s", call_id)
 
-            body = {"request": "accept"}
-            logger.info("[SIP_ACCEPT_FLOW] call_id=%s sending SIP accept request", call_id)
-            response = await self.orchestrator.send_plugin_message(
-                sip_handle,
-                body=body,
-                jsep=answer_jsep,
-            )
-            logger.info("[SIP_ACCEPT_FLOW] call_id=%s SIP accept response=%s", call_id, response)
+                sip_handle = self.orchestrator.sip_bridge.handle_id
+                if not sip_handle:
+                    logger.error("[WEBRTC] SIP handle missing call_id=%s", call_id)
+                    return
+
+                body = {"request": "accept"}
+                logger.warning("[WEBRTC] sending SIP accept call_id=%s", call_id)
+                response = await self.orchestrator.send_plugin_message(
+                    sip_handle,
+                    body=body,
+                    jsep=answer_jsep,
+                )
+                logger.warning("[WEBRTC] SIP accept response call_id=%s response=%s", call_id, response)
+            except Exception as exc:
+                logger.error("[WEBRTC] incoming offer handling failed call_id=%s error=%s", call_id, exc)
+                traceback.print_exc()
 
     async def disconnect_pipecat(self) -> None:
         async with self._state_lock:

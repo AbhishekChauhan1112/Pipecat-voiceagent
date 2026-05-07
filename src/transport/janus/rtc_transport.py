@@ -6,6 +6,7 @@ from aiortc import RTCPeerConnection, RTCSessionDescription
 from aiortc.sdp import candidate_from_sdp
 
 from .audio_tracks import AudioReceiver
+from . import config
 
 logger = logging.getLogger(__name__)
 
@@ -129,23 +130,32 @@ class RTCTransport:
         await self.pc.setRemoteDescription(answer)
 
     async def create_audio_only_answer_for_offer(self, sdp: str) -> dict:
-        """Accept an incoming offer and create an audio-only SDP answer."""
+        """Accept an incoming offer and create SDP answer with audio transceiver policy."""
         if not self.pc:
             raise RuntimeError("PeerConnection not initialized")
 
         if not self._audio_transceiver_added:
-            self.pc.addTransceiver("audio", direction="recvonly")
+            mode = (config.WEBRTC_AUDIO_TRANSCEIVER_MODE or "recvonly").strip().lower()
+            if mode not in {"recvonly", "sendrecv"}:
+                mode = "recvonly"
+            logger.warning("[WEBRTC] addTransceiver mode=%s", mode)
+            self.pc.addTransceiver("audio", direction=mode)
             self._audio_transceiver_added = True
-            logger.warning("[PC] added recvonly audio transceiver before setRemoteDescription")
+            logger.warning("[PC] added audio transceiver before setRemoteDescription")
 
         logger.warning("[SDP_REMOTE_OFFER] %s", sdp)
-        filtered_sdp = self._strip_video_mlines(sdp)
-        offer = RTCSessionDescription(sdp=filtered_sdp, type="offer")
+        offer = RTCSessionDescription(sdp=sdp, type="offer")
         logger.info("Setting remote description (offer) for SIP incoming call...")
+        logger.warning("[WEBRTC] setRemoteDescription START")
         await self.pc.setRemoteDescription(offer)
+        logger.warning("[WEBRTC] setRemoteDescription DONE")
 
+        logger.warning("[WEBRTC] createAnswer START")
         answer = await self.pc.createAnswer()
+        logger.warning("[WEBRTC] createAnswer DONE")
+        logger.warning("[WEBRTC] setLocalDescription START")
         await self.pc.setLocalDescription(answer)
+        logger.warning("[WEBRTC] setLocalDescription DONE")
 
         try:
             await asyncio.wait_for(self._wait_for_ice_gathering_complete(), timeout=2.0)
@@ -153,58 +163,15 @@ class RTCTransport:
             logger.warning("Timeout waiting for ICE gathering while creating SIP answer")
 
         logger.warning("[SDP_LOCAL_ANSWER] %s", self.pc.localDescription.sdp)
+        for t in self.pc.getTransceivers():
+            logger.warning(
+                "[TRANSCEIVER] kind=%s direction=%s currentDirection=%s",
+                t.kind,
+                t.direction,
+                t.currentDirection,
+            )
         logger.info("Created local SDP answer for SIP incoming call")
         return {"type": self.pc.localDescription.type, "sdp": self.pc.localDescription.sdp}
-
-    def _strip_video_mlines(self, sdp: str) -> str:
-        """Remove video m-sections from an SDP offer so we negotiate audio-only."""
-        lines = sdp.splitlines()
-        if not any(line.startswith("m=video") for line in lines):
-            return sdp
-
-        session_lines = []
-        media_sections = []
-        current = []
-
-        for line in lines:
-            if line.startswith("m="):
-                if current:
-                    media_sections.append(current)
-                current = [line]
-            else:
-                if current:
-                    current.append(line)
-                else:
-                    session_lines.append(line)
-        if current:
-            media_sections.append(current)
-
-        removed_mids = set()
-        kept_sections = []
-        for section in media_sections:
-            first = section[0]
-            if first.startswith("m=video"):
-                for l in section:
-                    if l.startswith("a=mid:"):
-                        removed_mids.add(l.split(":", 1)[1].strip())
-                continue
-            kept_sections.append(section)
-
-        rewritten_session = []
-        for l in session_lines:
-            if l.startswith("a=group:BUNDLE"):
-                parts = l.split()
-                base = parts[:1]
-                mids = [m for m in parts[1:] if m not in removed_mids]
-                if mids:
-                    rewritten_session.append(" ".join(base + mids))
-                continue
-            rewritten_session.append(l)
-
-        out = rewritten_session[:]
-        for sec in kept_sections:
-            out.extend(sec)
-        return "\r\n".join(out) + "\r\n"
 
     async def add_ice_candidate(self, candidate_info: dict):
         """Add a trickle ICE candidate received from Janus."""
