@@ -37,6 +37,7 @@ class JanusSessionManager:
 
         self.running = True
         logger.warning("[WS_LISTENER_START] creating receive loop task")
+        print("[TASK] creating task")
         self.receive_task = asyncio.create_task(self._receive_loop())
 
     async def create_session(self) -> int:
@@ -52,6 +53,7 @@ class JanusSessionManager:
         logger.warning("[SESSION_CREATED] session_id=%s", self.session_id)
 
         logger.warning("[KEEPALIVE_START] creating keepalive loop task")
+        print("[TASK] creating task")
         self.keepalive_task = asyncio.create_task(self._keepalive_loop())
         return self.session_id
 
@@ -179,10 +181,12 @@ class JanusSessionManager:
 
                 if sender and sender in self.handle_handlers:
                     logger.warning("[PLUGIN_EVENT_DISPATCH] sender=%s janus=%s", sender, janus_type)
+                    import traceback
                     try:
                         await self.handle_handlers[sender](msg)
-                    except Exception:
-                        logger.exception("Plugin handler failed")
+                    except Exception as e:
+                        logger.error(f"[PLUGIN_HANDLER_ERROR] {e}")
+                        traceback.print_exc()
 
                 if janus_type == "ack":
                     logger.warning("[JANUS_ASYNC_ACK] sender=%s tx=%s", sender, tx)

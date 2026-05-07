@@ -42,6 +42,7 @@ class MediaBridge:
     def start_inbound(self, track: MediaStreamTrack) -> None:
         if self._inbound_task:
             return
+        print("[TASK] creating task")
         self._inbound_task = asyncio.create_task(self._consume_inbound(track))
         logger.info("Media bridge inbound consumer started for track %s", track.id)
 
@@ -66,6 +67,7 @@ class MediaBridge:
         await self._queue_put(self.outbound_queue, pcm, direction="outbound")
 
     async def _consume_inbound(self, track: MediaStreamTrack) -> None:
+        import traceback
         try:
             while True:
                 frame = await track.recv()
@@ -75,6 +77,8 @@ class MediaBridge:
             logger.debug("Inbound media bridge task cancelled.")
         except Exception as exc:
             logger.error("Inbound media bridge error: %s", exc)
+            print(f"[TASK_ERROR] {exc}")
+            traceback.print_exc()
 
     async def _queue_put(self, queue: asyncio.Queue, pcm: bytes, *, direction: str) -> None:
         if queue.full():

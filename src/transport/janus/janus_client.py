@@ -37,6 +37,7 @@ class JanusClient:
         self.running = True
 
         # Start receive loop
+        print("[TASK] creating task")
         self.receive_task = asyncio.create_task(self._receive_loop())
         logger.info("Connected to Janus WebSocket.")
 
@@ -95,7 +96,12 @@ class JanusClient:
 
                 # Handle asynchronous events
                 if janus_type == "event":
-                    await self._handle_event(msg)
+                    import traceback
+                    try:
+                        await self._handle_event(msg)
+                    except Exception as e:
+                        traceback.print_exc()
+                        print(f"[TASK_ERROR] {e}")
                 elif janus_type == "trickle":
                     candidate = msg.get("candidate")
                     if candidate:
@@ -169,6 +175,7 @@ class JanusClient:
         if response.get("janus") == "success":
             self.session_id = response["data"]["id"]
             logger.info("Created Janus session: %s", self.session_id)
+            print("[TASK] creating task")
             self.keepalive_task = asyncio.create_task(self._keepalive_loop())
         else:
             raise Exception(f"Failed to create session: {response}")

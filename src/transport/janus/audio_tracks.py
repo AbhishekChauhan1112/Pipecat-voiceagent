@@ -79,6 +79,7 @@ class AudioReceiver:
 
     def start(self):
         self.active = True
+        print("[TASK] creating task")
         self._task = asyncio.create_task(self._consume_track())
         logger.info("Started AudioReceiver for track %s", self.track.id)
 
@@ -94,6 +95,7 @@ class AudioReceiver:
         logger.info("Stopped AudioReceiver. Total frames received: %s", self.frames_received)
 
     async def _consume_track(self):
+        import traceback
         try:
             while self.active:
                 frame = await self.track.recv()
@@ -116,3 +118,5 @@ class AudioReceiver:
             logger.debug("AudioReceiver consumption task cancelled.")
         except Exception as e:
             logger.error("Error in AudioReceiver: %s", e)
+            print(f"[TASK_ERROR] {e}")
+            traceback.print_exc()

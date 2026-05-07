@@ -31,41 +31,79 @@ class RTCTransport:
     def _setup_events(self):
         @self.pc.on("connectionstatechange")
         async def on_connectionstatechange():
+            print(f"[PC] connectionState={self.pc.connectionState}")
             logger.warning("[PC] connectionState=%s", self.pc.connectionState)
             if self.pc.connectionState == "connected" and not self._stats_task:
                 self._stats_task = asyncio.create_task(self._poll_stats())
+                print("[TASK] creating task")
             if self.pc.connectionState == "failed":
                 await self.pc.close()
 
         @self.pc.on("iceconnectionstatechange")
         async def on_iceconnectionstatechange():
+            print(f"[PC] iceConnectionState={self.pc.iceConnectionState}")
             logger.warning("[PC] iceConnectionState=%s", self.pc.iceConnectionState)
 
         @self.pc.on("icegatheringstatechange")
         async def on_icegatheringstatechange():
+            print(f"[PC] iceGatheringState={self.pc.iceGatheringState}")
             logger.warning("[PC] iceGatheringState=%s", self.pc.iceGatheringState)
 
         @self.pc.on("signalingstatechange")
         async def on_signalingstatechange():
+            print(f"[PC] signalingState={self.pc.signalingState}")
             logger.warning("[PC] signalingState=%s", self.pc.signalingState)
 
         @self.pc.on("track")
         def on_track(track):
+            print(
+                f"[TRACK] "
+                f"kind={track.kind} "
+                f"id={track.id}"
+            )
             logger.warning("[TRACK] kind=%s id=%s", track.kind, track.id)
             if track.kind == "audio":
+                print("[TASK] creating task")
                 task = asyncio.create_task(self._read_audio(track))
                 self._audio_reader_tasks.add(task)
                 task.add_done_callback(self._audio_reader_tasks.discard)
             else:
                 logger.warning("[TRACK_IGNORED] kind=%s id=%s", track.kind, track.id)
 
+    async def _poll_stats(self):
+        while True:
+            try:
+                stats = await self.pc.getStats()
+                for stat in stats.values():
+                    if stat.type == "candidate-pair":
+                        if getattr(stat, "selected", False):
+                            print(
+                                f"[ICE_SELECTED] "
+                                f"state={stat.state} "
+                                f"bytesReceived={getattr(stat, 'bytesReceived', 0)} "
+                                f"packetsReceived={getattr(stat, 'packetsReceived', 0)} "
+                                f"bytesSent={getattr(stat, 'bytesSent', 0)} "
+                                f"packetsSent={getattr(stat, 'packetsSent', 0)}"
+                            )
+            except Exception:
+                traceback.print_exc()
+            await asyncio.sleep(2)
+
     async def _read_audio(self, track):
+        print("[AUDIO] reader started")
         logger.warning("[AUDIO] reader started track=%s", track.id)
         frames = 0
         while True:
             try:
                 frame = await track.recv()
                 frames += 1
+                print(
+                    f"[AUDIO_FRAME] "
+                    f"count={frames} "
+                    f"pts={frame.pts} "
+                    f"samples={frame.samples} "
+                    f"rate={frame.sample_rate}"
+                )
                 logger.warning(
                     "[AUDIO_FRAME] count=%s pts=%s samples=%s rate=%s",
                     frames,
@@ -139,7 +177,9 @@ class RTCTransport:
             if mode not in {"recvonly", "sendrecv"}:
                 mode = "recvonly"
             logger.warning("[WEBRTC] addTransceiver mode=%s", mode)
+            print("[WEBRTC] addTransceiver START")
             self.pc.addTransceiver("audio", direction=mode)
+            print("[WEBRTC] addTransceiver DONE")
             self._audio_transceiver_added = True
             logger.warning("[PC] added audio transceiver before setRemoteDescription")
 
@@ -147,14 +187,20 @@ class RTCTransport:
         offer = RTCSessionDescription(sdp=sdp, type="offer")
         logger.info("Setting remote description (offer) for SIP incoming call...")
         logger.warning("[WEBRTC] setRemoteDescription START")
+        print("[WEBRTC] setRemoteDescription START")
         await self.pc.setRemoteDescription(offer)
+        print("[WEBRTC] setRemoteDescription DONE")
         logger.warning("[WEBRTC] setRemoteDescription DONE")
 
         logger.warning("[WEBRTC] createAnswer START")
+        print("[WEBRTC] createAnswer START")
         answer = await self.pc.createAnswer()
+        print("[WEBRTC] createAnswer DONE")
         logger.warning("[WEBRTC] createAnswer DONE")
         logger.warning("[WEBRTC] setLocalDescription START")
+        print("[WEBRTC] setLocalDescription START")
         await self.pc.setLocalDescription(answer)
+        print("[WEBRTC] setLocalDescription DONE")
         logger.warning("[WEBRTC] setLocalDescription DONE")
 
         try:
@@ -162,8 +208,17 @@ class RTCTransport:
         except asyncio.TimeoutError:
             logger.warning("Timeout waiting for ICE gathering while creating SIP answer")
 
+        print("[WEBRTC] LOCAL SDP START")
+        print(self.pc.localDescription.sdp)
+        print("[WEBRTC] LOCAL SDP END")
         logger.warning("[SDP_LOCAL_ANSWER] %s", self.pc.localDescription.sdp)
         for t in self.pc.getTransceivers():
+            print(
+                f"[TRANSCEIVER] "
+                f"kind={t.kind} "
+                f"direction={t.direction} "
+                f"currentDirection={t.currentDirection}"
+            )
             logger.warning(
                 "[TRANSCEIVER] kind=%s direction=%s currentDirection=%s",
                 t.kind,
