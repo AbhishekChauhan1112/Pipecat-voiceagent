@@ -45,6 +45,11 @@ class MediaBridge:
         self._inbound_task = asyncio.create_task(self._consume_inbound(track))
         logger.info("Media bridge inbound consumer started for track %s", track.id)
 
+    async def enqueue_inbound_frame(self, frame: AudioFrame) -> None:
+        """Accept an inbound aiortc AudioFrame and enqueue normalized PCM."""
+        pcm = self._audioframe_to_pcm(frame)
+        await self._queue_put(self.inbound_queue, pcm, direction="inbound")
+
     async def stop(self) -> None:
         if self._inbound_task:
             self._inbound_task.cancel()

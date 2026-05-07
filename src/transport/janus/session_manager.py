@@ -179,7 +179,10 @@ class JanusSessionManager:
 
                 if sender and sender in self.handle_handlers:
                     logger.warning("[PLUGIN_EVENT_DISPATCH] sender=%s janus=%s", sender, janus_type)
-                    await self.handle_handlers[sender](msg)
+                    try:
+                        await self.handle_handlers[sender](msg)
+                    except Exception:
+                        logger.exception("Plugin handler failed")
 
                 if janus_type == "ack":
                     logger.warning("[JANUS_ASYNC_ACK] sender=%s tx=%s", sender, tx)
