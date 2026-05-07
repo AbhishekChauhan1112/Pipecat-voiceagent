@@ -80,6 +80,12 @@ class FreeSwitchAudioSerializer(FrameSerializer):
         """Convert a Pipecat audio frame → raw PCM bytes for FreeSWITCH."""
         out_audio = getattr(frame, "audio", None)
         if out_audio is not None and isinstance(out_audio, bytes):
+            logger.info(
+            f"TTS FRAME: bytes={len(out_audio)} "
+            f"type={type(out_audio)} "
+            f"sample_rate={getattr(frame, 'sample_rate', 'unknown')} "
+            f"channels={getattr(frame, 'num_channels', 'unknown')}"
+        )
             # FreeSWITCH in 'stereo' mode REQUIRES stereo interleaved audio for write-back.
             if len(out_audio) >= 2:
                 # Fast mono->stereo duplication: copy each 2-byte sample
