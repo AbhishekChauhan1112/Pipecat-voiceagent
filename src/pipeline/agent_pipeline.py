@@ -293,21 +293,34 @@ class TelephonyAgentPipeline:
                 client=str(client),
             )
             self._latency.mark("client_connected")
-            logger.debug(
-                f"[{sid}] Sending greeting LLMMessagesUpdateFrame to pipeline"
-            )
+            
+            from pipecat.frames.frames import TTSAudioRawFrame
+            import numpy as np
+
+            # Generate a 1-second sine-wave test tone
+            sample_rate = 16000
+            duration = 1.0
+            frequency = 440
+
+            t = np.linspace(0, duration, int(sample_rate * duration), False)
+
+            tone = 0.2 * np.sin(2 * np.pi * frequency * t)
+
+            audio = (tone * 32767).astype(np.int16).tobytes()
+
+            logger.warning("=== SENDING TEST AUDIO FRAME TO FREESWITCH ===")
+
             await task.queue_frames(
                 [
-                    LLMMessagesUpdateFrame(
-                        messages=[
-                            {"role": "system", "content": self.config.system_prompt},
-                            {"role": "user",   "content": "Hello, I just picked up the phone."},
-                        ],
-                        run_llm=True,
+                    TTSAudioRawFrame(
+                        audio=audio,
+                        sample_rate=16000,
+                        num_channels=1,
                     )
                 ]
             )
-            logger.debug(f"[{sid}] Greeting frame queued")
+
+            logger.warning("=== TEST AUDIO FRAME QUEUED ===")
 
         @transport.event_handler("on_client_disconnected")
         async def on_disconnected(transport_obj, client):
