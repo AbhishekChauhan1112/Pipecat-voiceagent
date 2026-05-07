@@ -98,7 +98,6 @@ class RTCTransport:
         if self.pc and self.pc.connectionState != "closed":
             return
         self.pc = RTCPeerConnection()
-        self.pc.addTrack(ToneAudioTrack())
         self._setup_events()
 
     def _setup_events(self):
@@ -254,6 +253,15 @@ class RTCTransport:
         print("[WEBRTC] setRemoteDescription DONE")
         logger.warning("[WEBRTC] setRemoteDescription DONE")
 
+        self.pc.addTrack(ToneAudioTrack())
+        for sender in self.pc.getSenders():
+            print(
+                "[SENDER]",
+                sender,
+                "track=",
+                sender.track,
+            )
+
         logger.warning("[WEBRTC] createAnswer START")
         print("[WEBRTC] createAnswer START")
         answer = await self.pc.createAnswer()
@@ -264,6 +272,16 @@ class RTCTransport:
         await self.pc.setLocalDescription(answer)
         print("[WEBRTC] setLocalDescription DONE")
         logger.warning("[WEBRTC] setLocalDescription DONE")
+
+        for transceiver in self.pc.getTransceivers():
+            print(
+                "[TRANSCEIVER_FINAL]",
+                "kind=", transceiver.kind,
+                "direction=", transceiver.direction,
+                "currentDirection=", transceiver.currentDirection,
+                "sender_track=", transceiver.sender.track,
+                "receiver_track=", transceiver.receiver.track,
+            )
 
         try:
             await asyncio.wait_for(self._wait_for_ice_gathering_complete(), timeout=2.0)
