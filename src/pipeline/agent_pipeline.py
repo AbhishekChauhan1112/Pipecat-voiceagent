@@ -234,8 +234,8 @@ class TelephonyAgentPipeline:
                 llm,                    # 5. Groq LLM
                 dbg_after_llm,          #    ← debug: LLM token stream
                 tts,                    # 6. ElevenLabs TTS
-                dbg_after_tts,          #    ← debug: TTS audio chunks
-                ctx.assistant(),        # 7. store bot reply in memory
+                ctx.assistant(),        # 7. store bot reply (passes audio through)
+                dbg_after_tts,          #    ← debug: TTS audio reaching transport
                 transport.output(),     # 8. raw PCM → FreeSWITCH → caller
             ]
         )

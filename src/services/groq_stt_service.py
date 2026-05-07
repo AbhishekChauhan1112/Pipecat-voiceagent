@@ -18,7 +18,9 @@ def build_groq_stt(config: AgentConfig) -> GroqSTTService:
 
     stt = GroqSTTService(
         api_key=config.groq_api_key,
-        model="whisper-large-v3-turbo",
+        settings=GroqSTTService.Settings(
+            model="whisper-large-v3-turbo",
+        ),
     )
 
     logger.info("Groq Whisper STT service ready")
