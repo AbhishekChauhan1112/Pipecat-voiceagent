@@ -27,3 +27,4 @@ SIP_GUEST_MODE = os.getenv("SIP_GUEST_MODE", "true").lower() == "true"
 SIP_USERNAME = os.getenv("SIP_USERNAME", "")
 SIP_SECRET = os.getenv("SIP_SECRET", "")
 SIP_PROXY = os.getenv("SIP_PROXY", "")
+SIP_AUTHUSER = os.getenv("SIP_AUTHUSER", "")

@@ -29,6 +29,7 @@ class JanusOrchestrator:
         self.sip_register_enabled = config.SIP_REGISTER_ENABLED
         self.sip_guest = config.SIP_GUEST_MODE
         self.sip_username = config.SIP_USERNAME
+        self.sip_authuser = config.SIP_AUTHUSER
         self.sip_secret = config.SIP_SECRET
         self.sip_proxy = config.SIP_PROXY
 

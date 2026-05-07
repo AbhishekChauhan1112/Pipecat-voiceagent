@@ -42,11 +42,14 @@ class SipBridge:
 
         payload = {
             "request": "register",
-            "type": "guest" if self.orchestrator.sip_guest else "register",
             "username": self.orchestrator.sip_username,
+            "authuser": self.orchestrator.sip_authuser,
             "secret": self.orchestrator.sip_secret,
             "proxy": self.orchestrator.sip_proxy,
         }
+
+        if self.orchestrator.sip_guest:
+            payload["type"] = "guest"
 
         logger.warning(f"[SIP_REGISTER_PAYLOAD] {payload}")
         response = await self.orchestrator.send_plugin_message(
