@@ -48,7 +48,7 @@ from fastapi import WebSocket
 from src.config import AgentConfig
 from src.logging_utils import LatencyTracker, get_session_logger
 from src.services.llm_service import build_groq_llm
-from src.services.stt_service import build_deepgram_stt
+from src.services.groq_stt_service import build_groq_stt
 from src.services.tts_service import build_elevenlabs_tts
 from src.transport.freeswitch_serializer import FreeSwitchAudioSerializer
 
@@ -121,7 +121,7 @@ class TelephonyAgentPipeline:
         )
 
         # ── AI Services ──────────────────────────────────────────────────────
-        stt = build_deepgram_stt(self.config)
+        stt = build_groq_stt(self.config)
         llm, ctx = build_groq_llm(self.config)
         tts = build_elevenlabs_tts(self.config)
 

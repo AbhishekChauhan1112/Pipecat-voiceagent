@@ -58,7 +58,7 @@ def main() -> None:
     logger.info("║   Pipecat Telephony Voice Agent  v1.0.0      ║")
     logger.info("╚══════════════════════════════════════════════╝")
     logger.info(f"  Agent        : {config.agent_name}")
-    logger.info(f"  STT          : Deepgram {config.deepgram_model}")
+    logger.info(f"  STT          : Groq Whisper ({config.groq_model})")
     logger.info(f"  LLM          : Groq {config.groq_model}")
     logger.info(f"  TTS          : ElevenLabs {config.elevenlabs_model}")
     logger.info(f"  Sample rate  : {config.sample_rate} Hz")
