@@ -41,12 +41,12 @@ def build_elevenlabs_tts(config: AgentConfig) -> ElevenLabsTTSService:
 
     tts = ElevenLabsTTSService(
         api_key=config.elevenlabs_api_key,
+        voice_id=config.elevenlabs_voice_id,
+        model=config.elevenlabs_model,
+        sample_rate=16000,
         settings=ElevenLabsTTSService.Settings(
-            voice=config.elevenlabs_voice_id,
-            model=config.elevenlabs_model,
             stability=config.elevenlabs_stability,
             similarity_boost=config.elevenlabs_similarity_boost,
-            output_format="pcm_16000",
         ),
         # auto_mode=True is optimal for sentence-aggregated input
         # (disables server-side chunk scheduling for lower latency)
