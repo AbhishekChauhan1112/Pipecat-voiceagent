@@ -5,31 +5,30 @@ This serializer translates between:
   • FreeSWITCH mod_audio_stream binary protocol (raw PCM16 over WebSocket)
   • Pipecat's internal InputAudioRawFrame / AudioRawFrame
 
-Protocol breakdown
-──────────────────
-When a call hits the FreeSWITCH dialplan extension:
+Protocol breakdown (stereo mode)
+──────────────────────────────────
+When pipecat.lua calls `uuid_audio_stream start <url> stereo 16000`:
 
   1. FreeSWITCH sends one JSON text message (the handshake):
-       {"hostname":"fs01","uuid":"<call-uuid>","channels":1,"rate":16000,"codec":"L16"}
+       {"hostname":"fs01","uuid":"<call-uuid>","channels":2,"rate":16000,"codec":"L16"}
 
-  2. FreeSWITCH then streams BINARY WebSocket messages containing raw
-     L16 (linear 16-bit PCM) audio sampled at the configured rate.
+  2. FreeSWITCH streams BINARY WebSocket messages containing INTERLEAVED
+     stereo L16 PCM (left=caller audio, right=silence/unused) at 16kHz.
+     We extract just the LEFT channel for STT processing.
 
-  3. To play audio BACK to the caller, this server sends BINARY
-     WebSocket messages containing the same format: raw L16 PCM bytes.
+  3. To play audio BACK to the caller, we send BINARY WebSocket messages
+     containing MONO L16 PCM at 16kHz. mod_audio_stream routes this to the
+     write side of the media bug (SMBF_WRITE_STREAM) → OPUS encoder → caller.
 
-No headers, no framing, no base64 — just raw bytes in both directions.
+  ⚠ stereo mode MUST be used in pipecat.lua (not mono) because mono only
+    sets SMBF_READ_STREAM, which captures audio from caller but does NOT
+    enable write-back. Only stereo sets SMBF_WRITE_STREAM.
 
-Usage
-─────
-    serializer = FreeSwitchAudioSerializer(sample_rate=16000)
-    transport = FastAPIWebsocketTransport(..., params=FastAPIWebsocketParams(
-        serializer=serializer,
-        ...
-    ))
+No WAV headers, no base64 — just raw bytes in both directions.
 """
 
 import json
+import struct
 from typing import Optional
 
 from loguru import logger
@@ -117,6 +116,7 @@ class FreeSwitchAudioSerializer(FrameSerializer):
             logger.debug(
                 "Serializer: FIRST audio IN packet — FreeSWITCH is streaming",
                 bytes=len(data),
+                channels=self._num_channels,
             )
         elif self._rx_packets % 200 == 0:
             logger.debug(
@@ -125,9 +125,24 @@ class FreeSwitchAudioSerializer(FrameSerializer):
                 total_bytes=self._rx_bytes,
             )
 
+        # Stereo interleaved → extract left channel (caller audio) for STT.
+        # FreeSWITCH stereo: [L0 R0 L1 R1 ...] as int16 little-endian pairs.
+        # We take every even sample (index 0, 2, 4, ...) = left = caller.
+        if self._num_channels == 2 and len(data) >= 4:
+            samples = struct.unpack_from(f"<{len(data)//2}h", data)
+            mono_samples = samples[::2]  # left channel only
+            mono_data = struct.pack(f"<{len(mono_samples)}h", *mono_samples)
+            logger.debug(
+                "Serializer: stereo→mono downmix",
+                stereo_bytes=len(data),
+                mono_bytes=len(mono_data),
+            ) if self._rx_packets == 1 else None
+        else:
+            mono_data = data
+
         return InputAudioRawFrame(
-            audio=data,
-            num_channels=self._num_channels,
+            audio=mono_data,
+            num_channels=1,
             sample_rate=self._sample_rate,
         )
 
@@ -148,12 +163,21 @@ class FreeSwitchAudioSerializer(FrameSerializer):
         self._call_uuid = meta.get("uuid")
         self._handshake_done = True
 
-        # Log the effective rate so mismatches are immediately visible
+        # Auto-detect channel count from handshake (1=mono, 2=stereo)
+        reported_channels = int(meta.get("channels", self._num_channels))
+        if reported_channels != self._num_channels:
+            logger.info(
+                f"FreeSWITCH sent channels={reported_channels}, "
+                f"updating serializer (was {self._num_channels}). "
+                f"{'Stereo→mono downmix enabled.' if reported_channels == 2 else ''}"
+            )
+            self._num_channels = reported_channels
+
+        # Log rate mismatches immediately
         reported_rate = meta.get("rate", "?")
         if reported_rate != "?" and int(reported_rate) != self._sample_rate:
             logger.warning(
-                "FreeSWITCH sample rate mismatch — audio quality may be degraded. "
-                "Update the dialplan or SAMPLE_RATE in .env to match.",
+                "FreeSWITCH sample rate mismatch — audio quality may be degraded.",
                 freeswitch_rate=reported_rate,
                 pipecat_expected_rate=self._sample_rate,
             )
@@ -164,5 +188,6 @@ class FreeSwitchAudioSerializer(FrameSerializer):
             hostname=meta.get("hostname", "?"),
             codec=meta.get("codec", "L16"),
             rate=reported_rate,
-            channels=meta.get("channels", 1),
+            channels=self._num_channels,
         )
+
