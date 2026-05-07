@@ -27,6 +27,7 @@ class JanusClient:
         self.keepalive_task = None
         self.receive_task = None
         self.running = False
+        self._joined_event = asyncio.Event()
 
     async def connect(self):
         """Connect to Janus WebSocket and start receive loop."""
@@ -129,6 +130,7 @@ class JanusClient:
                 data.get("room"),
                 data.get("id"),
             )
+            self._joined_event.set()
         elif event_type == "event":
             # Other participants joining/leaving etc.
             pass
@@ -182,6 +184,8 @@ class JanusClient:
 
     async def join_room(self):
         """Join the configured AudioBridge room."""
+        self._joined_event.clear()
+
         payload = {
             "janus": "message",
             "body": {
@@ -192,10 +196,12 @@ class JanusClient:
                 "group": "default",
             },
         }
-        response = await self._send_request(payload)
-        plugindata = response.get("plugindata", {}).get("data", {})
-        if plugindata.get("audiobridge") != "joined":
-            logger.warning("Join response did not indicate 'joined': %s", response)
+        await self._send_request(payload)
+
+        try:
+            await asyncio.wait_for(self._joined_event.wait(), timeout=10.0)
+        except asyncio.TimeoutError:
+            raise Exception("Timed out waiting for Janus AudioBridge 'joined' event")
 
     async def configure_webrtc(self):
         """Send SDP offer to Janus to configure WebRTC media."""
