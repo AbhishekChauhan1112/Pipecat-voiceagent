@@ -59,6 +59,10 @@ class FreeSwitchAudioSerializer(FrameSerializer):
         self._num_channels = num_channels
         self._handshake_done: bool = False
         self._call_uuid: Optional[str] = None
+        self._rx_packets = 0      # binary frames received from FreeSWITCH
+        self._tx_packets = 0      # binary frames sent to FreeSWITCH
+        self._rx_bytes   = 0
+        self._tx_bytes   = 0
 
     # ── Public helpers ────────────────────────────────────────────────────
 
@@ -74,44 +78,52 @@ class FreeSwitchAudioSerializer(FrameSerializer):
     # ── FrameSerializer interface ─────────────────────────────────────────
 
     async def serialize(self, frame: Frame) -> bytes | str | None:
-        """Convert a Pipecat audio frame → raw PCM bytes for FreeSWITCH.
-
-        Only AudioRawFrame instances produce output; all other frame types
-        are silently dropped (they have no meaning in the raw-PCM channel).
-
-        Args:
-            frame: Any Pipecat Frame (only AudioRawFrame is acted upon).
-
-        Returns:
-            Raw PCM16 bytes to send back through the WebSocket to
-            FreeSWITCH, or None to send nothing.
-        """
+        """Convert a Pipecat audio frame → raw PCM bytes for FreeSWITCH."""
         if isinstance(frame, AudioRawFrame):
+            self._tx_packets += 1
+            self._tx_bytes += len(frame.audio)
+            if self._tx_packets == 1:
+                logger.debug(
+                    "Serializer: first audio OUT packet",
+                    bytes=len(frame.audio),
+                    sample_rate=frame.sample_rate,
+                )
+            elif self._tx_packets % 200 == 0:
+                logger.debug(
+                    "Serializer: audio OUT stats",
+                    packets=self._tx_packets,
+                    total_bytes=self._tx_bytes,
+                )
             return frame.audio
         return None
 
     async def deserialize(self, data: str | bytes) -> Frame | None:
-        """Convert a FreeSWITCH WebSocket message → Pipecat Frame.
-
-        Handles two message types:
-          - str  → JSON handshake (first message, no frame produced)
-          - bytes → raw PCM16 audio (produces InputAudioRawFrame)
-
-        Args:
-            data: Raw WebSocket message from FreeSWITCH.
-
-        Returns:
-            InputAudioRawFrame for binary audio messages, or None for the
-            JSON handshake / empty frames.
-        """
+        """Convert a FreeSWITCH WebSocket message → Pipecat Frame."""
         # ── JSON handshake (text frame) ───────────────────────────────────
         if isinstance(data, str):
+            logger.debug("Serializer: received text frame (handshake)", raw=data[:200])
             self._handle_handshake(data)
             return None
 
         # ── Binary audio frame ────────────────────────────────────────────
         if not isinstance(data, bytes) or len(data) == 0:
+            logger.debug("Serializer: empty/non-bytes frame", dtype=type(data).__name__)
             return None
+
+        self._rx_packets += 1
+        self._rx_bytes += len(data)
+
+        if self._rx_packets == 1:
+            logger.debug(
+                "Serializer: FIRST audio IN packet — FreeSWITCH is streaming",
+                bytes=len(data),
+            )
+        elif self._rx_packets % 200 == 0:
+            logger.debug(
+                "Serializer: audio IN stats",
+                packets=self._rx_packets,
+                total_bytes=self._rx_bytes,
+            )
 
         return InputAudioRawFrame(
             audio=data,

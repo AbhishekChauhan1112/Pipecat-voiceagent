@@ -1,44 +1,44 @@
 """
-Voice Agent Pipeline — Telephony Edition.
+Voice Agent Pipeline — Telephony Edition (with extensive debug logging).
 
-Assembles the Pipecat pipeline for a single inbound FreeSWITCH call.
-
-Data flow
-─────────
-  Linphone → SIP → FreeSWITCH (ext 9000)
-      → mod_audio_stream WebSocket (binary PCM16)
-          → [FreeSwitchAudioSerializer]   deserialize raw bytes → InputAudioRawFrame
-          → [Silero VAD]                  detect speech / silence
-          → [Deepgram STT]               stream audio → TranscriptionFrame
-          → [User Context Aggregator]     buffer turns → LLMMessagesFrame
-          → [Groq LLM]                   stream tokens
-          → [ElevenLabs TTS]             stream PCM16 audio chunks
-          → [Assistant Context Agg.]      store bot reply in memory
-          → [FreeSwitchAudioSerializer]   serialize AudioRawFrame → raw bytes
-      → mod_audio_stream WebSocket (binary PCM16)
-  FreeSWITCH → RTP → Linphone (caller hears the agent)
-
-Interruption / barge-in
-───────────────────────
-If the caller speaks while the agent is talking:
-  1. Silero VAD fires VADUserStartedSpeakingFrame
-  2. Transport emits StartInterruptionFrame
-  3. ElevenLabs TTS and Groq LLM receive CancelFrame → stop immediately
-  4. No more audio is sent back to the caller
-  5. A new STT → LLM → TTS cycle begins with what the caller said
+Data flow:
+  Linphone → SIP → FreeSWITCH → mod_audio_stream WebSocket (binary PCM16)
+      → FreeSwitchAudioSerializer → VAD → Groq Whisper STT
+      → User Context Aggregator → Groq LLM → ElevenLabs TTS
+      → Assistant Context Aggregator → transport.output() → FreeSWITCH → Linphone
 """
 
+import time
 import uuid
+from typing import AsyncGenerator
 
 from loguru import logger
 
 from pipecat.audio.vad.silero import SileroVADAnalyzer
 from pipecat.audio.vad.vad_analyzer import VADParams
-from pipecat.frames.frames import LLMMessagesUpdateFrame
+from pipecat.frames.frames import (
+    AudioRawFrame,
+    CancelFrame,
+    EndFrame,
+    Frame,
+    InputAudioRawFrame,
+    InterimTranscriptionFrame,
+    LLMMessagesUpdateFrame,
+    MetricsFrame,
+    StartInterruptionFrame,
+    TextFrame,
+    TranscriptionFrame,
+    TTSAudioRawFrame,
+    TTSStartedFrame,
+    TTSStoppedFrame,
+    UserStartedSpeakingFrame,
+    UserStoppedSpeakingFrame,
+)
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
 from pipecat.processors.audio.vad_processor import VADProcessor
+from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
 from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketParams,
     FastAPIWebsocketTransport,
@@ -53,17 +53,102 @@ from src.services.tts_service import build_elevenlabs_tts
 from src.transport.freeswitch_serializer import FreeSwitchAudioSerializer
 
 
-class TelephonyAgentPipeline:
-    """Manages one complete realtime voice pipeline for a single phone call.
+# ── Debug frame observer ───────────────────────────────────────────────────────
 
-    One instance is created per incoming WebSocket connection from FreeSWITCH
-    (i.e., per inbound call). Pipelines are fully isolated — multiple concurrent
-    calls each get their own Pipecat pipeline, services, and conversation context.
+class DebugFrameLogger(FrameProcessor):
+    """Sits at a named point in the pipeline and logs every frame passing through.
 
-    Lifecycle:
-        pipeline = TelephonyAgentPipeline(websocket, config)
-        await pipeline.run()   # blocks until call ends / WebSocket closes
+    Useful for confirming that audio, transcriptions, LLM tokens, and TTS
+    audio are actually flowing through the pipeline end-to-end.
     """
+
+    def __init__(self, label: str, session_id: str, *, log_audio: bool = False) -> None:
+        super().__init__()
+        self._label = label
+        self._sid = session_id
+        self._log_audio = log_audio
+        self._frame_counts: dict[str, int] = {}
+        self._audio_bytes_seen = 0
+        self._last_report = time.monotonic()
+
+    async def process_frame(self, frame: Frame, direction: FrameDirection) -> None:
+        await super().process_frame(frame, direction)
+
+        frame_type = type(frame).__name__
+        self._frame_counts[frame_type] = self._frame_counts.get(frame_type, 0) + 1
+
+        # Always log important semantic frames
+        if isinstance(frame, TranscriptionFrame):
+            logger.debug(
+                f"[{self._label}] 📝 TRANSCRIPTION: '{frame.text}' "
+                f"(user={frame.user_id})"
+            )
+        elif isinstance(frame, InterimTranscriptionFrame):
+            logger.debug(
+                f"[{self._label}] 📝 INTERIM: '{frame.text}'"
+            )
+        elif isinstance(frame, TextFrame):
+            logger.debug(
+                f"[{self._label}] 💬 LLM TOKEN: '{frame.text}'"
+            )
+        elif isinstance(frame, TTSStartedFrame):
+            logger.info(f"[{self._label}] 🔊 TTS STARTED")
+        elif isinstance(frame, TTSStoppedFrame):
+            logger.info(f"[{self._label}] 🔇 TTS STOPPED")
+        elif isinstance(frame, TTSAudioRawFrame):
+            logger.debug(
+                f"[{self._label}] 🎵 TTS AUDIO: {len(frame.audio)} bytes "
+                f"rate={frame.sample_rate}"
+            )
+        elif isinstance(frame, UserStartedSpeakingFrame):
+            logger.info(f"[{self._label}] 🎤 USER STARTED SPEAKING")
+        elif isinstance(frame, UserStoppedSpeakingFrame):
+            logger.info(f"[{self._label}] 🔕 USER STOPPED SPEAKING")
+        elif isinstance(frame, StartInterruptionFrame):
+            logger.warning(f"[{self._label}] ⚡ BARGE-IN / INTERRUPTION")
+        elif isinstance(frame, CancelFrame):
+            logger.warning(f"[{self._label}] ❌ CANCEL FRAME")
+        elif isinstance(frame, EndFrame):
+            logger.info(f"[{self._label}] 🏁 END FRAME — pipeline shutting down")
+        elif isinstance(frame, MetricsFrame):
+            logger.debug(f"[{self._label}] 📊 METRICS: {frame}")
+        elif isinstance(frame, InputAudioRawFrame) and self._log_audio:
+            self._audio_bytes_seen += len(frame.audio)
+            now = time.monotonic()
+            if now - self._last_report > 5.0:
+                logger.debug(
+                    f"[{self._label}] 🔉 AUDIO IN: {self._audio_bytes_seen} bytes "
+                    f"total in last 5s, rate={frame.sample_rate}"
+                )
+                self._audio_bytes_seen = 0
+                self._last_report = now
+        elif isinstance(frame, AudioRawFrame) and self._log_audio:
+            self._audio_bytes_seen += len(frame.audio)
+            now = time.monotonic()
+            if now - self._last_report > 5.0:
+                logger.debug(
+                    f"[{self._label}] 🔈 AUDIO OUT: {self._audio_bytes_seen} bytes "
+                    f"total in last 5s"
+                )
+                self._audio_bytes_seen = 0
+                self._last_report = now
+        else:
+            # Log all other frame types at trace level so they don't flood logs
+            logger.trace(f"[{self._label}] frame={frame_type} dir={direction.name}")
+
+        await self.push_frame(frame, direction)
+
+    async def cleanup(self) -> None:
+        logger.debug(
+            f"[{self._label}] Frame count summary: "
+            + ", ".join(f"{k}={v}" for k, v in sorted(self._frame_counts.items()))
+        )
+
+
+# ── Pipeline ───────────────────────────────────────────────────────────────────
+
+class TelephonyAgentPipeline:
+    """Manages one complete realtime voice pipeline for a single phone call."""
 
     def __init__(self, websocket: WebSocket, config: AgentConfig) -> None:
         self.websocket = websocket
@@ -73,10 +158,8 @@ class TelephonyAgentPipeline:
         self._latency = LatencyTracker(self.session_id)
 
     async def run(self) -> None:
-        """Build the pipeline and run it until the call ends."""
         self._log.info("Call session started", session_id=self.session_id)
         self._latency.mark("call_start")
-
         try:
             await self._run_pipeline()
         except Exception as exc:
@@ -88,17 +171,13 @@ class TelephonyAgentPipeline:
             self._log.info("Call session ended", session_id=self.session_id)
 
     async def _run_pipeline(self) -> None:
+        sid = self.session_id
 
-        # ── Serializer ───────────────────────────────────────────────────────
-        # Translates between raw binary PCM16 (FreeSWITCH wire format)
-        # and Pipecat's AudioRawFrame objects.
+        # ── Serializer ────────────────────────────────────────────────────────
         serializer = FreeSwitchAudioSerializer(sample_rate=self.config.sample_rate)
+        logger.debug(f"[{sid}] Serializer ready — sample_rate={self.config.sample_rate}")
 
-        # ── Transport ────────────────────────────────────────────────────────
-        # FastAPIWebsocketTransport manages the WebSocket lifecycle and
-        # converts binary PCM ↔ Pipecat frames using the serializer above.
-        # Silero VAD runs inside the transport so barge-in detection happens
-        # as close to the audio source as possible.
+        # ── Transport ─────────────────────────────────────────────────────────
         transport = FastAPIWebsocketTransport(
             websocket=self.websocket,
             params=FastAPIWebsocketParams(
@@ -108,7 +187,9 @@ class TelephonyAgentPipeline:
                 serializer=serializer,
             ),
         )
+        logger.debug(f"[{sid}] Transport created")
 
+        # ── VAD ───────────────────────────────────────────────────────────────
         vad = VADProcessor(
             vad_analyzer=SileroVADAnalyzer(
                 params=VADParams(
@@ -119,31 +200,52 @@ class TelephonyAgentPipeline:
                 )
             )
         )
+        logger.debug(f"[{sid}] VAD processor created (Silero, confidence=0.7)")
 
-        # ── AI Services ──────────────────────────────────────────────────────
+        # ── AI Services ───────────────────────────────────────────────────────
+        logger.debug(f"[{sid}] Building AI services...")
         stt = build_groq_stt(self.config)
-        llm, ctx = build_groq_llm(self.config)
-        tts = build_elevenlabs_tts(self.config)
+        logger.info(f"[{sid}] STT ready: Groq Whisper")
 
-        # ── Pipeline ─────────────────────────────────────────────────────────
+        llm, ctx = build_groq_llm(self.config)
+        logger.info(f"[{sid}] LLM ready: {self.config.groq_model}")
+
+        tts = build_elevenlabs_tts(self.config)
+        logger.info(f"[{sid}] TTS ready: ElevenLabs {self.config.elevenlabs_model}")
+
+        # ── Debug observers ───────────────────────────────────────────────────
+        # Place probes between each stage to see exactly what's flowing where.
+        dbg_after_transport = DebugFrameLogger("AFTER_TRANSPORT", sid, log_audio=True)
+        dbg_after_vad       = DebugFrameLogger("AFTER_VAD",       sid, log_audio=False)
+        dbg_after_stt       = DebugFrameLogger("AFTER_STT",       sid)
+        dbg_after_llm       = DebugFrameLogger("AFTER_LLM",       sid)
+        dbg_after_tts       = DebugFrameLogger("AFTER_TTS",       sid, log_audio=True)
+
+        # ── Pipeline ──────────────────────────────────────────────────────────
         pipeline = Pipeline(
             [
-                transport.input(),       # 1. raw PCM from FreeSWITCH
-                vad,                     # 2. Silero VAD — barge-in / endpointing
-                stt,                     # 3. Deepgram streaming STT
-                ctx.user(),              # 4. accumulate turns → LLM context
-                llm,                     # 5. Groq streaming LLM
-                tts,                     # 6. ElevenLabs streaming TTS
-                ctx.assistant(),         # 7. store bot reply in memory
-                transport.output(),      # 8. raw PCM back to FreeSWITCH
+                transport.input(),      # 1. raw PCM from FreeSWITCH
+                dbg_after_transport,    #    ← debug: what enters the pipeline?
+                vad,                    # 2. Silero VAD — speech detection
+                dbg_after_vad,          #    ← debug: VAD events, speech start/stop
+                stt,                    # 3. Groq Whisper STT
+                dbg_after_stt,          #    ← debug: transcriptions
+                ctx.user(),             # 4. accumulate turns → LLM context
+                llm,                    # 5. Groq LLM
+                dbg_after_llm,          #    ← debug: LLM token stream
+                tts,                    # 6. ElevenLabs TTS
+                dbg_after_tts,          #    ← debug: TTS audio chunks
+                ctx.assistant(),        # 7. store bot reply in memory
+                transport.output(),     # 8. raw PCM → FreeSWITCH → caller
             ]
         )
+        logger.debug(f"[{sid}] Pipeline assembled with 8 stages + 5 debug observers")
 
-        # ── Task ─────────────────────────────────────────────────────────────
+        # ── Task ──────────────────────────────────────────────────────────────
         task = PipelineTask(
             pipeline,
             params=PipelineParams(
-                allow_interruptions=True,       # barge-in support
+                allow_interruptions=True,
                 enable_metrics=True,
                 enable_usage_metrics=True,
             ),
@@ -153,22 +255,27 @@ class TelephonyAgentPipeline:
         @transport.event_handler("on_client_connected")
         async def on_connected(transport_obj, client):
             call_uuid = serializer.call_uuid or "pending"
-            self._log.info("FreeSWITCH connected", call_uuid=call_uuid)
+            self._log.info(
+                "FreeSWITCH connected",
+                call_uuid=call_uuid,
+                client=str(client),
+            )
             self._latency.mark("client_connected")
-
-            # Greet the caller immediately — inject a synthetic "Hello" so
-            # the LLM produces an opening message without the caller speaking.
+            logger.debug(
+                f"[{sid}] Sending greeting LLMMessagesUpdateFrame to pipeline"
+            )
             await task.queue_frames(
                 [
                     LLMMessagesUpdateFrame(
                         messages=[
                             {"role": "system", "content": self.config.system_prompt},
-                            {"role": "user", "content": "Hello, I just picked up the phone."},
+                            {"role": "user",   "content": "Hello, I just picked up the phone."},
                         ],
                         run_llm=True,
                     )
                 ]
             )
+            logger.debug(f"[{sid}] Greeting frame queued")
 
         @transport.event_handler("on_client_disconnected")
         async def on_disconnected(transport_obj, client):
@@ -181,4 +288,8 @@ class TelephonyAgentPipeline:
         # ── Run ───────────────────────────────────────────────────────────────
         runner = PipelineRunner(handle_sigint=False)
         self._log.info("Pipeline running — waiting for audio from FreeSWITCH")
+        logger.debug(
+            f"[{sid}] WebSocket transport audio_in={True} audio_out={True} "
+            f"sample_rate={self.config.sample_rate}"
+        )
         await runner.run(task)
