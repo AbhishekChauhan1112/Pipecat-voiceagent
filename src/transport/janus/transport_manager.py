@@ -64,8 +64,6 @@ class JanusTransportManager:
 
             logger.info("[CONNECTING] joining Janus room")
             self.rtc.initialize()
-            # outbound_track = PipecatTTSAudioTrack(self.media_bridge)
-            # self.rtc.add_track(outbound_track)
 
             # Pipecat joins AudioBridge only when SIP call is active.
             await self.orchestrator.audiobridge.join_room(display="pipecat-voiceagent")
@@ -88,10 +86,6 @@ class JanusTransportManager:
                     print("[WEBRTC] create pc DONE")
                     logger.warning("[WEBRTC] RTCPeerConnection initialized")
 
-                    logger.warning("[WEBRTC] adding outbound audio track")
-                    # outbound_track = PipecatTTSAudioTrack(self.media_bridge)
-                    # self.rtc.add_track(outbound_track)
-                    logger.warning("[WEBRTC] outbound audio track added")
 
                     offer_sdp = jsep.get("sdp")
                     if not offer_sdp:

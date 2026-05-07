@@ -126,7 +126,6 @@ class RTCTransport:
                 f"kind={track.kind} "
                 f"id={track.id}"
             )
-            logger.warning("[TRACK] kind=%s id=%s", track.kind, track.id)
             if track.kind == "audio":
                 for task in self._audio_reader_tasks:
                     if getattr(task, "track_id", None) == track.id:
@@ -160,7 +159,6 @@ class RTCTransport:
 
     async def _read_audio(self, track):
         print("[AUDIO] reader started")
-        logger.warning("[AUDIO] reader started track=%s", track.id)
         frames = 0
         while True:
             try:
@@ -172,13 +170,6 @@ class RTCTransport:
                     f"pts={frame.pts} "
                     f"samples={frame.samples} "
                     f"rate={frame.sample_rate}"
-                )
-                logger.warning(
-                    "[AUDIO_FRAME] count=%s pts=%s samples=%s rate=%s",
-                    frames,
-                    frame.pts,
-                    frame.samples,
-                    frame.sample_rate,
                 )
                 if self.media_bridge:
                     await self.media_bridge.enqueue_inbound_frame(frame)
@@ -244,11 +235,9 @@ class RTCTransport:
         logger.warning("[SDP_REMOTE_OFFER] %s", sdp)
         offer = RTCSessionDescription(sdp=sdp, type="offer")
         logger.info("Setting remote description (offer) for SIP incoming call...")
-        logger.warning("[WEBRTC] setRemoteDescription START")
         print("[WEBRTC] setRemoteDescription START")
         await self.pc.setRemoteDescription(offer)
         print("[WEBRTC] setRemoteDescription DONE")
-        logger.warning("[WEBRTC] setRemoteDescription DONE")
 
         self.outbound_track = ToneAudioTrack()
         self.pc.addTrack(self.outbound_track)
@@ -265,16 +254,12 @@ class RTCTransport:
                 sender.track,
             )
 
-        logger.warning("[WEBRTC] createAnswer START")
         print("[WEBRTC] createAnswer START")
         answer = await self.pc.createAnswer()
         print("[WEBRTC] createAnswer DONE")
-        logger.warning("[WEBRTC] createAnswer DONE")
-        logger.warning("[WEBRTC] setLocalDescription START")
         print("[WEBRTC] setLocalDescription START")
         await self.pc.setLocalDescription(answer)
         print("[WEBRTC] setLocalDescription DONE")
-        logger.warning("[WEBRTC] setLocalDescription DONE")
 
         for transceiver in self.pc.getTransceivers():
             print(
@@ -294,19 +279,12 @@ class RTCTransport:
         print("[WEBRTC] LOCAL SDP START")
         print(self.pc.localDescription.sdp)
         print("[WEBRTC] LOCAL SDP END")
-        logger.warning("[SDP_LOCAL_ANSWER] %s", self.pc.localDescription.sdp)
         for t in self.pc.getTransceivers():
             print(
                 f"[TRANSCEIVER] "
                 f"kind={t.kind} "
                 f"direction={t.direction} "
                 f"currentDirection={t.currentDirection}"
-            )
-            logger.warning(
-                "[TRANSCEIVER] kind=%s direction=%s currentDirection=%s",
-                t.kind,
-                t.direction,
-                t.currentDirection,
             )
         logger.info("Created local SDP answer for SIP incoming call")
         return {"type": self.pc.localDescription.type, "sdp": self.pc.localDescription.sdp}
