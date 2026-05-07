@@ -73,7 +73,7 @@ class FreeSwitchAudioSerializer(FrameSerializer):
 
     # ── FrameSerializer interface ─────────────────────────────────────────
 
-    def serialize(self, frame: Frame) -> bytes | str | None:
+    async def serialize(self, frame: Frame) -> bytes | str | None:
         """Convert a Pipecat audio frame → raw PCM bytes for FreeSWITCH.
 
         Only AudioRawFrame instances produce output; all other frame types
@@ -90,7 +90,7 @@ class FreeSwitchAudioSerializer(FrameSerializer):
             return frame.audio
         return None
 
-    def deserialize(self, data: str | bytes) -> Frame | None:
+    async def deserialize(self, data: str | bytes) -> Frame | None:
         """Convert a FreeSWITCH WebSocket message → Pipecat Frame.
 
         Handles two message types:

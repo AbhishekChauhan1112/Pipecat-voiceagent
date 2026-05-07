@@ -32,7 +32,11 @@ def build_groq_llm(config: AgentConfig):
 
     llm = GroqLLMService(
         api_key=config.groq_api_key,
-        model=config.groq_model,
+        settings=GroqLLMService.Settings(
+            model=config.groq_model,
+            temperature=config.llm_temperature,
+            max_tokens=config.llm_max_tokens,
+        ),
     )
 
     # Seed the conversation with the system prompt.
