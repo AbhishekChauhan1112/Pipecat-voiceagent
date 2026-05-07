@@ -17,10 +17,11 @@ class ToneAudioTrack(AudioStreamTrack):
 
         self.sample_rate = 48000
         self.samples_per_frame = 960
+
         self.timestamp = 0
+        self.phase = 0
 
         self.frequency = 440.0
-        self.phase = 0.0
 
         print("[TONE_TRACK] initialized")
 
@@ -32,7 +33,7 @@ class ToneAudioTrack(AudioStreamTrack):
             + self.phase
         ) / self.sample_rate
 
-        samples = (
+        mono = (
             0.2
             * np.sin(
                 2
@@ -42,18 +43,25 @@ class ToneAudioTrack(AudioStreamTrack):
             )
         )
 
-        pcm = (
-            samples * 32767
+        mono = (
+            mono * 32767
         ).astype(np.int16)
 
+        stereo = np.stack(
+            [mono, mono],
+            axis=0
+        )
+
         frame = av.AudioFrame.from_ndarray(
-            pcm.reshape(1, -1),
+            stereo,
             format="s16",
-            layout="mono"
+            layout="stereo"
         )
 
         frame.sample_rate = self.sample_rate
+
         frame.pts = self.timestamp
+
         frame.time_base = Fraction(
             1,
             self.sample_rate
