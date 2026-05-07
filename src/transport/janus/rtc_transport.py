@@ -18,7 +18,6 @@ class ToneAudioTrack(AudioStreamTrack):
         self.sample_rate = 48000
         self.samples_per_frame = 960
 
-        self.timestamp = 0
         self.phase = 0
 
         self.frequency = 440.0
@@ -26,7 +25,7 @@ class ToneAudioTrack(AudioStreamTrack):
         print("[TONE_TRACK] initialized")
 
     async def recv(self):
-        await asyncio.sleep(0.02)
+        pts, time_base = await self.next_timestamp()
 
         t = (
             np.arange(self.samples_per_frame)
@@ -59,14 +58,9 @@ class ToneAudioTrack(AudioStreamTrack):
 
         frame.sample_rate = self.sample_rate
 
-        frame.pts = self.timestamp
+        frame.pts = pts
+        frame.time_base = time_base
 
-        frame.time_base = Fraction(
-            1,
-            self.sample_rate
-        )
-
-        self.timestamp += self.samples_per_frame
         self.phase += self.samples_per_frame
 
         print(
