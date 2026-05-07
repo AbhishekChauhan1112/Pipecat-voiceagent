@@ -92,6 +92,13 @@ class FreeSwitchAudioSerializer(FrameSerializer):
                 pairs = [out_audio[i:i+2] for i in range(0, len(out_audio), 2)]
                 out_audio = b"".join(p + p for p in pairs)
 
+            logger.warning(
+                f"SERIALIZER AUDIO FORMAT "
+                f"rate={getattr(frame, 'sample_rate', 'unknown')} "
+                f"channels={getattr(frame, 'num_channels', 'unknown')} "
+                f"bytes={len(out_audio)}"
+            )
+
             self._tx_packets += 1
             self._tx_bytes += len(out_audio)
             
