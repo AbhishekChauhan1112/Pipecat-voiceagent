@@ -5,9 +5,11 @@ import traceback
 from aiortc import RTCPeerConnection, RTCSessionDescription, AudioStreamTrack
 from aiortc.sdp import candidate_from_sdp
 import av
+import math
+import numpy as np
 from fractions import Fraction
 
-class SilenceAudioTrack(AudioStreamTrack):
+class ToneAudioTrack(AudioStreamTrack):
     kind = "audio"
 
     def __init__(self):
@@ -17,21 +19,38 @@ class SilenceAudioTrack(AudioStreamTrack):
         self.samples_per_frame = 960
         self.timestamp = 0
 
-        print("[SILENCE_TRACK] initialized")
+        self.frequency = 440.0
+        self.phase = 0.0
+
+        print("[TONE_TRACK] initialized")
 
     async def recv(self):
         await asyncio.sleep(0.02)
 
-        frame = av.AudioFrame(
-            format="s16",
-            layout="mono",
-            samples=self.samples_per_frame
+        t = (
+            np.arange(self.samples_per_frame)
+            + self.phase
+        ) / self.sample_rate
+
+        samples = (
+            0.2
+            * np.sin(
+                2
+                * math.pi
+                * self.frequency
+                * t
+            )
         )
 
-        for plane in frame.planes:
-            plane.update(
-                b"\x00" * plane.buffer_size
-            )
+        pcm = (
+            samples * 32767
+        ).astype(np.int16)
+
+        frame = av.AudioFrame.from_ndarray(
+            pcm.reshape(1, -1),
+            format="s16",
+            layout="mono"
+        )
 
         frame.sample_rate = self.sample_rate
         frame.pts = self.timestamp
@@ -41,9 +60,10 @@ class SilenceAudioTrack(AudioStreamTrack):
         )
 
         self.timestamp += self.samples_per_frame
+        self.phase += self.samples_per_frame
 
         print(
-            f"[SILENCE_FRAME] "
+            f"[TONE_FRAME] "
             f"pts={frame.pts}"
         )
 
@@ -70,7 +90,7 @@ class RTCTransport:
         if self.pc and self.pc.connectionState != "closed":
             return
         self.pc = RTCPeerConnection()
-        self.pc.addTrack(SilenceAudioTrack())
+        self.pc.addTrack(ToneAudioTrack())
         self._setup_events()
 
     def _setup_events(self):
