@@ -172,17 +172,6 @@ class RTCTransport:
         if not self.pc:
             raise RuntimeError("PeerConnection not initialized")
 
-        if not self._audio_transceiver_added:
-            mode = (config.WEBRTC_AUDIO_TRANSCEIVER_MODE or "recvonly").strip().lower()
-            if mode not in {"recvonly", "sendrecv"}:
-                mode = "recvonly"
-            logger.warning("[WEBRTC] addTransceiver mode=%s", mode)
-            print("[WEBRTC] addTransceiver START")
-            self.pc.addTransceiver("audio", direction=mode)
-            print("[WEBRTC] addTransceiver DONE")
-            self._audio_transceiver_added = True
-            logger.warning("[PC] added audio transceiver before setRemoteDescription")
-
         logger.warning("[SDP_REMOTE_OFFER] %s", sdp)
         offer = RTCSessionDescription(sdp=sdp, type="offer")
         logger.info("Setting remote description (offer) for SIP incoming call...")
