@@ -1,92 +1,67 @@
-Type /help <enter> to see a list of commands
+ype /help <enter> to see a list of commands
 
 
 
 +OK log level  [7]
-2026-05-07 07:25:59.288578 95.27% [WARNING] sofia_reg.c:3210 Can't find user [110@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="110" attribute
+2026-05-07 07:40:18.628555 93.70% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/888892@13.235.45.114 [00c25b6d-eebe-4e24-ad96-b23a45661f52]
+2026-05-07 07:40:18.628555 93.70% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/888892@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11888)
+2026-05-07 07:40:18.628555 93.70% [INFO] sofia.c:10460 sofia/internal/888892@13.235.45.114 receiving invite from 199.127.61.12:57062 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 963258398-1268379939-2050393006
+2026-05-07 07:40:18.628555 93.70% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:18.628555 93.70% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/888892@13.235.45.114) State NEW
+2026-05-07 07:40:18.628555 93.70% [DEBUG] sofia.c:2419 detaching session 00c25b6d-eebe-4e24-ad96-b23a45661f52
+2026-05-07 07:40:18.888598 93.73% [DEBUG] sofia.c:2532 Re-attaching to session 00c25b6d-eebe-4e24-ad96-b23a45661f52
+2026-05-07 07:40:18.888598 93.73% [INFO] sofia.c:10460 sofia/internal/888892@13.235.45.114 receiving invite from 199.127.61.12:57062 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 963258398-1268379939-2050393006
+2026-05-07 07:40:18.888598 93.73% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:18.888598 93.73% [WARNING] sofia_reg.c:3210 Can't find user [888892@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="888892" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:00.148936 97.00% [WARNING] switch_core_state_machine.c:684 11fc4783-88ad-4c70-839f-59c681a44ba9 sofia/internal/9020111323545114@13.235.45.114 Abandoned
-2026-05-07 07:26:00.148936 97.00% [NOTICE] switch_core_state_machine.c:687 Hangup sofia/internal/9020111323545114@13.235.45.114 [CS_NEW] [WRONG_CALL_STATE]
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9020111323545114@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11794)
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/9020111323545114@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/9020111323545114@13.235.45.114) State HANGUP
-2026-05-07 07:26:00.148936 97.00% [DEBUG] mod_sofia.c:469 Channel sofia/internal/9020111323545114@13.235.45.114 hanging up, cause: WRONG_CALL_STATE
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:59 sofia/internal/9020111323545114@13.235.45.114 Standard HANGUP, cause: WRONG_CALL_STATE
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/9020111323545114@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/9020111323545114@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9020111323545114@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11794)
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/9020111323545114@13.235.45.114) State REPORTING
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:168 sofia/internal/9020111323545114@13.235.45.114 Standard REPORTING, cause: WRONG_CALL_STATE
-2026-05-07 07:26:00.148936 97.00% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/9020111323545114@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:00.168787 97.00% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/9020111323545114@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:00.168787 97.00% [DEBUG] switch_core_session.c:1744 Session 11793 (sofia/internal/9020111323545114@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:00.168787 97.00% [NOTICE] switch_core_session.c:1762 Session 11793 (sofia/internal/9020111323545114@13.235.45.114) Ended
-2026-05-07 07:26:00.168787 97.00% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/9020111323545114@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:00.168787 97.00% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/9020111323545114@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11794)
-2026-05-07 07:26:00.168787 97.00% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/9020111323545114@13.235.45.114) State DESTROY
-2026-05-07 07:26:00.168787 97.00% [DEBUG] mod_sofia.c:380 sofia/internal/9020111323545114@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:00.168787 97.00% [DEBUG] switch_core_state_machine.c:175 sofia/internal/9020111323545114@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:00.168787 97.00% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/9020111323545114@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:02.128563 98.87% [WARNING] sofia_reg.c:3210 Can't find user [102@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="102" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:05.568624 98.83% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/4600@13.235.45.114 [d9a1112d-688e-4e5e-9e14-1c642fd3f71b]
-2026-05-07 07:26:05.568624 98.83% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/4600@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11795)
-2026-05-07 07:26:05.568624 98.83% [INFO] sofia.c:10460 sofia/internal/4600@13.235.45.114 receiving invite from 199.127.61.12:58781 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 91992751-1773451447-399178682
-2026-05-07 07:26:05.568624 98.83% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:05.568624 98.83% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/4600@13.235.45.114) State NEW
-2026-05-07 07:26:05.568624 98.83% [DEBUG] sofia.c:2419 detaching session d9a1112d-688e-4e5e-9e14-1c642fd3f71b
-2026-05-07 07:26:05.808605 98.83% [DEBUG] sofia.c:2532 Re-attaching to session d9a1112d-688e-4e5e-9e14-1c642fd3f71b
-2026-05-07 07:26:05.828602 98.83% [INFO] sofia.c:10460 sofia/internal/4600@13.235.45.114 receiving invite from 199.127.61.12:58781 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 91992751-1773451447-399178682
-2026-05-07 07:26:05.828602 98.83% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:05.828602 98.83% [WARNING] sofia_reg.c:3210 Can't find user [4600@172.31.38.106] from 199.127.61.12
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="4600" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:05.828602 98.83% [NOTICE] sofia.c:2417 Hangup sofia/internal/4600@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:26:05.848458 98.83% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/4600@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11795)
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/4600@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/4600@13.235.45.114) State HANGUP
-2026-05-07 07:26:05.848458 98.83% [DEBUG] mod_sofia.c:469 Channel sofia/internal/4600@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:59 sofia/internal/4600@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/4600@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/4600@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/4600@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11795)
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/4600@13.235.45.114) State REPORTING
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:168 sofia/internal/4600@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/4600@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/4600@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_session.c:1744 Session 11795 (sofia/internal/4600@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:05.848458 98.83% [NOTICE] switch_core_session.c:1762 Session 11795 (sofia/internal/4600@13.235.45.114) Ended
-2026-05-07 07:26:05.848458 98.83% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/4600@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/4600@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11795)
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/4600@13.235.45.114) State DESTROY
-2026-05-07 07:26:05.848458 98.83% [DEBUG] mod_sofia.c:380 sofia/internal/4600@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:175 sofia/internal/4600@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:05.848458 98.83% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/4600@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:05.908656 98.83% [WARNING] sofia_reg.c:3210 Can't find user [103@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="103" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:07.468546 98.80% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/1000@13.235.45.114 [d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4]
-2026-05-07 07:26:07.468546 98.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11796)
-2026-05-07 07:26:07.468546 98.80% [INFO] sofia.c:10460 sofia/internal/1000@13.235.45.114 receiving invite from 86.107.100.98:58213 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: FNc8XM4r8a
-2026-05-07 07:26:07.468546 98.80% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 86.107.100.98:0.
-2026-05-07 07:26:07.468546 98.80% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/1000@13.235.45.114) State NEW
-2026-05-07 07:26:07.468546 98.80% [DEBUG] sofia.c:2419 detaching session d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4
-2026-05-07 07:26:07.548624 98.80% [DEBUG] sofia.c:2532 Re-attaching to session d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4
-2026-05-07 07:26:07.548624 98.80% [INFO] sofia.c:10460 sofia/internal/1000@13.235.45.114 receiving invite from 86.107.100.98:58213 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: FNc8XM4r8a
-2026-05-07 07:26:07.548624 98.80% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 86.107.100.98:0.
-2026-05-07 07:26:07.548624 98.80% [DEBUG] sofia.c:7493 Channel sofia/internal/1000@13.235.45.114 entering state [received][100]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] sofia.c:7503 Remote SDP:
+2026-05-07 07:40:18.888598 93.73% [NOTICE] sofia.c:2417 Hangup sofia/internal/888892@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:40:18.908609 93.73% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/888892@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11888)
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/888892@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/888892@13.235.45.114) State HANGUP
+2026-05-07 07:40:18.908609 93.73% [DEBUG] mod_sofia.c:469 Channel sofia/internal/888892@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:59 sofia/internal/888892@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/888892@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/888892@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/888892@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11888)
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/888892@13.235.45.114) State REPORTING
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:168 sofia/internal/888892@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/888892@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/888892@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_session.c:1744 Session 11888 (sofia/internal/888892@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:40:18.908609 93.73% [NOTICE] switch_core_session.c:1762 Session 11888 (sofia/internal/888892@13.235.45.114) Ended
+2026-05-07 07:40:18.908609 93.73% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/888892@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/888892@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11888)
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/888892@13.235.45.114) State DESTROY
+2026-05-07 07:40:18.908609 93.73% [DEBUG] mod_sofia.c:380 sofia/internal/888892@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:175 sofia/internal/888892@13.235.45.114 Standard DESTROY
+2026-05-07 07:40:18.908609 93.73% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/888892@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:40:22.788642 93.73% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/9100111323545114@13.235.45.114 [13a29b91-c918-487d-8237-bffe452c7ca4]
+2026-05-07 07:40:22.788642 93.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9100111323545114@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11889)
+2026-05-07 07:40:22.788642 93.73% [INFO] sofia.c:10460 sofia/internal/9100111323545114@13.235.45.114 receiving invite from 5.196.63.60:62238 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1151786333-2025968881-280422438
+2026-05-07 07:40:22.788642 93.73% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 5.196.63.60:0.
+2026-05-07 07:40:22.788642 93.73% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/9100111323545114@13.235.45.114) State NEW
+2026-05-07 07:40:22.788642 93.73% [DEBUG] sofia.c:2419 detaching session 13a29b91-c918-487d-8237-bffe452c7ca4
+2026-05-07 07:40:23.128590 93.73% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/1000@13.235.45.114 [f4d2cb35-75ae-4399-b838-1707c9fb0186]
+2026-05-07 07:40:23.128590 93.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11890)
+2026-05-07 07:40:23.128590 93.73% [INFO] sofia.c:10460 sofia/internal/1000@13.235.45.114 receiving invite from 86.107.100.98:50940 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: Tvo7i47hqX
+2026-05-07 07:40:23.128590 93.73% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 86.107.100.98:0.
+2026-05-07 07:40:23.128590 93.73% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/1000@13.235.45.114) State NEW
+2026-05-07 07:40:23.128590 93.73% [DEBUG] sofia.c:2419 detaching session f4d2cb35-75ae-4399-b838-1707c9fb0186
+2026-05-07 07:40:23.188496 93.73% [DEBUG] sofia.c:2532 Re-attaching to session f4d2cb35-75ae-4399-b838-1707c9fb0186
+2026-05-07 07:40:23.208553 93.73% [INFO] sofia.c:10460 sofia/internal/1000@13.235.45.114 receiving invite from 86.107.100.98:50940 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: Tvo7i47hqX
+2026-05-07 07:40:23.208553 93.73% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 86.107.100.98:0.
+2026-05-07 07:40:23.208553 93.73% [DEBUG] sofia.c:7493 Channel sofia/internal/1000@13.235.45.114 entering state [received][100]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] sofia.c:7503 Remote SDP:
 v=0
-o=1000 3154 2204 IN IP4 86.107.100.98
+o=1000 496 2809 IN IP4 86.107.100.98
 s=Talk
 c=IN IP4 86.107.100.98
 t=0 0
 a=rtcp-xr:rcvr-rtt=all:10000 stat-summary=loss,dup,jitt,TTL voip-metrics
 a=record:off
-m=audio 60109 RTP/AVP 96 97 98 0 8 18 101 99 100
+m=audio 44305 RTP/AVP 96 97 98 0 8 18 101 99 100
 a=rtpmap:96 opus/48000/2
 a=fmtp:96 useinbandfec=1
 a=rtpmap:97 speex/16000
@@ -97,23 +72,23 @@ a=fmtp:18 annexb=yes
 a=rtpmap:101 telephone-event/48000
 a=rtpmap:99 telephone-event/16000
 a=rtpmap:100 telephone-event/8000
-a=rtcp:41059
+a=rtcp:59090
 a=rtcp-fb:* trr-int 1000
 a=rtcp-fb:* ccm tmmbr
 
-2026-05-07 07:26:07.548624 98.80% [DEBUG] sofia.c:7906 (sofia/internal/1000@13.235.45.114) State Change CS_NEW -> CS_INIT
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_INIT (Cur 1 Tot 11796)
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:624 (sofia/internal/1000@13.235.45.114) State INIT
-2026-05-07 07:26:07.548624 98.80% [DEBUG] mod_sofia.c:97 sofia/internal/1000@13.235.45.114 SOFIA INIT
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:40 sofia/internal/1000@13.235.45.114 Standard INIT
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:48 (sofia/internal/1000@13.235.45.114) State Change CS_INIT -> CS_ROUTING
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:624 (sofia/internal/1000@13.235.45.114) State INIT going to sleep
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_ROUTING (Cur 1 Tot 11796)
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_channel.c:2399 (sofia/internal/1000@13.235.45.114) Callstate Change DOWN -> RINGING
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:640 (sofia/internal/1000@13.235.45.114) State ROUTING
-2026-05-07 07:26:07.548624 98.80% [DEBUG] mod_sofia.c:158 sofia/internal/1000@13.235.45.114 SOFIA ROUTING
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:230 sofia/internal/1000@13.235.45.114 Standard ROUTING
-2026-05-07 07:26:07.548624 98.80% [INFO] mod_dialplan_xml.c:639 Processing 1000 <1000>->7007 in context default
+2026-05-07 07:40:23.208553 93.73% [DEBUG] sofia.c:7906 (sofia/internal/1000@13.235.45.114) State Change CS_NEW -> CS_INIT
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_INIT (Cur 2 Tot 11890)
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:624 (sofia/internal/1000@13.235.45.114) State INIT
+2026-05-07 07:40:23.208553 93.73% [DEBUG] mod_sofia.c:97 sofia/internal/1000@13.235.45.114 SOFIA INIT
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:40 sofia/internal/1000@13.235.45.114 Standard INIT
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:48 (sofia/internal/1000@13.235.45.114) State Change CS_INIT -> CS_ROUTING
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:624 (sofia/internal/1000@13.235.45.114) State INIT going to sleep
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_ROUTING (Cur 2 Tot 11890)
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_channel.c:2399 (sofia/internal/1000@13.235.45.114) Callstate Change DOWN -> RINGING
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:640 (sofia/internal/1000@13.235.45.114) State ROUTING
+2026-05-07 07:40:23.208553 93.73% [DEBUG] mod_sofia.c:158 sofia/internal/1000@13.235.45.114 SOFIA ROUTING
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:230 sofia/internal/1000@13.235.45.114 Standard ROUTING
+2026-05-07 07:40:23.208553 93.73% [INFO] mod_dialplan_xml.c:639 Processing 1000 <1000>->7007 in context default
 Dialplan: sofia/internal/1000@13.235.45.114 parsing [default->unloop] continue=false
 Dialplan: sofia/internal/1000@13.235.45.114 Regex (PASS) [unloop] ${unroll_loops}(true) =~ /^true$/ break=on-false
 Dialplan: sofia/internal/1000@13.235.45.114 Regex (FAIL) [unloop] ${sip_looped_call}() =~ /^true$/ break=on-false
@@ -135,13 +110,13 @@ Dialplan: sofia/internal/1000@13.235.45.114 Regex (FAIL) [global] ${default_pass
 Dialplan: sofia/internal/1000@13.235.45.114 Regex (FAIL) [global] ${rtp_has_crypto}() =~ /^(AEAD_AES_256_GCM_8|AEAD_AES_128_GCM_8|AES_CM_256_HMAC_SHA1_80|AES_CM_192_HMAC_SHA1_80|AES_CM_128_HMAC_SHA1_80|AES_CM_256_HMAC_SHA1_32|AES_CM_192_HMAC_SHA1_32|AES_CM_128_HMAC_SHA1_32|AES_CM_128_NULL_AUTH)$/ break=never
 Dialplan: sofia/internal/1000@13.235.45.114 Regex (PASS) [global] ${endpoint_disposition}(DELAYED NEGOTIATION) =~ /^(DELAYED NEGOTIATION)/ break=on-false
 Dialplan: sofia/internal/1000@13.235.45.114 Regex (FAIL) [global] ${switch_r_sdp}(v=0
-o=1000 3154 2204 IN IP4 86.107.100.98
+o=1000 496 2809 IN IP4 86.107.100.98
 s=Talk
 c=IN IP4 86.107.100.98
 t=0 0
 a=rtcp-xr:rcvr-rtt=all:10000 stat-summary=loss,dup,jitt,TTL voip-metrics
 a=record:off
-m=audio 60109 RTP/AVP 96 97 98 0 8 18 101 99 100
+m=audio 44305 RTP/AVP 96 97 98 0 8 18 101 99 100
 a=rtpmap:96 opus/48000/2
 a=fmtp:96 useinbandfec=1
 a=rtpmap:97 speex/16000
@@ -152,7 +127,7 @@ a=fmtp:18 annexb=yes
 a=rtpmap:101 telephone-event/48000
 a=rtpmap:99 telephone-event/16000
 a=rtpmap:100 telephone-event/8000
-a=rtcp:41059
+a=rtcp:59090
 a=rtcp-fb:* trr-int 1000
 a=rtcp-fb:* ccm tmmbr
 ) =~ /(AES_CM_128_HMAC_SHA1_32|AES_CM_128_HMAC_SHA1_80)/ break=never
@@ -294,420 +269,726 @@ Dialplan: sofia/internal/1000@13.235.45.114 Regex (FAIL) [101] destination_numbe
 Dialplan: sofia/internal/1000@13.235.45.114 parsing [default->pipecat_agent] continue=false
 Dialplan: sofia/internal/1000@13.235.45.114 Regex (PASS) [pipecat_agent] destination_number(7007) =~ /^7007$/ break=on-false
 Dialplan: sofia/internal/1000@13.235.45.114 Action lua(pipecat.lua) 
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:281 (sofia/internal/1000@13.235.45.114) State Change CS_ROUTING -> CS_EXECUTE
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:640 (sofia/internal/1000@13.235.45.114) State ROUTING going to sleep
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_EXECUTE (Cur 1 Tot 11796)
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:647 (sofia/internal/1000@13.235.45.114) State EXECUTE
-2026-05-07 07:26:07.548624 98.80% [DEBUG] mod_sofia.c:213 sofia/internal/1000@13.235.45.114 SOFIA EXECUTE
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_state_machine.c:323 sofia/internal/1000@13.235.45.114 Standard EXECUTE
-EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 hash(insert/172.31.38.106-spymap/1000/d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4)
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:281 (sofia/internal/1000@13.235.45.114) State Change CS_ROUTING -> CS_EXECUTE
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:640 (sofia/internal/1000@13.235.45.114) State ROUTING going to sleep
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_EXECUTE (Cur 2 Tot 11890)
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:647 (sofia/internal/1000@13.235.45.114) State EXECUTE
+2026-05-07 07:40:23.208553 93.73% [DEBUG] mod_sofia.c:213 sofia/internal/1000@13.235.45.114 SOFIA EXECUTE
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_state_machine.c:323 sofia/internal/1000@13.235.45.114 Standard EXECUTE
+EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 hash(insert/172.31.38.106-spymap/1000/f4d2cb35-75ae-4399-b838-1707c9fb0186)
 EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 hash(insert/172.31.38.106-last_dial/1000/7007)
-EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 hash(insert/172.31.38.106-last_dial/global/d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4)
-EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 export(RFC2822_DATE=Thu, 07 May 2026 07:26:07 +0000)
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_channel.c:1334 EXPORT (export_vars) [RFC2822_DATE]=[Thu, 07 May 2026 07:26:07 +0000]
+EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 hash(insert/172.31.38.106-last_dial/global/f4d2cb35-75ae-4399-b838-1707c9fb0186)
+EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 export(RFC2822_DATE=Thu, 07 May 2026 07:40:23 +0000)
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_channel.c:1334 EXPORT (export_vars) [RFC2822_DATE]=[Thu, 07 May 2026 07:40:23 +0000]
 EXECUTE [depth=0] sofia/internal/1000@13.235.45.114 lua(pipecat.lua)
-2026-05-07 07:26:07.548624 98.80% [INFO] switch_cpp.cpp:1466 === PIPECAT AGENT STARTED uuid=d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4 ===
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [opus:96:48000:20:0:1]/[opus:116:48000:20:0:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5588 Audio Codec Compare [opus:116:48000:20:0:1] ++++ is saved as a match
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [opus:96:48000:20:0:1]/[PCMU:0:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [opus:96:48000:20:0:1]/[PCMA:8:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:97:16000:20:0:1]/[opus:116:48000:20:0:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:97:16000:20:0:1]/[PCMU:0:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:97:16000:20:0:1]/[PCMA:8:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:98:8000:20:0:1]/[opus:116:48000:20:0:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:98:8000:20:0:1]/[PCMU:0:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:98:8000:20:0:1]/[PCMA:8:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMU:0:8000:20:64000:1]/[opus:116:48000:20:0:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMU:0:8000:20:64000:1]/[PCMU:0:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5588 Audio Codec Compare [PCMU:0:8000:20:64000:1] ++++ is saved as a match
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMU:0:8000:20:64000:1]/[PCMA:8:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMA:8:8000:20:64000:1]/[opus:116:48000:20:0:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMA:8:8000:20:64000:1]/[PCMU:0:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMA:8:8000:20:64000:1]/[PCMA:8:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5588 Audio Codec Compare [PCMA:8:8000:20:64000:1] ++++ is saved as a match
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [G729:18:8000:20:8000:1]/[opus:116:48000:20:0:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [G729:18:8000:20:8000:1]/[PCMU:0:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [G729:18:8000:20:8000:1]/[PCMA:8:8000:20:64000:1]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5438 Set telephone-event payload to 101@48000
-2026-05-07 07:26:07.548624 98.80% [DEBUG] mod_opus.c:629 Opus encoder: set bitrate to local settings [72000bps]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] mod_opus.c:629 Opus encoder: set bitrate to local settings [72000bps]
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:3731 Set Codec sofia/internal/1000@13.235.45.114 opus/48000 20 ms 960 samples 0 bits 1 channels
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_codec.c:111 sofia/internal/1000@13.235.45.114 Original read codec set to opus:116
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5798 Set telephone-event payload to 101@48000
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:5856 sofia/internal/1000@13.235.45.114 Set 2833 dtmf send payload to 101 recv payload to 101
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:8660 AUDIO RTP [sofia/internal/1000@13.235.45.114] 172.31.38.106 port 18528 -> 86.107.100.98 port 60109 codec: 96 ms: 20
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_rtp.c:4566 Starting timer [soft] 960 bytes per 20ms
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:8881 Activating RTCP PORT 41059
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_rtp.c:4898 RTCP send rate is: 1000 and packet rate is: 20000 Remote Port: 41059
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_rtp.c:2692 Setting RTCP remote addr to 86.107.100.98:41059 2
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:8973 sofia/internal/1000@13.235.45.114 Set 2833 dtmf send payload to 101
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:8980 sofia/internal/1000@13.235.45.114 Set 2833 dtmf receive payload to 101
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:9003 sofia/internal/1000@13.235.45.114 Set rtp dtmf delay to 40
-2026-05-07 07:26:07.548624 98.80% [NOTICE] sofia_media.c:90 Pre-Answer sofia/internal/1000@13.235.45.114!
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_channel.c:3585 (sofia/internal/1000@13.235.45.114) Callstate Change RINGING -> EARLY
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_core_media.c:8642 Audio params are unchanged for sofia/internal/1000@13.235.45.114.
-2026-05-07 07:26:07.548624 98.80% [DEBUG] mod_sofia.c:914 Local SDP sofia/internal/1000@13.235.45.114:
+2026-05-07 07:40:23.208553 93.73% [INFO] switch_cpp.cpp:1466 === PIPECAT AGENT STARTED uuid=f4d2cb35-75ae-4399-b838-1707c9fb0186 ===
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [opus:96:48000:20:0:1]/[opus:116:48000:20:0:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5588 Audio Codec Compare [opus:116:48000:20:0:1] ++++ is saved as a match
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [opus:96:48000:20:0:1]/[PCMU:0:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [opus:96:48000:20:0:1]/[PCMA:8:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:97:16000:20:0:1]/[opus:116:48000:20:0:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:97:16000:20:0:1]/[PCMU:0:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:97:16000:20:0:1]/[PCMA:8:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:98:8000:20:0:1]/[opus:116:48000:20:0:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:98:8000:20:0:1]/[PCMU:0:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [speex:98:8000:20:0:1]/[PCMA:8:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMU:0:8000:20:64000:1]/[opus:116:48000:20:0:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMU:0:8000:20:64000:1]/[PCMU:0:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5588 Audio Codec Compare [PCMU:0:8000:20:64000:1] ++++ is saved as a match
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMU:0:8000:20:64000:1]/[PCMA:8:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMA:8:8000:20:64000:1]/[opus:116:48000:20:0:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMA:8:8000:20:64000:1]/[PCMU:0:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [PCMA:8:8000:20:64000:1]/[PCMA:8:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5588 Audio Codec Compare [PCMA:8:8000:20:64000:1] ++++ is saved as a match
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [G729:18:8000:20:8000:1]/[opus:116:48000:20:0:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [G729:18:8000:20:8000:1]/[PCMU:0:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5526 Audio Codec Compare [G729:18:8000:20:8000:1]/[PCMA:8:8000:20:64000:1]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5438 Set telephone-event payload to 101@48000
+2026-05-07 07:40:23.208553 93.73% [DEBUG] mod_opus.c:629 Opus encoder: set bitrate to local settings [72000bps]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] mod_opus.c:629 Opus encoder: set bitrate to local settings [72000bps]
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:3731 Set Codec sofia/internal/1000@13.235.45.114 opus/48000 20 ms 960 samples 0 bits 1 channels
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_codec.c:111 sofia/internal/1000@13.235.45.114 Original read codec set to opus:116
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5798 Set telephone-event payload to 101@48000
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:5856 sofia/internal/1000@13.235.45.114 Set 2833 dtmf send payload to 101 recv payload to 101
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:8660 AUDIO RTP [sofia/internal/1000@13.235.45.114] 172.31.38.106 port 26922 -> 86.107.100.98 port 44305 codec: 96 ms: 20
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_rtp.c:4566 Starting timer [soft] 960 bytes per 20ms
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:8881 Activating RTCP PORT 59090
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_rtp.c:4898 RTCP send rate is: 1000 and packet rate is: 20000 Remote Port: 59090
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_rtp.c:2692 Setting RTCP remote addr to 86.107.100.98:59090 2
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:8973 sofia/internal/1000@13.235.45.114 Set 2833 dtmf send payload to 101
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:8980 sofia/internal/1000@13.235.45.114 Set 2833 dtmf receive payload to 101
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:9003 sofia/internal/1000@13.235.45.114 Set rtp dtmf delay to 40
+2026-05-07 07:40:23.208553 93.73% [NOTICE] sofia_media.c:90 Pre-Answer sofia/internal/1000@13.235.45.114!
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_channel.c:3585 (sofia/internal/1000@13.235.45.114) Callstate Change RINGING -> EARLY
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_core_media.c:8642 Audio params are unchanged for sofia/internal/1000@13.235.45.114.
+2026-05-07 07:40:23.208553 93.73% [DEBUG] mod_sofia.c:914 Local SDP sofia/internal/1000@13.235.45.114:
 v=0
-o=FreeSWITCH 1778120239 1778120240 IN IP4 13.235.45.114
+o=FreeSWITCH 1778112701 1778112702 IN IP4 13.235.45.114
 s=FreeSWITCH
 c=IN IP4 13.235.45.114
 t=0 0
-m=audio 18528 RTP/AVP 96 101
+m=audio 26922 RTP/AVP 96 101
 a=rtpmap:96 opus/48000/2
 a=fmtp:96 useinbandfec=1
 a=rtpmap:101 telephone-event/48000
 a=fmtp:101 0-15
 a=ptime:20
 a=sendrecv
-a=rtcp:18529 IN IP4 13.235.45.114
+a=rtcp:26923 IN IP4 13.235.45.114
 
-2026-05-07 07:26:07.548624 98.80% [NOTICE] switch_cpp.cpp:704 Channel [sofia/internal/1000@13.235.45.114] has been answered
-2026-05-07 07:26:07.548624 98.80% [DEBUG] switch_channel.c:3912 (sofia/internal/1000@13.235.45.114) Callstate Change EARLY -> ACTIVE
-2026-05-07 07:26:07.548624 98.80% [DEBUG] sofia.c:7493 Channel sofia/internal/1000@13.235.45.114 entering state [completed][200]
-2026-05-07 07:26:07.948551 98.77% [DEBUG] switch_rtp.c:7128 Correct audio RTCP ip/port confirmed.
-2026-05-07 07:26:07.968641 98.77% [DEBUG] sofia.c:7493 Channel sofia/internal/1000@13.235.45.114 entering state [ready][200]
-2026-05-07 07:26:08.048629 98.77% [INFO] switch_cpp.cpp:1466 Sending: uuid_audio_stream d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4 start ws://127.0.0.1:8765 mono 16000
-2026-05-07 07:26:08.048629 98.77% [DEBUG] mod_audio_stream.c:151 mod_audio_stream cmd: d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4 start ws://127.0.0.1:8765 mono 16000
-2026-05-07 07:26:08.048629 98.77% [DEBUG] mod_audio_stream.c:82 calling stream_session_init.
-2026-05-07 07:26:08.048629 98.77% [DEBUG] audio_streamer_glue.cpp:485 (d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4) resampling from 48000 to 16000
-2026-05-07 07:26:08.048629 98.77% [DEBUG] audio_streamer_glue.cpp:496 (d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4) stream_data_init
-2026-05-07 07:26:08.048629 98.77% [DEBUG] mod_audio_stream.c:88 adding bug.
-2026-05-07 07:26:08.048629 98.77% [DEBUG] switch_core_media_bug.c:976 Attaching BUG to sofia/internal/1000@13.235.45.114
-2026-05-07 07:26:08.048629 98.77% [DEBUG] mod_audio_stream.c:92 setting bug private data.
-2026-05-07 07:26:08.048629 98.77% [DEBUG] mod_audio_stream.c:95 exiting start_capture.
-2026-05-07 07:26:08.048629 98.77% [INFO] switch_cpp.cpp:1466 Result: +OK Success
+2026-05-07 07:40:23.208553 93.73% [NOTICE] switch_cpp.cpp:704 Channel [sofia/internal/1000@13.235.45.114] has been answered
+2026-05-07 07:40:23.208553 93.73% [DEBUG] switch_channel.c:3912 (sofia/internal/1000@13.235.45.114) Callstate Change EARLY -> ACTIVE
+2026-05-07 07:40:23.208553 93.73% [DEBUG] sofia.c:7493 Channel sofia/internal/1000@13.235.45.114 entering state [completed][200]
+2026-05-07 07:40:23.508568 93.73% [DEBUG] sofia.c:7493 Channel sofia/internal/1000@13.235.45.114 entering state [ready][200]
+2026-05-07 07:40:23.508568 93.73% [DEBUG] switch_rtp.c:7128 Correct audio RTCP ip/port confirmed.
+2026-05-07 07:40:23.608480 93.73% [DEBUG] switch_rtp.c:1934 rtcp_stats_init: audio ssrc[838991930] base_seq[0]
+2026-05-07 07:40:23.608480 93.73% [DEBUG] switch_rtp.c:7698 Correct audio ip/port confirmed.
+2026-05-07 07:40:23.728565 93.73% [INFO] switch_cpp.cpp:1466 Sending: uuid_audio_stream f4d2cb35-75ae-4399-b838-1707c9fb0186 start ws://127.0.0.1:8765 stereo 16000
+2026-05-07 07:40:23.728565 93.73% [DEBUG] mod_audio_stream.c:151 mod_audio_stream cmd: f4d2cb35-75ae-4399-b838-1707c9fb0186 start ws://127.0.0.1:8765 stereo 16000
+2026-05-07 07:40:23.728565 93.73% [DEBUG] mod_audio_stream.c:82 calling stream_session_init.
+2026-05-07 07:40:23.728565 93.73% [DEBUG] audio_streamer_glue.cpp:485 (f4d2cb35-75ae-4399-b838-1707c9fb0186) resampling from 48000 to 16000
+2026-05-07 07:40:23.728565 93.73% [DEBUG] audio_streamer_glue.cpp:496 (f4d2cb35-75ae-4399-b838-1707c9fb0186) stream_data_init
+2026-05-07 07:40:23.728565 93.73% [DEBUG] mod_audio_stream.c:88 adding bug.
+2026-05-07 07:40:23.728565 93.73% [DEBUG] switch_core_media_bug.c:976 Attaching BUG to sofia/internal/1000@13.235.45.114
+2026-05-07 07:40:23.728565 93.73% [DEBUG] mod_audio_stream.c:92 setting bug private data.
+2026-05-07 07:40:23.728565 93.73% [DEBUG] mod_audio_stream.c:95 exiting start_capture.
+2026-05-07 07:40:23.728565 93.73% [INFO] switch_cpp.cpp:1466 Result: +OK Success
 
-2026-05-07 07:26:08.128555 98.77% [DEBUG] switch_rtp.c:1934 rtcp_stats_init: audio ssrc[4096831846] base_seq[0]
-2026-05-07 07:26:08.128555 98.77% [DEBUG] switch_rtp.c:7698 Correct audio ip/port confirmed.
-2026-05-07 07:26:08.128555 98.77% [DEBUG] switch_core_io.c:448 Setting BUG Codec opus:116
-2026-05-07 07:26:08.128555 98.77% [DEBUG] mod_opus.c:629 Opus encoder: set bitrate to local settings [72000bps]
-2026-05-07 07:26:08.208455 98.77% [WARNING] sofia_reg.c:3210 Can't find user [104@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="104" attribute
+2026-05-07 07:40:23.788465 93.63% [DEBUG] switch_core_io.c:448 Setting BUG Codec opus:116
+2026-05-07 07:40:23.788465 93.63% [DEBUG] mod_opus.c:629 Opus encoder: set bitrate to local settings [72000bps]
+2026-05-07 07:40:27.688608 92.37% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/888892@13.235.45.114 [2dd3792a-c074-4412-b0e6-185d87dfda4a]
+2026-05-07 07:40:27.688608 92.37% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/888892@13.235.45.114) Running State Change CS_NEW (Cur 3 Tot 11891)
+2026-05-07 07:40:27.688608 92.37% [INFO] sofia.c:10460 sofia/internal/888892@13.235.45.114 receiving invite from 199.127.61.12:55735 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1977094592-1810129133-809857685
+2026-05-07 07:40:27.688608 92.37% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:27.688608 92.37% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/888892@13.235.45.114) State NEW
+2026-05-07 07:40:27.688608 92.37% [DEBUG] sofia.c:2419 detaching session 2dd3792a-c074-4412-b0e6-185d87dfda4a
+2026-05-07 07:40:27.948550 92.37% [DEBUG] sofia.c:2532 Re-attaching to session 2dd3792a-c074-4412-b0e6-185d87dfda4a
+2026-05-07 07:40:27.948550 92.37% [INFO] sofia.c:10460 sofia/internal/888892@13.235.45.114 receiving invite from 199.127.61.12:55735 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1977094592-1810129133-809857685
+2026-05-07 07:40:27.948550 92.37% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:27.948550 92.37% [WARNING] sofia_reg.c:3210 Can't find user [888892@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="888892" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:09.808580 97.17% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/'or''='@13.235.45.114 [92f35c33-39e8-4d08-bd16-310253224802]
-2026-05-07 07:26:09.808580 97.17% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/'or''='@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11797)
-2026-05-07 07:26:09.808580 97.17% [INFO] sofia.c:10460 sofia/internal/'or''='@13.235.45.114 receiving invite from 107.152.36.33:53781 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 749203647-432021227-73991099
-2026-05-07 07:26:09.808580 97.17% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 107.152.36.33:0.
-2026-05-07 07:26:09.808580 97.17% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/'or''='@13.235.45.114) State NEW
-2026-05-07 07:26:09.808580 97.17% [DEBUG] sofia.c:2419 detaching session 92f35c33-39e8-4d08-bd16-310253224802
-2026-05-07 07:26:10.068583 97.17% [DEBUG] sofia.c:2532 Re-attaching to session 92f35c33-39e8-4d08-bd16-310253224802
-2026-05-07 07:26:10.088614 97.17% [INFO] sofia.c:10460 sofia/internal/'or''='@13.235.45.114 receiving invite from 107.152.36.33:53781 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 749203647-432021227-73991099
-2026-05-07 07:26:10.088614 97.17% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 107.152.36.33:0.
-2026-05-07 07:26:10.088614 97.17% [WARNING] sofia_reg.c:3210 Can't find user ['or''='@172.31.38.106] from 107.152.36.33
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="'or''='" attribute
+2026-05-07 07:40:27.948550 92.37% [NOTICE] sofia.c:2417 Hangup sofia/internal/888892@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:40:27.968585 92.37% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:40:27.968585 92.37% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/888892@13.235.45.114) Running State Change CS_HANGUP (Cur 3 Tot 11891)
+2026-05-07 07:40:27.968585 92.37% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/888892@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:40:27.968585 92.37% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/888892@13.235.45.114) State HANGUP
+2026-05-07 07:40:27.968585 92.37% [DEBUG] mod_sofia.c:469 Channel sofia/internal/888892@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:40:27.968585 92.37% [DEBUG] switch_core_state_machine.c:59 sofia/internal/888892@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:40:27.968585 92.37% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/888892@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:40:27.968585 92.37% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/888892@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:40:27.968585 92.37% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/888892@13.235.45.114) Running State Change CS_REPORTING (Cur 3 Tot 11891)
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/888892@13.235.45.114) State REPORTING
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:168 sofia/internal/888892@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/888892@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/888892@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_session.c:1744 Session 11891 (sofia/internal/888892@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:40:27.988565 92.37% [NOTICE] switch_core_session.c:1762 Session 11891 (sofia/internal/888892@13.235.45.114) Ended
+2026-05-07 07:40:27.988565 92.37% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/888892@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/888892@13.235.45.114) Running State Change CS_DESTROY (Cur 2 Tot 11891)
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/888892@13.235.45.114) State DESTROY
+2026-05-07 07:40:27.988565 92.37% [DEBUG] mod_sofia.c:380 sofia/internal/888892@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:175 sofia/internal/888892@13.235.45.114 Standard DESTROY
+2026-05-07 07:40:27.988565 92.37% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/888892@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:40:32.828509 93.83% [WARNING] switch_core_state_machine.c:684 13a29b91-c918-487d-8237-bffe452c7ca4 sofia/internal/9100111323545114@13.235.45.114 Abandoned
+2026-05-07 07:40:32.828509 93.83% [NOTICE] switch_core_state_machine.c:687 Hangup sofia/internal/9100111323545114@13.235.45.114 [CS_NEW] [WRONG_CALL_STATE]
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9100111323545114@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11891)
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/9100111323545114@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/9100111323545114@13.235.45.114) State HANGUP
+2026-05-07 07:40:32.828509 93.83% [DEBUG] mod_sofia.c:469 Channel sofia/internal/9100111323545114@13.235.45.114 hanging up, cause: WRONG_CALL_STATE
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:59 sofia/internal/9100111323545114@13.235.45.114 Standard HANGUP, cause: WRONG_CALL_STATE
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/9100111323545114@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/9100111323545114@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9100111323545114@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11891)
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/9100111323545114@13.235.45.114) State REPORTING
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:168 sofia/internal/9100111323545114@13.235.45.114 Standard REPORTING, cause: WRONG_CALL_STATE
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/9100111323545114@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/9100111323545114@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_session.c:1744 Session 11889 (sofia/internal/9100111323545114@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:40:32.828509 93.83% [NOTICE] switch_core_session.c:1762 Session 11889 (sofia/internal/9100111323545114@13.235.45.114) Ended
+2026-05-07 07:40:32.828509 93.83% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/9100111323545114@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/9100111323545114@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11891)
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/9100111323545114@13.235.45.114) State DESTROY
+2026-05-07 07:40:32.828509 93.83% [DEBUG] mod_sofia.c:380 sofia/internal/9100111323545114@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:175 sofia/internal/9100111323545114@13.235.45.114 Standard DESTROY
+2026-05-07 07:40:32.828509 93.83% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/9100111323545114@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:40:39.388482 97.67% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/7305@13.235.45.114 [add3e641-9089-451f-a1f6-c363833f9d94]
+2026-05-07 07:40:39.388482 97.67% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11892)
+2026-05-07 07:40:39.388482 97.67% [INFO] sofia.c:10460 sofia/internal/7305@13.235.45.114 receiving invite from 199.127.61.12:61144 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1194948866-514999119-2042583813
+2026-05-07 07:40:39.388482 97.67% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:39.388482 97.67% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/7305@13.235.45.114) State NEW
+2026-05-07 07:40:39.388482 97.67% [DEBUG] sofia.c:2419 detaching session add3e641-9089-451f-a1f6-c363833f9d94
+2026-05-07 07:40:39.628520 97.67% [DEBUG] sofia.c:2532 Re-attaching to session add3e641-9089-451f-a1f6-c363833f9d94
+2026-05-07 07:40:39.648593 97.67% [INFO] sofia.c:10460 sofia/internal/7305@13.235.45.114 receiving invite from 199.127.61.12:61144 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1194948866-514999119-2042583813
+2026-05-07 07:40:39.648593 97.67% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:39.648593 97.67% [WARNING] sofia_reg.c:3210 Can't find user [7305@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="7305" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:10.088614 97.17% [NOTICE] sofia.c:2417 Hangup sofia/internal/'or''='@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:26:10.108594 97.17% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/'or''='@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11797)
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/'or''='@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/'or''='@13.235.45.114) State HANGUP
-2026-05-07 07:26:10.108594 97.17% [DEBUG] mod_sofia.c:469 Channel sofia/internal/'or''='@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:59 sofia/internal/'or''='@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/'or''='@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/'or''='@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/'or''='@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11797)
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/'or''='@13.235.45.114) State REPORTING
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:168 sofia/internal/'or''='@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/'or''='@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/'or''='@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_session.c:1744 Session 11797 (sofia/internal/'or''='@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:10.108594 97.17% [NOTICE] switch_core_session.c:1762 Session 11797 (sofia/internal/'or''='@13.235.45.114) Ended
-2026-05-07 07:26:10.108594 97.17% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/'or''='@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/'or''='@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11797)
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/'or''='@13.235.45.114) State DESTROY
-2026-05-07 07:26:10.108594 97.17% [DEBUG] mod_sofia.c:380 sofia/internal/'or''='@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:175 sofia/internal/'or''='@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:10.108594 97.17% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/'or''='@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:11.848604 96.67% [WARNING] sofia_reg.c:3210 Can't find user [105@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="105" attribute
+2026-05-07 07:40:39.648593 97.67% [NOTICE] sofia.c:2417 Hangup sofia/internal/7305@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:40:39.668595 97.67% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11892)
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/7305@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7305@13.235.45.114) State HANGUP
+2026-05-07 07:40:39.668595 97.67% [DEBUG] mod_sofia.c:469 Channel sofia/internal/7305@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:59 sofia/internal/7305@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7305@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/7305@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11892)
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7305@13.235.45.114) State REPORTING
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:168 sofia/internal/7305@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7305@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/7305@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_session.c:1744 Session 11892 (sofia/internal/7305@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:40:39.668595 97.67% [NOTICE] switch_core_session.c:1762 Session 11892 (sofia/internal/7305@13.235.45.114) Ended
+2026-05-07 07:40:39.668595 97.67% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/7305@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/7305@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11892)
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7305@13.235.45.114) State DESTROY
+2026-05-07 07:40:39.668595 97.67% [DEBUG] mod_sofia.c:380 sofia/internal/7305@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:175 sofia/internal/7305@13.235.45.114 Standard DESTROY
+2026-05-07 07:40:39.668595 97.67% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7305@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:40:48.028579 97.67% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/7305@13.235.45.114 [9b758129-3598-4e41-88f8-4ec41b17efd5]
+2026-05-07 07:40:48.028579 97.67% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11893)
+2026-05-07 07:40:48.028579 97.67% [INFO] sofia.c:10460 sofia/internal/7305@13.235.45.114 receiving invite from 199.127.61.12:64414 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1765886487-172392801-1311691351
+2026-05-07 07:40:48.028579 97.67% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:48.028579 97.67% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/7305@13.235.45.114) State NEW
+2026-05-07 07:40:48.028579 97.67% [DEBUG] sofia.c:2419 detaching session 9b758129-3598-4e41-88f8-4ec41b17efd5
+2026-05-07 07:40:48.288543 97.67% [DEBUG] sofia.c:2532 Re-attaching to session 9b758129-3598-4e41-88f8-4ec41b17efd5
+2026-05-07 07:40:48.308574 97.67% [INFO] sofia.c:10460 sofia/internal/7305@13.235.45.114 receiving invite from 199.127.61.12:64414 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1765886487-172392801-1311691351
+2026-05-07 07:40:48.308574 97.67% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:48.308574 97.67% [WARNING] sofia_reg.c:3210 Can't find user [7305@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="7305" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:14.328553 96.20% [WARNING] sofia_reg.c:3210 Can't find user [106@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="106" attribute
+2026-05-07 07:40:48.308574 97.67% [NOTICE] sofia.c:2417 Hangup sofia/internal/7305@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:40:48.328513 97.67% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11893)
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/7305@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7305@13.235.45.114) State HANGUP
+2026-05-07 07:40:48.328513 97.67% [DEBUG] mod_sofia.c:469 Channel sofia/internal/7305@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:59 sofia/internal/7305@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7305@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/7305@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11893)
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7305@13.235.45.114) State REPORTING
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:168 sofia/internal/7305@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7305@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/7305@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_session.c:1744 Session 11893 (sofia/internal/7305@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:40:48.328513 97.67% [NOTICE] switch_core_session.c:1762 Session 11893 (sofia/internal/7305@13.235.45.114) Ended
+2026-05-07 07:40:48.328513 97.67% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/7305@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/7305@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11893)
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7305@13.235.45.114) State DESTROY
+2026-05-07 07:40:48.328513 97.67% [DEBUG] mod_sofia.c:380 sofia/internal/7305@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:175 sofia/internal/7305@13.235.45.114 Standard DESTROY
+2026-05-07 07:40:48.328513 97.67% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7305@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:40:55.048640 98.97% [WARNING] sofia_reg.c:3210 Can't find user [1020@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1020" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:17.668589 95.47% [WARNING] sofia_reg.c:3210 Can't find user [107@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="107" attribute
+2026-05-07 07:40:56.688576 99.03% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/7305@13.235.45.114 [ab1521fe-2066-4f0e-9baa-b689c599abc5]
+2026-05-07 07:40:56.688576 99.03% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11894)
+2026-05-07 07:40:56.688576 99.03% [INFO] sofia.c:10460 sofia/internal/7305@13.235.45.114 receiving invite from 199.127.61.12:50801 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 31554017-839831228-2115151734
+2026-05-07 07:40:56.688576 99.03% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:56.688576 99.03% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/7305@13.235.45.114) State NEW
+2026-05-07 07:40:56.688576 99.03% [DEBUG] sofia.c:2419 detaching session ab1521fe-2066-4f0e-9baa-b689c599abc5
+2026-05-07 07:40:56.948609 99.03% [DEBUG] sofia.c:2532 Re-attaching to session ab1521fe-2066-4f0e-9baa-b689c599abc5
+2026-05-07 07:40:56.948609 99.03% [INFO] sofia.c:10460 sofia/internal/7305@13.235.45.114 receiving invite from 199.127.61.12:50801 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 31554017-839831228-2115151734
+2026-05-07 07:40:56.948609 99.03% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:40:56.948609 99.03% [WARNING] sofia_reg.c:3210 Can't find user [7305@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="7305" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:17.948601 95.23% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/444446@13.235.45.114 [2dcb6f69-7577-4975-989f-e37c30ce0950]
-2026-05-07 07:26:17.948601 95.23% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11798)
-2026-05-07 07:26:17.948601 95.23% [INFO] sofia.c:10460 sofia/internal/444446@13.235.45.114 receiving invite from 199.127.61.12:50062 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 2136869733-1946061777-781850869
-2026-05-07 07:26:17.948601 95.23% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:17.948601 95.23% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/444446@13.235.45.114) State NEW
-2026-05-07 07:26:17.948601 95.23% [DEBUG] sofia.c:2419 detaching session 2dcb6f69-7577-4975-989f-e37c30ce0950
-2026-05-07 07:26:18.228530 95.23% [DEBUG] sofia.c:2532 Re-attaching to session 2dcb6f69-7577-4975-989f-e37c30ce0950
-2026-05-07 07:26:18.228530 95.23% [INFO] sofia.c:10460 sofia/internal/444446@13.235.45.114 receiving invite from 199.127.61.12:50062 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 2136869733-1946061777-781850869
-2026-05-07 07:26:18.228530 95.23% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:18.228530 95.23% [WARNING] sofia_reg.c:3210 Can't find user [444446@172.31.38.106] from 199.127.61.12
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="444446" attribute
+2026-05-07 07:40:56.948609 99.03% [NOTICE] sofia.c:2417 Hangup sofia/internal/7305@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:40:56.968592 99.03% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11894)
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/7305@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7305@13.235.45.114) State HANGUP
+2026-05-07 07:40:56.968592 99.03% [DEBUG] mod_sofia.c:469 Channel sofia/internal/7305@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:59 sofia/internal/7305@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7305@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/7305@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7305@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11894)
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7305@13.235.45.114) State REPORTING
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:168 sofia/internal/7305@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7305@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/7305@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_session.c:1744 Session 11894 (sofia/internal/7305@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:40:56.968592 99.03% [NOTICE] switch_core_session.c:1762 Session 11894 (sofia/internal/7305@13.235.45.114) Ended
+2026-05-07 07:40:56.968592 99.03% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/7305@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/7305@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11894)
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7305@13.235.45.114) State DESTROY
+2026-05-07 07:40:56.968592 99.03% [DEBUG] mod_sofia.c:380 sofia/internal/7305@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:175 sofia/internal/7305@13.235.45.114 Standard DESTROY
+2026-05-07 07:40:56.968592 99.03% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7305@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:40:59.928584 99.03% [WARNING] sofia_reg.c:3210 Can't find user [1021@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1021" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:18.228530 95.23% [NOTICE] sofia.c:2417 Hangup sofia/internal/444446@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:26:18.248618 95.23% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11798)
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/444446@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/444446@13.235.45.114) State HANGUP
-2026-05-07 07:26:18.248618 95.23% [DEBUG] mod_sofia.c:469 Channel sofia/internal/444446@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:59 sofia/internal/444446@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/444446@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/444446@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11798)
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/444446@13.235.45.114) State REPORTING
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:168 sofia/internal/444446@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/444446@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/444446@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_session.c:1744 Session 11798 (sofia/internal/444446@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:18.248618 95.23% [NOTICE] switch_core_session.c:1762 Session 11798 (sofia/internal/444446@13.235.45.114) Ended
-2026-05-07 07:26:18.248618 95.23% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/444446@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/444446@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11798)
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/444446@13.235.45.114) State DESTROY
-2026-05-07 07:26:18.248618 95.23% [DEBUG] mod_sofia.c:380 sofia/internal/444446@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:175 sofia/internal/444446@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:18.248618 95.23% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/444446@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:20.368569 94.73% [WARNING] sofia_reg.c:3210 Can't find user [108@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="108" attribute
+2026-05-07 07:41:07.148638 98.93% [WARNING] sofia_reg.c:3210 Can't find user [1022@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1022" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:23.808597 93.80% [WARNING] sofia_reg.c:3210 Can't find user [100@172.31.38.106] from 5.39.101.60
+2026-05-07 07:41:11.368588 99.00% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/777788@13.235.45.114 [1ca48356-e0b7-412b-aa04-97602aa2f9ec]
+2026-05-07 07:41:11.368588 99.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11895)
+2026-05-07 07:41:11.368588 99.00% [INFO] sofia.c:10460 sofia/internal/777788@13.235.45.114 receiving invite from 199.127.61.12:57331 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1383588849-1197912520-487696246
+2026-05-07 07:41:11.368588 99.00% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:11.368588 99.00% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/777788@13.235.45.114) State NEW
+2026-05-07 07:41:11.368588 99.00% [DEBUG] sofia.c:2419 detaching session 1ca48356-e0b7-412b-aa04-97602aa2f9ec
+2026-05-07 07:41:11.628616 99.00% [DEBUG] sofia.c:2532 Re-attaching to session 1ca48356-e0b7-412b-aa04-97602aa2f9ec
+2026-05-07 07:41:11.628616 99.00% [INFO] sofia.c:10460 sofia/internal/777788@13.235.45.114 receiving invite from 199.127.61.12:57331 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1383588849-1197912520-487696246
+2026-05-07 07:41:11.628616 99.00% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:11.628616 99.00% [WARNING] sofia_reg.c:3210 Can't find user [777788@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="777788" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:11.628616 99.00% [NOTICE] sofia.c:2417 Hangup sofia/internal/777788@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:41:11.648623 99.00% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11895)
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/777788@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/777788@13.235.45.114) State HANGUP
+2026-05-07 07:41:11.648623 99.00% [DEBUG] mod_sofia.c:469 Channel sofia/internal/777788@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:59 sofia/internal/777788@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/777788@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/777788@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11895)
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/777788@13.235.45.114) State REPORTING
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:168 sofia/internal/777788@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/777788@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/777788@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_session.c:1744 Session 11895 (sofia/internal/777788@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:41:11.648623 99.00% [NOTICE] switch_core_session.c:1762 Session 11895 (sofia/internal/777788@13.235.45.114) Ended
+2026-05-07 07:41:11.648623 99.00% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/777788@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/777788@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11895)
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/777788@13.235.45.114) State DESTROY
+2026-05-07 07:41:11.648623 99.00% [DEBUG] mod_sofia.c:380 sofia/internal/777788@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:175 sofia/internal/777788@13.235.45.114 Standard DESTROY
+2026-05-07 07:41:11.648623 99.00% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/777788@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:41:12.068494 98.93% [WARNING] sofia_reg.c:3210 Can't find user [1023@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1023" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:17.548538 98.90% [WARNING] sofia_reg.c:3210 Can't find user [1024@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1024" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:20.208482 98.90% [WARNING] sofia_reg.c:3210 Can't find user [1025@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1025" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:20.988549 98.90% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/777788@13.235.45.114 [ac3cf4ab-7b75-4d15-b2d9-febe3c82fbb1]
+2026-05-07 07:41:20.988549 98.90% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11896)
+2026-05-07 07:41:20.988549 98.90% [INFO] sofia.c:10460 sofia/internal/777788@13.235.45.114 receiving invite from 199.127.61.12:60412 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 935070767-1367758124-1273219628
+2026-05-07 07:41:20.988549 98.90% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:20.988549 98.90% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/777788@13.235.45.114) State NEW
+2026-05-07 07:41:20.988549 98.90% [DEBUG] sofia.c:2419 detaching session ac3cf4ab-7b75-4d15-b2d9-febe3c82fbb1
+2026-05-07 07:41:21.228634 98.90% [DEBUG] sofia.c:2532 Re-attaching to session ac3cf4ab-7b75-4d15-b2d9-febe3c82fbb1
+2026-05-07 07:41:21.248511 98.90% [INFO] sofia.c:10460 sofia/internal/777788@13.235.45.114 receiving invite from 199.127.61.12:60412 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 935070767-1367758124-1273219628
+2026-05-07 07:41:21.248511 98.90% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:21.248511 98.90% [WARNING] sofia_reg.c:3210 Can't find user [777788@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="777788" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:21.248511 98.90% [NOTICE] sofia.c:2417 Hangup sofia/internal/777788@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:41:21.268525 98.90% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11896)
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/777788@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/777788@13.235.45.114) State HANGUP
+2026-05-07 07:41:21.268525 98.90% [DEBUG] mod_sofia.c:469 Channel sofia/internal/777788@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:59 sofia/internal/777788@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/777788@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/777788@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11896)
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/777788@13.235.45.114) State REPORTING
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:168 sofia/internal/777788@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/777788@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/777788@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_session.c:1744 Session 11896 (sofia/internal/777788@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:41:21.268525 98.90% [NOTICE] switch_core_session.c:1762 Session 11896 (sofia/internal/777788@13.235.45.114) Ended
+2026-05-07 07:41:21.268525 98.90% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/777788@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/777788@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11896)
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/777788@13.235.45.114) State DESTROY
+2026-05-07 07:41:21.268525 98.90% [DEBUG] mod_sofia.c:380 sofia/internal/777788@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:175 sofia/internal/777788@13.235.45.114 Standard DESTROY
+2026-05-07 07:41:21.268525 98.90% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/777788@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:41:25.508529 98.87% [WARNING] sofia_reg.c:3210 Can't find user [1026@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1026" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:29.988585 98.93% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/777788@13.235.45.114 [0c2d3d4f-4267-4b8b-b8dd-3ab3ec3eae62]
+2026-05-07 07:41:29.988585 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11897)
+2026-05-07 07:41:29.988585 98.93% [INFO] sofia.c:10460 sofia/internal/777788@13.235.45.114 receiving invite from 199.127.61.12:62654 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 328108106-1014805324-1147139371
+2026-05-07 07:41:29.988585 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:29.988585 98.93% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/777788@13.235.45.114) State NEW
+2026-05-07 07:41:29.988585 98.93% [DEBUG] sofia.c:2419 detaching session 0c2d3d4f-4267-4b8b-b8dd-3ab3ec3eae62
+2026-05-07 07:41:30.228613 98.93% [DEBUG] sofia.c:2532 Re-attaching to session 0c2d3d4f-4267-4b8b-b8dd-3ab3ec3eae62
+2026-05-07 07:41:30.248479 98.93% [INFO] sofia.c:10460 sofia/internal/777788@13.235.45.114 receiving invite from 199.127.61.12:62654 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 328108106-1014805324-1147139371
+2026-05-07 07:41:30.248479 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:30.248479 98.93% [WARNING] sofia_reg.c:3210 Can't find user [777788@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="777788" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:30.248479 98.93% [NOTICE] sofia.c:2417 Hangup sofia/internal/777788@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:41:30.268529 98.93% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11897)
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/777788@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/777788@13.235.45.114) State HANGUP
+2026-05-07 07:41:30.268529 98.93% [DEBUG] mod_sofia.c:469 Channel sofia/internal/777788@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:59 sofia/internal/777788@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/777788@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/777788@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/777788@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11897)
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/777788@13.235.45.114) State REPORTING
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:168 sofia/internal/777788@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/777788@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/777788@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_session.c:1744 Session 11897 (sofia/internal/777788@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:41:30.268529 98.93% [NOTICE] switch_core_session.c:1762 Session 11897 (sofia/internal/777788@13.235.45.114) Ended
+2026-05-07 07:41:30.268529 98.93% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/777788@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/777788@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11897)
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/777788@13.235.45.114) State DESTROY
+2026-05-07 07:41:30.268529 98.93% [DEBUG] mod_sofia.c:380 sofia/internal/777788@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:175 sofia/internal/777788@13.235.45.114 Standard DESTROY
+2026-05-07 07:41:30.268529 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/777788@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:41:30.388519 98.93% [WARNING] sofia_reg.c:3210 Can't find user [1027@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1027" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:36.508555 99.00% [WARNING] sofia_reg.c:3210 Can't find user [1028@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1028" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:41.808629 99.00% [WARNING] sofia_reg.c:3210 Can't find user [1029@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1029" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:42.508564 99.00% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/7209@13.235.45.114 [d48ccf84-02d4-4913-bfbe-6d63191241a3]
+2026-05-07 07:41:42.508564 99.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11898)
+2026-05-07 07:41:42.508564 99.00% [INFO] sofia.c:10460 sofia/internal/7209@13.235.45.114 receiving invite from 199.127.61.12:53427 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 446369248-113448402-1619797045
+2026-05-07 07:41:42.508564 99.00% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:42.508564 99.00% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/7209@13.235.45.114) State NEW
+2026-05-07 07:41:42.508564 99.00% [DEBUG] sofia.c:2419 detaching session d48ccf84-02d4-4913-bfbe-6d63191241a3
+2026-05-07 07:41:42.788627 99.00% [DEBUG] sofia.c:2532 Re-attaching to session d48ccf84-02d4-4913-bfbe-6d63191241a3
+2026-05-07 07:41:42.788627 99.00% [INFO] sofia.c:10460 sofia/internal/7209@13.235.45.114 receiving invite from 199.127.61.12:53427 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 446369248-113448402-1619797045
+2026-05-07 07:41:42.788627 99.00% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:42.788627 99.00% [WARNING] sofia_reg.c:3210 Can't find user [7209@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="7209" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:42.788627 99.00% [NOTICE] sofia.c:2417 Hangup sofia/internal/7209@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:41:42.808614 99.00% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11898)
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/7209@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7209@13.235.45.114) State HANGUP
+2026-05-07 07:41:42.808614 99.00% [DEBUG] mod_sofia.c:469 Channel sofia/internal/7209@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:59 sofia/internal/7209@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7209@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/7209@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11898)
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7209@13.235.45.114) State REPORTING
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:168 sofia/internal/7209@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7209@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/7209@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_session.c:1744 Session 11898 (sofia/internal/7209@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:41:42.808614 99.00% [NOTICE] switch_core_session.c:1762 Session 11898 (sofia/internal/7209@13.235.45.114) Ended
+2026-05-07 07:41:42.808614 99.00% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/7209@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/7209@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11898)
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7209@13.235.45.114) State DESTROY
+2026-05-07 07:41:42.808614 99.00% [DEBUG] mod_sofia.c:380 sofia/internal/7209@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:175 sofia/internal/7209@13.235.45.114 Standard DESTROY
+2026-05-07 07:41:42.808614 99.00% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7209@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:41:47.868518 98.93% [WARNING] sofia_reg.c:3210 Can't find user [1096@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1096" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:51.228553 98.93% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/7209@13.235.45.114 [37e82d34-74ed-4a5b-acb7-6a60af2652d5]
+2026-05-07 07:41:51.228553 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11899)
+2026-05-07 07:41:51.228553 98.93% [INFO] sofia.c:10460 sofia/internal/7209@13.235.45.114 receiving invite from 199.127.61.12:57051 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1819272831-1267770299-164082049
+2026-05-07 07:41:51.228553 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:51.228553 98.93% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/7209@13.235.45.114) State NEW
+2026-05-07 07:41:51.228553 98.93% [DEBUG] sofia.c:2419 detaching session 37e82d34-74ed-4a5b-acb7-6a60af2652d5
+2026-05-07 07:41:51.468584 98.93% [DEBUG] sofia.c:2532 Re-attaching to session 37e82d34-74ed-4a5b-acb7-6a60af2652d5
+2026-05-07 07:41:51.488833 98.93% [INFO] sofia.c:10460 sofia/internal/7209@13.235.45.114 receiving invite from 199.127.61.12:57051 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1819272831-1267770299-164082049
+2026-05-07 07:41:51.488833 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:51.488833 98.93% [WARNING] sofia_reg.c:3210 Can't find user [7209@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="7209" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:51.488833 98.93% [NOTICE] sofia.c:2417 Hangup sofia/internal/7209@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11899)
+2026-05-07 07:41:51.488833 98.93% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/7209@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7209@13.235.45.114) State HANGUP
+2026-05-07 07:41:51.488833 98.93% [DEBUG] mod_sofia.c:469 Channel sofia/internal/7209@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:59 sofia/internal/7209@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7209@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/7209@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11899)
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7209@13.235.45.114) State REPORTING
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:168 sofia/internal/7209@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7209@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/7209@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_session.c:1744 Session 11899 (sofia/internal/7209@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:41:51.488833 98.93% [NOTICE] switch_core_session.c:1762 Session 11899 (sofia/internal/7209@13.235.45.114) Ended
+2026-05-07 07:41:51.488833 98.93% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/7209@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/7209@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11899)
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7209@13.235.45.114) State DESTROY
+2026-05-07 07:41:51.488833 98.93% [DEBUG] mod_sofia.c:380 sofia/internal/7209@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:175 sofia/internal/7209@13.235.45.114 Standard DESTROY
+2026-05-07 07:41:51.488833 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7209@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:41:52.268657 98.93% [WARNING] sofia_reg.c:3210 Can't find user [1097@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1097" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:56.808557 98.93% [WARNING] sofia_reg.c:3210 Can't find user [1098@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1098" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:41:59.808602 98.93% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/7209@13.235.45.114 [4e5fa4c8-1d8e-4164-9ddc-640e90e13d98]
+2026-05-07 07:41:59.808602 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11900)
+2026-05-07 07:41:59.808602 98.93% [INFO] sofia.c:10460 sofia/internal/7209@13.235.45.114 receiving invite from 199.127.61.12:58700 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 54578067-449313809-582395166
+2026-05-07 07:41:59.808602 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:41:59.808602 98.93% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/7209@13.235.45.114) State NEW
+2026-05-07 07:41:59.808602 98.93% [DEBUG] sofia.c:2419 detaching session 4e5fa4c8-1d8e-4164-9ddc-640e90e13d98
+2026-05-07 07:42:00.068648 98.93% [DEBUG] sofia.c:2532 Re-attaching to session 4e5fa4c8-1d8e-4164-9ddc-640e90e13d98
+2026-05-07 07:42:00.088607 98.93% [INFO] sofia.c:10460 sofia/internal/7209@13.235.45.114 receiving invite from 199.127.61.12:58700 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 54578067-449313809-582395166
+2026-05-07 07:42:00.088607 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:00.088607 98.93% [WARNING] sofia_reg.c:3210 Can't find user [7209@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="7209" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:42:00.088607 98.93% [NOTICE] sofia.c:2417 Hangup sofia/internal/7209@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:42:00.108885 98.93% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11900)
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/7209@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7209@13.235.45.114) State HANGUP
+2026-05-07 07:42:00.108885 98.93% [DEBUG] mod_sofia.c:469 Channel sofia/internal/7209@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:59 sofia/internal/7209@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/7209@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/7209@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/7209@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11900)
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7209@13.235.45.114) State REPORTING
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:168 sofia/internal/7209@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/7209@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/7209@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_session.c:1744 Session 11900 (sofia/internal/7209@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:42:00.108885 98.93% [NOTICE] switch_core_session.c:1762 Session 11900 (sofia/internal/7209@13.235.45.114) Ended
+2026-05-07 07:42:00.108885 98.93% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/7209@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/7209@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11900)
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7209@13.235.45.114) State DESTROY
+2026-05-07 07:42:00.108885 98.93% [DEBUG] mod_sofia.c:380 sofia/internal/7209@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:175 sofia/internal/7209@13.235.45.114 Standard DESTROY
+2026-05-07 07:42:00.108885 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/7209@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:42:02.308502 98.80% [WARNING] sofia_reg.c:3210 Can't find user [1099@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="1099" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:42:06.268570 98.73% [WARNING] sofia_reg.c:3210 Can't find user [100@172.31.38.106] from 5.39.101.60
 You must define a domain called '172.31.38.106' in your directory and add a user with the id="100" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:26.348645 93.30% [WARNING] sofia_reg.c:3210 Can't find user [101@172.31.38.106] from 5.39.101.60
+2026-05-07 07:42:10.268561 98.77% [WARNING] sofia_reg.c:3210 Can't find user [101@172.31.38.106] from 5.39.101.60
 You must define a domain called '172.31.38.106' in your directory and add a user with the id="101" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:27.548565 93.07% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/444446@13.235.45.114 [17fb4294-8420-4521-891a-099eb8453ea0]
-2026-05-07 07:26:27.548565 93.07% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11799)
-2026-05-07 07:26:27.548565 93.07% [INFO] sofia.c:10460 sofia/internal/444446@13.235.45.114 receiving invite from 199.127.61.12:53729 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1392847420-2054612700-420239451
-2026-05-07 07:26:27.548565 93.07% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:27.548565 93.07% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/444446@13.235.45.114) State NEW
-2026-05-07 07:26:27.548565 93.07% [DEBUG] sofia.c:2419 detaching session 17fb4294-8420-4521-891a-099eb8453ea0
-2026-05-07 07:26:27.828601 92.80% [DEBUG] sofia.c:2532 Re-attaching to session 17fb4294-8420-4521-891a-099eb8453ea0
-2026-05-07 07:26:27.828601 92.80% [INFO] sofia.c:10460 sofia/internal/444446@13.235.45.114 receiving invite from 199.127.61.12:53729 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1392847420-2054612700-420239451
-2026-05-07 07:26:27.828601 92.80% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:27.828601 92.80% [WARNING] sofia_reg.c:3210 Can't find user [444446@172.31.38.106] from 199.127.61.12
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="444446" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:27.828601 92.80% [NOTICE] sofia.c:2417 Hangup sofia/internal/444446@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:26:27.848540 92.80% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11799)
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/444446@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/444446@13.235.45.114) State HANGUP
-2026-05-07 07:26:27.848540 92.80% [DEBUG] mod_sofia.c:469 Channel sofia/internal/444446@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:59 sofia/internal/444446@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/444446@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/444446@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11799)
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/444446@13.235.45.114) State REPORTING
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:168 sofia/internal/444446@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/444446@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/444446@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_session.c:1744 Session 11799 (sofia/internal/444446@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:27.848540 92.80% [NOTICE] switch_core_session.c:1762 Session 11799 (sofia/internal/444446@13.235.45.114) Ended
-2026-05-07 07:26:27.848540 92.80% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/444446@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/444446@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11799)
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/444446@13.235.45.114) State DESTROY
-2026-05-07 07:26:27.848540 92.80% [DEBUG] mod_sofia.c:380 sofia/internal/444446@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:175 sofia/internal/444446@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:27.848540 92.80% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/444446@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:29.928528 92.30% [WARNING] sofia_reg.c:3210 Can't find user [102@172.31.38.106] from 5.39.101.60
+2026-05-07 07:42:13.188579 98.73% [WARNING] sofia_reg.c:3210 Can't find user [102@172.31.38.106] from 5.39.101.60
 You must define a domain called '172.31.38.106' in your directory and add a user with the id="102" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:33.868581 91.37% [WARNING] sofia_reg.c:3210 Can't find user [103@172.31.38.106] from 5.39.101.60
+2026-05-07 07:42:14.068496 98.77% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/3908@13.235.45.114 [8668ae52-2d55-4392-9358-ac383dad4f54]
+2026-05-07 07:42:14.068496 98.77% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11901)
+2026-05-07 07:42:14.068496 98.77% [INFO] sofia.c:10460 sofia/internal/3908@13.235.45.114 receiving invite from 199.127.61.12:64772 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 351300966-908276116-319886810
+2026-05-07 07:42:14.068496 98.77% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:14.068496 98.77% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/3908@13.235.45.114) State NEW
+2026-05-07 07:42:14.068496 98.77% [DEBUG] sofia.c:2419 detaching session 8668ae52-2d55-4392-9358-ac383dad4f54
+2026-05-07 07:42:14.308589 98.77% [DEBUG] sofia.c:2532 Re-attaching to session 8668ae52-2d55-4392-9358-ac383dad4f54
+2026-05-07 07:42:14.328555 98.77% [INFO] sofia.c:10460 sofia/internal/3908@13.235.45.114 receiving invite from 199.127.61.12:64772 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 351300966-908276116-319886810
+2026-05-07 07:42:14.328555 98.77% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:14.328555 98.77% [WARNING] sofia_reg.c:3210 Can't find user [3908@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="3908" attribute
+and you must configure your device to use the proper domain in its authentication credentials.
+2026-05-07 07:42:14.328555 98.77% [NOTICE] sofia.c:2417 Hangup sofia/internal/3908@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:42:14.348533 98.77% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11901)
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/3908@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/3908@13.235.45.114) State HANGUP
+2026-05-07 07:42:14.348533 98.77% [DEBUG] mod_sofia.c:469 Channel sofia/internal/3908@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:59 sofia/internal/3908@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/3908@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/3908@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11901)
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/3908@13.235.45.114) State REPORTING
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:168 sofia/internal/3908@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/3908@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/3908@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_session.c:1744 Session 11901 (sofia/internal/3908@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:42:14.348533 98.77% [NOTICE] switch_core_session.c:1762 Session 11901 (sofia/internal/3908@13.235.45.114) Ended
+2026-05-07 07:42:14.348533 98.77% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/3908@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/3908@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11901)
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/3908@13.235.45.114) State DESTROY
+2026-05-07 07:42:14.348533 98.77% [DEBUG] mod_sofia.c:380 sofia/internal/3908@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:175 sofia/internal/3908@13.235.45.114 Standard DESTROY
+2026-05-07 07:42:14.348533 98.77% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/3908@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:42:18.608701 98.80% [WARNING] sofia_reg.c:3210 Can't find user [103@172.31.38.106] from 5.39.101.60
 You must define a domain called '172.31.38.106' in your directory and add a user with the id="103" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:36.688626 90.70% [WARNING] sofia_reg.c:3210 Can't find user [104@172.31.38.106] from 5.39.101.60
+2026-05-07 07:42:22.488481 98.80% [NOTICE] sofia.c:1065 Hangup sofia/internal/1000@13.235.45.114 [CS_EXECUTE] [NORMAL_CLEARING]
+2026-05-07 07:42:22.488481 98.80% [DEBUG] mod_audio_stream.c:151 mod_audio_stream cmd: f4d2cb35-75ae-4399-b838-1707c9fb0186 stop
+2026-05-07 07:42:22.488481 98.80% [ERR] mod_audio_stream.c:233 Error locating session f4d2cb35-75ae-4399-b838-1707c9fb0186
+2026-05-07 07:42:22.488481 98.80% [INFO] switch_cpp.cpp:1466 === PIPECAT AGENT ENDED ===
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_cpp.cpp:1210 sofia/internal/1000@13.235.45.114 destroy/unlink session from object
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_session.c:2979 sofia/internal/1000@13.235.45.114 skip receive message [APPLICATION_EXEC_COMPLETE] (channel is hungup already)
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:647 (sofia/internal/1000@13.235.45.114) State EXECUTE going to sleep
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11901)
+2026-05-07 07:42:22.488481 98.80% [INFO] mod_audio_stream.c:34 Got SWITCH_ABC_TYPE_CLOSE.
+2026-05-07 07:42:22.488481 98.80% [DEBUG] audio_streamer_glue.cpp:889 (f4d2cb35-75ae-4399-b838-1707c9fb0186) stream_session_cleanup
+2026-05-07 07:42:22.488481 98.80% [DEBUG] audio_streamer_glue.cpp:41 disconnecting...
+2026-05-07 07:42:22.488481 98.80% [INFO] audio_streamer_glue.cpp:502 f4d2cb35-75ae-4399-b838-1707c9fb0186 destroy_tech_pvt
+2026-05-07 07:42:22.488481 98.80% [INFO] audio_streamer_glue.cpp:921 (f4d2cb35-75ae-4399-b838-1707c9fb0186) stream_session_cleanup: connection closed
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_media_bug.c:1326 Removing BUG from sofia/internal/1000@13.235.45.114
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/1000@13.235.45.114) Callstate Change ACTIVE -> HANGUP
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1000@13.235.45.114) State HANGUP
+2026-05-07 07:42:22.488481 98.80% [DEBUG] mod_sofia.c:469 Channel sofia/internal/1000@13.235.45.114 hanging up, cause: NORMAL_CLEARING
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:59 sofia/internal/1000@13.235.45.114 Standard HANGUP, cause: NORMAL_CLEARING
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1000@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/1000@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11901)
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1000@13.235.45.114) State REPORTING
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:168 sofia/internal/1000@13.235.45.114 Standard REPORTING, cause: NORMAL_CLEARING
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1000@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/1000@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_session.c:1744 Session 11890 (sofia/internal/1000@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:42:22.488481 98.80% [NOTICE] switch_core_session.c:1762 Session 11890 (sofia/internal/1000@13.235.45.114) Ended
+2026-05-07 07:42:22.488481 98.80% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/1000@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/1000@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11901)
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1000@13.235.45.114) State DESTROY
+2026-05-07 07:42:22.488481 98.80% [DEBUG] mod_sofia.c:380 sofia/internal/1000@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:42:22.488481 98.80% [DEBUG] mod_opus.c:735 Opus decoder stats: Frames[0] PLC[0] FEC[0]
+2026-05-07 07:42:22.488481 98.80% [DEBUG] mod_opus.c:750 Opus encoder stats: Frames[0] Bytes encoded[0] Encoded length ms[0] Average encoded bitrate bps[0]
+2026-05-07 07:42:22.488481 98.80% [DEBUG] mod_opus.c:735 Opus decoder stats: Frames[0] PLC[0] FEC[0]
+2026-05-07 07:42:22.488481 98.80% [DEBUG] mod_opus.c:750 Opus encoder stats: Frames[0] Bytes encoded[0] Encoded length ms[0] Average encoded bitrate bps[0]
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:175 sofia/internal/1000@13.235.45.114 Standard DESTROY
+2026-05-07 07:42:22.488481 98.80% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1000@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:42:23.348460 98.77% [WARNING] sofia_reg.c:3210 Can't find user [104@172.31.38.106] from 5.39.101.60
 You must define a domain called '172.31.38.106' in your directory and add a user with the id="104" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:37.028624 90.43% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/444446@13.235.45.114 [01b90c91-b8d9-4453-963a-b35a831d49d9]
-2026-05-07 07:26:37.028624 90.43% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_NEW (Cur 2 Tot 11800)
-2026-05-07 07:26:37.028624 90.43% [INFO] sofia.c:10460 sofia/internal/444446@13.235.45.114 receiving invite from 199.127.61.12:55422 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1661294862-910153926-1960971005
-2026-05-07 07:26:37.028624 90.43% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:37.028624 90.43% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/444446@13.235.45.114) State NEW
-2026-05-07 07:26:37.028624 90.43% [DEBUG] sofia.c:2419 detaching session 01b90c91-b8d9-4453-963a-b35a831d49d9
-2026-05-07 07:26:37.288605 90.43% [DEBUG] sofia.c:2532 Re-attaching to session 01b90c91-b8d9-4453-963a-b35a831d49d9
-2026-05-07 07:26:37.288605 90.43% [INFO] sofia.c:10460 sofia/internal/444446@13.235.45.114 receiving invite from 199.127.61.12:55422 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1661294862-910153926-1960971005
-2026-05-07 07:26:37.288605 90.43% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:37.288605 90.43% [WARNING] sofia_reg.c:3210 Can't find user [444446@172.31.38.106] from 199.127.61.12
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="444446" attribute
+2026-05-07 07:42:23.568558 98.77% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/3908@13.235.45.114 [9e094c08-39ce-47ba-8464-85fcd15f3d7d]
+2026-05-07 07:42:23.568558 98.77% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11902)
+2026-05-07 07:42:23.568558 98.77% [INFO] sofia.c:10460 sofia/internal/3908@13.235.45.114 receiving invite from 199.127.61.12:52071 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 483185643-249574701-448523539
+2026-05-07 07:42:23.568558 98.77% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:23.568558 98.77% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/3908@13.235.45.114) State NEW
+2026-05-07 07:42:23.568558 98.77% [DEBUG] sofia.c:2419 detaching session 9e094c08-39ce-47ba-8464-85fcd15f3d7d
+2026-05-07 07:42:23.808457 98.77% [DEBUG] sofia.c:2532 Re-attaching to session 9e094c08-39ce-47ba-8464-85fcd15f3d7d
+2026-05-07 07:42:23.828470 98.77% [INFO] sofia.c:10460 sofia/internal/3908@13.235.45.114 receiving invite from 199.127.61.12:52071 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 483185643-249574701-448523539
+2026-05-07 07:42:23.828470 98.77% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:23.828470 98.77% [WARNING] sofia_reg.c:3210 Can't find user [3908@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="3908" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:37.288605 90.43% [NOTICE] sofia.c:2417 Hangup sofia/internal/444446@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:26:37.308474 90.43% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_HANGUP (Cur 2 Tot 11800)
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/444446@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/444446@13.235.45.114) State HANGUP
-2026-05-07 07:26:37.308474 90.43% [DEBUG] mod_sofia.c:469 Channel sofia/internal/444446@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:59 sofia/internal/444446@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/444446@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/444446@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/444446@13.235.45.114) Running State Change CS_REPORTING (Cur 2 Tot 11800)
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/444446@13.235.45.114) State REPORTING
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:168 sofia/internal/444446@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/444446@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/444446@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_session.c:1744 Session 11800 (sofia/internal/444446@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:37.308474 90.43% [NOTICE] switch_core_session.c:1762 Session 11800 (sofia/internal/444446@13.235.45.114) Ended
-2026-05-07 07:26:37.308474 90.43% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/444446@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/444446@13.235.45.114) Running State Change CS_DESTROY (Cur 1 Tot 11800)
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/444446@13.235.45.114) State DESTROY
-2026-05-07 07:26:37.308474 90.43% [DEBUG] mod_sofia.c:380 sofia/internal/444446@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:175 sofia/internal/444446@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:37.308474 90.43% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/444446@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:37.468577 90.43% [NOTICE] sofia.c:1065 Hangup sofia/internal/1000@13.235.45.114 [CS_EXECUTE] [NORMAL_CLEARING]
-2026-05-07 07:26:37.468577 90.43% [DEBUG] mod_audio_stream.c:151 mod_audio_stream cmd: d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4 stop
-2026-05-07 07:26:37.468577 90.43% [ERR] mod_audio_stream.c:233 Error locating session d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4
-2026-05-07 07:26:37.468577 90.43% [INFO] switch_cpp.cpp:1466 === PIPECAT AGENT ENDED ===
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_cpp.cpp:1210 sofia/internal/1000@13.235.45.114 destroy/unlink session from object
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_session.c:2979 sofia/internal/1000@13.235.45.114 skip receive message [APPLICATION_EXEC_COMPLETE] (channel is hungup already)
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:647 (sofia/internal/1000@13.235.45.114) State EXECUTE going to sleep
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11800)
-2026-05-07 07:26:37.468577 90.43% [INFO] mod_audio_stream.c:34 Got SWITCH_ABC_TYPE_CLOSE.
-2026-05-07 07:26:37.468577 90.43% [DEBUG] audio_streamer_glue.cpp:889 (d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4) stream_session_cleanup
-2026-05-07 07:26:37.468577 90.43% [DEBUG] audio_streamer_glue.cpp:41 disconnecting...
-2026-05-07 07:26:37.468577 90.43% [INFO] audio_streamer_glue.cpp:502 d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4 destroy_tech_pvt
-2026-05-07 07:26:37.468577 90.43% [INFO] audio_streamer_glue.cpp:921 (d0ddc190-2e1d-4dd0-a3ad-b1aeccdc3da4) stream_session_cleanup: connection closed
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_media_bug.c:1326 Removing BUG from sofia/internal/1000@13.235.45.114
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/1000@13.235.45.114) Callstate Change ACTIVE -> HANGUP
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1000@13.235.45.114) State HANGUP
-2026-05-07 07:26:37.468577 90.43% [DEBUG] mod_sofia.c:469 Channel sofia/internal/1000@13.235.45.114 hanging up, cause: NORMAL_CLEARING
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:59 sofia/internal/1000@13.235.45.114 Standard HANGUP, cause: NORMAL_CLEARING
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1000@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/1000@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1000@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11800)
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1000@13.235.45.114) State REPORTING
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:168 sofia/internal/1000@13.235.45.114 Standard REPORTING, cause: NORMAL_CLEARING
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1000@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/1000@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_session.c:1744 Session 11796 (sofia/internal/1000@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:37.468577 90.43% [NOTICE] switch_core_session.c:1762 Session 11796 (sofia/internal/1000@13.235.45.114) Ended
-2026-05-07 07:26:37.468577 90.43% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/1000@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/1000@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11800)
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1000@13.235.45.114) State DESTROY
-2026-05-07 07:26:37.468577 90.43% [DEBUG] mod_sofia.c:380 sofia/internal/1000@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:37.468577 90.43% [DEBUG] mod_opus.c:735 Opus decoder stats: Frames[0] PLC[0] FEC[0]
-2026-05-07 07:26:37.468577 90.43% [DEBUG] mod_opus.c:750 Opus encoder stats: Frames[0] Bytes encoded[0] Encoded length ms[0] Average encoded bitrate bps[0]
-2026-05-07 07:26:37.468577 90.43% [DEBUG] mod_opus.c:735 Opus decoder stats: Frames[0] PLC[0] FEC[0]
-2026-05-07 07:26:37.468577 90.43% [DEBUG] mod_opus.c:750 Opus encoder stats: Frames[0] Bytes encoded[0] Encoded length ms[0] Average encoded bitrate bps[0]
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:175 sofia/internal/1000@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:37.468577 90.43% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1000@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:40.268582 91.87% [WARNING] sofia_reg.c:3210 Can't find user [800@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="800" attribute
+2026-05-07 07:42:23.828470 98.77% [NOTICE] sofia.c:2417 Hangup sofia/internal/3908@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:42:23.848458 98.77% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11902)
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/3908@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/3908@13.235.45.114) State HANGUP
+2026-05-07 07:42:23.848458 98.77% [DEBUG] mod_sofia.c:469 Channel sofia/internal/3908@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:59 sofia/internal/3908@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/3908@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/3908@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11902)
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/3908@13.235.45.114) State REPORTING
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:168 sofia/internal/3908@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/3908@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/3908@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_session.c:1744 Session 11902 (sofia/internal/3908@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:42:23.848458 98.77% [NOTICE] switch_core_session.c:1762 Session 11902 (sofia/internal/3908@13.235.45.114) Ended
+2026-05-07 07:42:23.848458 98.77% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/3908@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/3908@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11902)
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/3908@13.235.45.114) State DESTROY
+2026-05-07 07:42:23.848458 98.77% [DEBUG] mod_sofia.c:380 sofia/internal/3908@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:175 sofia/internal/3908@13.235.45.114 Standard DESTROY
+2026-05-07 07:42:23.848458 98.77% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/3908@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:42:27.128678 98.77% [WARNING] sofia_reg.c:3210 Can't find user [105@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="105" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:44.568457 92.83% [WARNING] sofia_reg.c:3210 Can't find user [816@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="816" attribute
+2026-05-07 07:42:31.168619 98.90% [WARNING] sofia_reg.c:3210 Can't find user [106@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="106" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:48.208603 93.80% [WARNING] sofia_reg.c:3210 Can't find user [831@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="831" attribute
+2026-05-07 07:42:32.648636 98.93% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/3908@13.235.45.114 [6d1f49d9-f7fb-4cb8-a90e-cb2c381ceb38]
+2026-05-07 07:42:32.648636 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11903)
+2026-05-07 07:42:32.648636 98.93% [INFO] sofia.c:10460 sofia/internal/3908@13.235.45.114 receiving invite from 199.127.61.12:54813 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1044735469-1985989533-1032777189
+2026-05-07 07:42:32.648636 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:32.648636 98.93% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/3908@13.235.45.114) State NEW
+2026-05-07 07:42:32.648636 98.93% [DEBUG] sofia.c:2419 detaching session 6d1f49d9-f7fb-4cb8-a90e-cb2c381ceb38
+2026-05-07 07:42:32.908563 98.97% [DEBUG] sofia.c:2532 Re-attaching to session 6d1f49d9-f7fb-4cb8-a90e-cb2c381ceb38
+2026-05-07 07:42:32.908563 98.97% [INFO] sofia.c:10460 sofia/internal/3908@13.235.45.114 receiving invite from 199.127.61.12:54813 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1044735469-1985989533-1032777189
+2026-05-07 07:42:32.908563 98.97% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:32.908563 98.97% [WARNING] sofia_reg.c:3210 Can't find user [3908@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="3908" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:49.108568 94.07% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/1603@13.235.45.114 [c71c8be1-9af3-4386-94cc-7b7ec308cd64]
-2026-05-07 07:26:49.108568 94.07% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11801)
-2026-05-07 07:26:49.108568 94.07% [INFO] sofia.c:10460 sofia/internal/1603@13.235.45.114 receiving invite from 199.127.61.12:61628 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 244202151-1074296583-1352874989
-2026-05-07 07:26:49.108568 94.07% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:49.108568 94.07% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/1603@13.235.45.114) State NEW
-2026-05-07 07:26:49.108568 94.07% [DEBUG] sofia.c:2419 detaching session c71c8be1-9af3-4386-94cc-7b7ec308cd64
-2026-05-07 07:26:49.348531 94.07% [DEBUG] sofia.c:2532 Re-attaching to session c71c8be1-9af3-4386-94cc-7b7ec308cd64
-2026-05-07 07:26:49.368526 94.07% [INFO] sofia.c:10460 sofia/internal/1603@13.235.45.114 receiving invite from 199.127.61.12:61628 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 244202151-1074296583-1352874989
-2026-05-07 07:26:49.368526 94.07% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:49.368526 94.07% [WARNING] sofia_reg.c:3210 Can't find user [1603@172.31.38.106] from 199.127.61.12
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="1603" attribute
+2026-05-07 07:42:32.908563 98.97% [NOTICE] sofia.c:2417 Hangup sofia/internal/3908@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:42:32.928636 98.97% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11903)
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/3908@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/3908@13.235.45.114) State HANGUP
+2026-05-07 07:42:32.928636 98.97% [DEBUG] mod_sofia.c:469 Channel sofia/internal/3908@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:59 sofia/internal/3908@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/3908@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/3908@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/3908@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11903)
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/3908@13.235.45.114) State REPORTING
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:168 sofia/internal/3908@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/3908@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/3908@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_session.c:1744 Session 11903 (sofia/internal/3908@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:42:32.928636 98.97% [NOTICE] switch_core_session.c:1762 Session 11903 (sofia/internal/3908@13.235.45.114) Ended
+2026-05-07 07:42:32.928636 98.97% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/3908@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/3908@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11903)
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/3908@13.235.45.114) State DESTROY
+2026-05-07 07:42:32.928636 98.97% [DEBUG] mod_sofia.c:380 sofia/internal/3908@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:175 sofia/internal/3908@13.235.45.114 Standard DESTROY
+2026-05-07 07:42:32.928636 98.97% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/3908@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:42:33.188776 98.97% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/9110111323545114@13.235.45.114 [5137bf15-6a61-4937-ba04-a19c032c457f]
+2026-05-07 07:42:33.188776 98.97% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9110111323545114@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11904)
+2026-05-07 07:42:33.188776 98.97% [INFO] sofia.c:10460 sofia/internal/9110111323545114@13.235.45.114 receiving invite from 5.196.63.60:56340 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 60546054-133662437-551859887
+2026-05-07 07:42:33.188776 98.97% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 5.196.63.60:0.
+2026-05-07 07:42:33.188776 98.97% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/9110111323545114@13.235.45.114) State NEW
+2026-05-07 07:42:33.188776 98.97% [DEBUG] sofia.c:2419 detaching session 5137bf15-6a61-4937-ba04-a19c032c457f
+2026-05-07 07:42:35.208471 99.00% [WARNING] sofia_reg.c:3210 Can't find user [107@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="107" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:49.368526 94.07% [NOTICE] sofia.c:2417 Hangup sofia/internal/1603@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:26:49.388551 94.07% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11801)
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/1603@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1603@13.235.45.114) State HANGUP
-2026-05-07 07:26:49.388551 94.07% [DEBUG] mod_sofia.c:469 Channel sofia/internal/1603@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:59 sofia/internal/1603@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1603@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/1603@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11801)
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1603@13.235.45.114) State REPORTING
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:168 sofia/internal/1603@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1603@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/1603@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_session.c:1744 Session 11801 (sofia/internal/1603@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:49.388551 94.07% [NOTICE] switch_core_session.c:1762 Session 11801 (sofia/internal/1603@13.235.45.114) Ended
-2026-05-07 07:26:49.388551 94.07% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/1603@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/1603@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11801)
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1603@13.235.45.114) State DESTROY
-2026-05-07 07:26:49.388551 94.07% [DEBUG] mod_sofia.c:380 sofia/internal/1603@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:175 sofia/internal/1603@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:49.388551 94.07% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1603@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:26:52.348632 94.77% [WARNING] sofia_reg.c:3210 Can't find user [832@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="832" attribute
+2026-05-07 07:42:39.108585 98.93% [WARNING] sofia_reg.c:3210 Can't find user [108@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="108" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:56.488569 95.73% [WARNING] sofia_reg.c:3210 Can't find user [833@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="833" attribute
+2026-05-07 07:42:43.108586 98.97% [WARNING] sofia_reg.c:3210 Can't find user [109@172.31.38.106] from 5.39.101.60
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="109" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:58.268544 96.23% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/1603@13.235.45.114 [84e77679-e41d-4f46-9c0d-fad8cc3e6d18]
-2026-05-07 07:26:58.268544 96.23% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11802)
-2026-05-07 07:26:58.268544 96.23% [INFO] sofia.c:10460 sofia/internal/1603@13.235.45.114 receiving invite from 199.127.61.12:65121 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 2004252661-672573151-2008109879
-2026-05-07 07:26:58.268544 96.23% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:58.268544 96.23% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/1603@13.235.45.114) State NEW
-2026-05-07 07:26:58.268544 96.23% [DEBUG] sofia.c:2419 detaching session 84e77679-e41d-4f46-9c0d-fad8cc3e6d18
-2026-05-07 07:26:58.548557 96.23% [DEBUG] sofia.c:2532 Re-attaching to session 84e77679-e41d-4f46-9c0d-fad8cc3e6d18
-2026-05-07 07:26:58.548557 96.23% [INFO] sofia.c:10460 sofia/internal/1603@13.235.45.114 receiving invite from 199.127.61.12:65121 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 2004252661-672573151-2008109879
-2026-05-07 07:26:58.548557 96.23% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:26:58.548557 96.23% [WARNING] sofia_reg.c:3210 Can't find user [1603@172.31.38.106] from 199.127.61.12
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="1603" attribute
+2026-05-07 07:42:43.228571 98.97% [WARNING] switch_core_state_machine.c:684 5137bf15-6a61-4937-ba04-a19c032c457f sofia/internal/9110111323545114@13.235.45.114 Abandoned
+2026-05-07 07:42:43.228571 98.97% [NOTICE] switch_core_state_machine.c:687 Hangup sofia/internal/9110111323545114@13.235.45.114 [CS_NEW] [WRONG_CALL_STATE]
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9110111323545114@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11904)
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/9110111323545114@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/9110111323545114@13.235.45.114) State HANGUP
+2026-05-07 07:42:43.228571 98.97% [DEBUG] mod_sofia.c:469 Channel sofia/internal/9110111323545114@13.235.45.114 hanging up, cause: WRONG_CALL_STATE
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:59 sofia/internal/9110111323545114@13.235.45.114 Standard HANGUP, cause: WRONG_CALL_STATE
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/9110111323545114@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/9110111323545114@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/9110111323545114@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11904)
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/9110111323545114@13.235.45.114) State REPORTING
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:168 sofia/internal/9110111323545114@13.235.45.114 Standard REPORTING, cause: WRONG_CALL_STATE
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/9110111323545114@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/9110111323545114@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_session.c:1744 Session 11904 (sofia/internal/9110111323545114@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:42:43.228571 98.97% [NOTICE] switch_core_session.c:1762 Session 11904 (sofia/internal/9110111323545114@13.235.45.114) Ended
+2026-05-07 07:42:43.228571 98.97% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/9110111323545114@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/9110111323545114@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11904)
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/9110111323545114@13.235.45.114) State DESTROY
+2026-05-07 07:42:43.228571 98.97% [DEBUG] mod_sofia.c:380 sofia/internal/9110111323545114@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:175 sofia/internal/9110111323545114@13.235.45.114 Standard DESTROY
+2026-05-07 07:42:43.228571 98.97% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/9110111323545114@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:42:45.048616 98.93% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/18898@13.235.45.114 [4659f331-4b01-4f92-a4fa-03047e16f57f]
+2026-05-07 07:42:45.048616 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/18898@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11905)
+2026-05-07 07:42:45.048616 98.93% [INFO] sofia.c:10460 sofia/internal/18898@13.235.45.114 receiving invite from 199.127.61.12:60573 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1902708720-2055273546-665760462
+2026-05-07 07:42:45.048616 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:45.048616 98.93% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/18898@13.235.45.114) State NEW
+2026-05-07 07:42:45.048616 98.93% [DEBUG] sofia.c:2419 detaching session 4659f331-4b01-4f92-a4fa-03047e16f57f
+2026-05-07 07:42:45.288656 98.93% [DEBUG] sofia.c:2532 Re-attaching to session 4659f331-4b01-4f92-a4fa-03047e16f57f
+2026-05-07 07:42:45.308640 98.93% [INFO] sofia.c:10460 sofia/internal/18898@13.235.45.114 receiving invite from 199.127.61.12:60573 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 1902708720-2055273546-665760462
+2026-05-07 07:42:45.308640 98.93% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
+2026-05-07 07:42:45.308640 98.93% [WARNING] sofia_reg.c:3210 Can't find user [18898@172.31.38.106] from 199.127.61.12
+You must define a domain called '172.31.38.106' in your directory and add a user with the id="18898" attribute
 and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:26:58.548557 96.23% [NOTICE] sofia.c:2417 Hangup sofia/internal/1603@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:26:58.568544 96.23% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11802)
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/1603@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1603@13.235.45.114) State HANGUP
-2026-05-07 07:26:58.568544 96.23% [DEBUG] mod_sofia.c:469 Channel sofia/internal/1603@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:59 sofia/internal/1603@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1603@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/1603@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11802)
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1603@13.235.45.114) State REPORTING
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:168 sofia/internal/1603@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1603@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/1603@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_session.c:1744 Session 11802 (sofia/internal/1603@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:26:58.568544 96.23% [NOTICE] switch_core_session.c:1762 Session 11802 (sofia/internal/1603@13.235.45.114) Ended
-2026-05-07 07:26:58.568544 96.23% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/1603@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/1603@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11802)
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1603@13.235.45.114) State DESTROY
-2026-05-07 07:26:58.568544 96.23% [DEBUG] mod_sofia.c:380 sofia/internal/1603@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:175 sofia/internal/1603@13.235.45.114 Standard DESTROY
-2026-05-07 07:26:58.568544 96.23% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1603@13.235.45.114) State DESTROY going to sleep
-2026-05-07 07:27:00.388554 96.77% [WARNING] sofia_reg.c:3210 Can't find user [834@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="834" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:27:04.268617 97.77% [WARNING] sofia_reg.c:3210 Can't find user [835@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="835" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:27:06.848457 98.73% [WARNING] sofia_reg.c:3210 Can't find user [836@172.31.38.106] from 5.39.101.60
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="836" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:27:06.988529 98.73% [NOTICE] switch_channel.c:1142 New Channel sofia/internal/1603@13.235.45.114 [bbc1551a-814f-49e1-923b-a9f7ae8c728b]
-2026-05-07 07:27:06.988529 98.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_NEW (Cur 1 Tot 11803)
-2026-05-07 07:27:06.988529 98.73% [INFO] sofia.c:10460 sofia/internal/1603@13.235.45.114 receiving invite from 199.127.61.12:50945 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 42023491-1753857095-591993190
-2026-05-07 07:27:06.988529 98.73% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:27:06.988529 98.73% [DEBUG] switch_core_state_machine.c:600 (sofia/internal/1603@13.235.45.114) State NEW
-2026-05-07 07:27:06.988529 98.73% [DEBUG] sofia.c:2419 detaching session bbc1551a-814f-49e1-923b-a9f7ae8c728b
-2026-05-07 07:27:07.228537 98.73% [DEBUG] sofia.c:2532 Re-attaching to session bbc1551a-814f-49e1-923b-a9f7ae8c728b
-2026-05-07 07:27:07.248553 98.73% [INFO] sofia.c:10460 sofia/internal/1603@13.235.45.114 receiving invite from 199.127.61.12:50945 version: 1.10.12-release git a88d069 2024-08-02 21:02:27Z 64bit call-id: 42023491-1753857095-591993190
-2026-05-07 07:27:07.248553 98.73% [DEBUG] sofia.c:10554 verifying acl "domains" for ip/port 199.127.61.12:0.
-2026-05-07 07:27:07.248553 98.73% [WARNING] sofia_reg.c:3210 Can't find user [1603@172.31.38.106] from 199.127.61.12
-You must define a domain called '172.31.38.106' in your directory and add a user with the id="1603" attribute
-and you must configure your device to use the proper domain in its authentication credentials.
-2026-05-07 07:27:07.248553 98.73% [NOTICE] sofia.c:2417 Hangup sofia/internal/1603@13.235.45.114 [CS_NEW] [CALL_REJECTED]
-2026-05-07 07:27:07.268561 98.73% [DEBUG] sofia.c:1527 Channel is already hungup.
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11803)
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/1603@13.235.45.114) Callstate Change DOWN -> HANGUP
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1603@13.235.45.114) State HANGUP
-2026-05-07 07:27:07.268561 98.73% [DEBUG] mod_sofia.c:469 Channel sofia/internal/1603@13.235.45.114 hanging up, cause: CALL_REJECTED
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:59 sofia/internal/1603@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/1603@13.235.45.114) State HANGUP going to sleep
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/1603@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/1603@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11803)
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1603@13.235.45.114) State REPORTING
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:168 sofia/internal/1603@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/1603@13.235.45.114) State REPORTING going to sleep
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/1603@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_session.c:1744 Session 11803 (sofia/internal/1603@13.235.45.114) Locked, Waiting on external entities
-2026-05-07 07:27:07.268561 98.73% [NOTICE] switch_core_session.c:1762 Session 11803 (sofia/internal/1603@13.235.45.114) Ended
-2026-05-07 07:27:07.268561 98.73% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/1603@13.235.45.114 [CS_DESTROY]
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/1603@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11803)
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1603@13.235.45.114) State DESTROY
-2026-05-07 07:27:07.268561 98.73% [DEBUG] mod_sofia.c:380 sofia/internal/1603@13.235.45.114 SOFIA DESTROY
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:175 sofia/internal/1603@13.235.45.114 Standard DESTROY
-2026-05-07 07:27:07.268561 98.73% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/1603@13.235.45.114) State DESTROY going to sleep
-freeswitch@ip-172-31-38-106> 
+2026-05-07 07:42:45.308640 98.93% [NOTICE] sofia.c:2417 Hangup sofia/internal/18898@13.235.45.114 [CS_NEW] [CALL_REJECTED]
+2026-05-07 07:42:45.328611 98.93% [DEBUG] sofia.c:1527 Channel is already hungup.
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/18898@13.235.45.114) Running State Change CS_HANGUP (Cur 1 Tot 11905)
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:844 (sofia/internal/18898@13.235.45.114) Callstate Change DOWN -> HANGUP
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/18898@13.235.45.114) State HANGUP
+2026-05-07 07:42:45.328611 98.93% [DEBUG] mod_sofia.c:469 Channel sofia/internal/18898@13.235.45.114 hanging up, cause: CALL_REJECTED
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:59 sofia/internal/18898@13.235.45.114 Standard HANGUP, cause: CALL_REJECTED
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:846 (sofia/internal/18898@13.235.45.114) State HANGUP going to sleep
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:616 (sofia/internal/18898@13.235.45.114) State Change CS_HANGUP -> CS_REPORTING
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:581 (sofia/internal/18898@13.235.45.114) Running State Change CS_REPORTING (Cur 1 Tot 11905)
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/18898@13.235.45.114) State REPORTING
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:168 sofia/internal/18898@13.235.45.114 Standard REPORTING, cause: CALL_REJECTED
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:932 (sofia/internal/18898@13.235.45.114) State REPORTING going to sleep
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:607 (sofia/internal/18898@13.235.45.114) State Change CS_REPORTING -> CS_DESTROY
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_session.c:1744 Session 11905 (sofia/internal/18898@13.235.45.114) Locked, Waiting on external entities
+2026-05-07 07:42:45.328611 98.93% [NOTICE] switch_core_session.c:1762 Session 11905 (sofia/internal/18898@13.235.45.114) Ended
+2026-05-07 07:42:45.328611 98.93% [NOTICE] switch_core_session.c:1766 Close Channel sofia/internal/18898@13.235.45.114 [CS_DESTROY]
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:735 (sofia/internal/18898@13.235.45.114) Running State Change CS_DESTROY (Cur 0 Tot 11905)
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/18898@13.235.45.114) State DESTROY
+2026-05-07 07:42:45.328611 98.93% [DEBUG] mod_sofia.c:380 sofia/internal/18898@13.235.45.114 SOFIA DESTROY
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:175 sofia/internal/18898@13.235.45.114 Standard DESTROY
+2026-05-07 07:42:45.328611 98.93% [DEBUG] switch_core_state_machine.c:745 (sofia/internal/18898@13.235.45.114) State DESTROY going to sleep
+2026-05-07 07:42:46.948631 98.90% [WARNING] sofia_reg.c:3210 Can't find user [110@172.31.38.106] from 5.39.101.60

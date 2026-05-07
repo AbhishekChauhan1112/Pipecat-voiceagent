@@ -79,13 +79,24 @@ class FreeSwitchAudioSerializer(FrameSerializer):
     async def serialize(self, frame: Frame) -> bytes | str | None:
         """Convert a Pipecat audio frame → raw PCM bytes for FreeSWITCH."""
         if isinstance(frame, AudioRawFrame):
+            out_audio = frame.audio
+
+            # If FreeSWITCH expects stereo, we must duplicate the mono TTS audio
+            # into left and right channels for playback
+            if self._num_channels == 2 and len(out_audio) >= 2:
+                # Fast mono->stereo duplication: copy each 2-byte sample
+                pairs = [out_audio[i:i+2] for i in range(0, len(out_audio), 2)]
+                out_audio = b''.join(p + p for p in pairs)
+
             self._tx_packets += 1
-            self._tx_bytes += len(frame.audio)
+            self._tx_bytes += len(out_audio)
+            
             if self._tx_packets == 1:
-                logger.debug(
-                    "Serializer: first audio OUT packet",
-                    bytes=len(frame.audio),
+                logger.info(
+                    "Serializer: first audio OUT packet sent to FreeSWITCH",
+                    bytes=len(out_audio),
                     sample_rate=frame.sample_rate,
+                    channels=self._num_channels,
                 )
             elif self._tx_packets % 200 == 0:
                 logger.debug(
@@ -93,7 +104,7 @@ class FreeSwitchAudioSerializer(FrameSerializer):
                     packets=self._tx_packets,
                     total_bytes=self._tx_bytes,
                 )
-            return frame.audio
+            return out_audio
         return None
 
     async def deserialize(self, data: str | bytes) -> Frame | None:
