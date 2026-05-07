@@ -104,18 +104,15 @@ class FreeSwitchAudioSerializer(FrameSerializer):
                         f"output_bytes={audio_np.nbytes}"
                     )
                 
-                # Convert mono to stereo by duplicating channels
-                audio_stereo = np.empty(audio_np.size * 2, dtype=np.int16)
-                audio_stereo[0::2] = audio_np
-                audio_stereo[1::2] = audio_np
-                out_audio = audio_stereo.tobytes()
+                # FreeSWITCH playback expects MONO PCM write stream
+                out_audio = audio_np.astype(np.int16).tobytes()
 
             out_rate = 16000
             
             logger.warning(
                 f"SERIALIZER AUDIO FORMAT "
                 f"rate={out_rate} "
-                f"channels=2 "
+                f"channels=1 "
                 f"bytes={len(out_audio)}"
             )
 
