@@ -2,8 +2,52 @@ import asyncio
 import logging
 import traceback
 
-from aiortc import RTCPeerConnection, RTCSessionDescription
+from aiortc import RTCPeerConnection, RTCSessionDescription, AudioStreamTrack
 from aiortc.sdp import candidate_from_sdp
+import av
+from fractions import Fraction
+
+class SilenceAudioTrack(AudioStreamTrack):
+    kind = "audio"
+
+    def __init__(self):
+        super().__init__()
+
+        self.sample_rate = 48000
+        self.samples_per_frame = 960
+        self.timestamp = 0
+
+        print("[SILENCE_TRACK] initialized")
+
+    async def recv(self):
+        await asyncio.sleep(0.02)
+
+        frame = av.AudioFrame(
+            format="s16",
+            layout="mono",
+            samples=self.samples_per_frame
+        )
+
+        for plane in frame.planes:
+            plane.update(
+                b"\x00" * plane.buffer_size
+            )
+
+        frame.sample_rate = self.sample_rate
+        frame.pts = self.timestamp
+        frame.time_base = Fraction(
+            1,
+            self.sample_rate
+        )
+
+        self.timestamp += self.samples_per_frame
+
+        print(
+            f"[SILENCE_FRAME] "
+            f"pts={frame.pts}"
+        )
+
+        return frame
 
 from .audio_tracks import AudioReceiver
 from . import config
@@ -26,7 +70,7 @@ class RTCTransport:
         if self.pc and self.pc.connectionState != "closed":
             return
         self.pc = RTCPeerConnection()
-        self.pc.addTransceiver("audio", direction="recvonly")
+        self.pc.addTrack(SilenceAudioTrack())
         self._setup_events()
 
     def _setup_events(self):
