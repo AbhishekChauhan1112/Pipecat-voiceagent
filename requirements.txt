@@ -26,6 +26,7 @@ pydantic-settings>=2.3.0
 
 # Numeric / audio processing
 numpy>=1.26.0
+scipy>=1.10.1
 
 # audioop is built into Python stdlib for versions < 3.13
 # audioop-lts is only needed on Python 3.13+ — omit here for compatibility

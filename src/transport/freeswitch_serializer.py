@@ -31,6 +31,8 @@ import json
 import struct
 from typing import Optional
 
+import numpy as np
+from scipy.signal import resample
 from loguru import logger
 
 from pipecat.frames.frames import AudioRawFrame, Frame, InputAudioRawFrame
@@ -81,29 +83,41 @@ class FreeSwitchAudioSerializer(FrameSerializer):
         out_audio = getattr(frame, "audio", None)
         if out_audio is not None and isinstance(out_audio, bytes):
             logger.info(
-            f"TTS FRAME: bytes={len(out_audio)} "
-            f"type={type(out_audio)} "
-            f"sample_rate={getattr(frame, 'sample_rate', 'unknown')} "
-            f"channels={getattr(frame, 'num_channels', 'unknown')}"
-        )
-            # FreeSWITCH in 'stereo' mode REQUIRES stereo interleaved audio for write-back.
+                f"TTS FRAME: bytes={len(out_audio)} "
+                f"type={type(out_audio)} "
+                f"sample_rate={getattr(frame, 'sample_rate', 'unknown')} "
+                f"channels={getattr(frame, 'num_channels', 'unknown')}"
+            )
+            
+            orig_sample_rate = getattr(frame, "sample_rate", 16000)
+            
             if len(out_audio) >= 2:
-                # Fast mono->stereo duplication: copy each 2-byte sample
-                pairs = [out_audio[i:i+2] for i in range(0, len(out_audio), 2)]
-                out_audio = b"".join(p + p for p in pairs)
+                # Read as PCM16
+                audio_np = np.frombuffer(out_audio, dtype=np.int16)
+                
+                if orig_sample_rate != 16000:
+                    # Resample audio to 16000Hz before sending to FreeSWITCH
+                    num_samples = int(len(audio_np) * 16000 / orig_sample_rate)
+                    audio_np = resample(audio_np, num_samples).astype(np.int16)
+                    logger.warning(
+                        f"RESAMPLING AUDIO {orig_sample_rate}Hz -> 16000Hz "
+                        f"output_bytes={audio_np.nbytes}"
+                    )
+                
+                # Convert mono to stereo by duplicating channels
+                audio_stereo = np.empty(audio_np.size * 2, dtype=np.int16)
+                audio_stereo[0::2] = audio_np
+                audio_stereo[1::2] = audio_np
+                out_audio = audio_stereo.tobytes()
 
+            out_rate = 16000
+            
             logger.warning(
                 f"SERIALIZER AUDIO FORMAT "
-                f"rate={getattr(frame, 'sample_rate', 'unknown')} "
-                f"channels={getattr(frame, 'num_channels', 'unknown')} "
+                f"rate={out_rate} "
+                f"channels=2 "
                 f"bytes={len(out_audio)}"
             )
-
-            if getattr(frame, "sample_rate", 16000) != 16000:
-                logger.error(
-                    f"INVALID SAMPLE RATE {getattr(frame, 'sample_rate')} "
-                    f"EXPECTED 16000"
-                )
 
             self._tx_packets += 1
             self._tx_bytes += len(out_audio)
