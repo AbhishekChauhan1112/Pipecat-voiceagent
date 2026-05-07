@@ -47,9 +47,8 @@ class ToneAudioTrack(AudioStreamTrack):
             mono * 32767
         ).astype(np.int16)
 
-        stereo = np.stack(
-            [mono, mono],
-            axis=0
+        stereo = np.column_stack(
+            [mono, mono]
         )
 
         frame = av.AudioFrame.from_ndarray(
@@ -71,8 +70,7 @@ class ToneAudioTrack(AudioStreamTrack):
         self.phase += self.samples_per_frame
 
         print(
-            f"[TONE_FRAME] "
-            f"pts={frame.pts}"
+            f"[TONE_FRAME] pts={frame.pts}"
         )
 
         return frame
@@ -91,6 +89,7 @@ class RTCTransport:
         self._audio_reader_tasks = set()
         self._stats_task = None
         self._audio_transceiver_added = False
+        self.outbound_track = None
         self.initialize()
 
     def initialize(self):
@@ -135,8 +134,12 @@ class RTCTransport:
             )
             logger.warning("[TRACK] kind=%s id=%s", track.kind, track.id)
             if track.kind == "audio":
+                for task in self._audio_reader_tasks:
+                    if getattr(task, "track_id", None) == track.id:
+                        return
                 print("[TASK] creating task")
                 task = asyncio.create_task(self._read_audio(track))
+                task.track_id = track.id
                 self._audio_reader_tasks.add(task)
                 task.add_done_callback(self._audio_reader_tasks.discard)
             else:
@@ -253,7 +256,13 @@ class RTCTransport:
         print("[WEBRTC] setRemoteDescription DONE")
         logger.warning("[WEBRTC] setRemoteDescription DONE")
 
-        self.pc.addTrack(ToneAudioTrack())
+        self.outbound_track = ToneAudioTrack()
+        self.pc.addTrack(self.outbound_track)
+        print(
+            "[WEBRTC] persistent outbound track stored",
+            self.outbound_track
+        )
+
         for sender in self.pc.getSenders():
             print(
                 "[SENDER]",
