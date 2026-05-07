@@ -53,23 +53,18 @@ def build_deepgram_stt(config: AgentConfig) -> DeepgramSTTService:
 
     stt = DeepgramSTTService(
         api_key=config.deepgram_api_key,
-        # Connection-level (init-only) parameters
-        encoding="linear16",
-        channels=1,
-        sample_rate=config.sample_rate,
-        # Runtime-updatable settings via Settings dataclass
         settings=DeepgramSTTService.Settings(
             model=config.deepgram_model,
             language=language,
-            # Interim results: emit partial transcripts for barge-in detection
+            encoding="linear16",
+            channels=1,
+            sample_rate=config.sample_rate,
+            # Interim results: partial transcripts for barge-in
             interim_results=True,
-            # Smart formatting adds punctuation, capitalisation, etc.
             smart_format=True,
             punctuate=True,
-            # Endpointing: ms of silence before Deepgram sends a final transcript.
-            # Lower = faster response but more fragmented speech.
+            # Endpointing: ms of silence before final transcript
             endpointing=config.deepgram_endpointing_ms,
-            # utterance_end_ms: additional silence ms to confirm utterance end
             utterance_end_ms=1000,
         ),
     )
