@@ -1,0 +1,8 @@
+# Normalize line endings to LF in the repo (Windows → Linux EC2)
+* text=auto eol=lf
+
+# Shell scripts must always be LF (or they break on Linux)
+*.sh text eol=lf
+
+# Windows-only files can keep CRLF if needed
+*.bat text eol=crlf

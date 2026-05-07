@@ -1,0 +1,22 @@
+<!--
+  mod_audio_stream module configuration.
+  File: /etc/freeswitch/autoload_configs/audio_stream.conf.xml
+  
+  This is a minimal config — mod_audio_stream has no global settings
+  that must be tuned. All parameters (URL, rate, channels) are passed
+  per-call from the dialplan audio_stream action.
+  
+  The module just needs to be enabled here and in modules.conf.xml.
+-->
+<configuration name="audio_stream.conf" description="Audio Stream (WebSocket) Configuration">
+  <settings>
+    <!-- 
+      Buffer size in bytes per audio chunk sent to the WebSocket.
+      320 bytes = 160 samples @ 16kHz = 10ms of audio per WebSocket frame.
+      Smaller = lower latency, more overhead.
+      Larger  = higher latency, less overhead.
+      Default 320 is optimal for voice AI (10ms chunks).
+    -->
+    <param name="buffer-size" value="320"/>
+  </settings>
+</configuration>

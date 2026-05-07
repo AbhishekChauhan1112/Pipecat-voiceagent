@@ -1,0 +1,64 @@
+<!--
+  FreeSWITCH Dialplan — AI Voice Agent Extension
+  ================================================
+  File: /etc/freeswitch/dialplan/default/01_ai_agent.xml
+  (or place in /etc/freeswitch/dialplan/default.xml inside an <include>)
+
+  This dialplan routes calls to extension 9000 to the Pipecat AI agent
+  via mod_audio_stream WebSocket.
+
+  How it works:
+    1. Linphone dials extension 9000
+    2. FreeSWITCH answers the call
+    3. mod_audio_stream opens a WebSocket to ws://127.0.0.1:8765/ws
+    4. Audio flows bidirectionally: caller ↔ Pipecat AI agent
+    5. Call ends when Linphone hangs up or WebSocket closes
+
+  Prerequisites:
+    - mod_audio_stream must be compiled and loaded (see install script)
+    - Pipecat agent must be running: python main.py
+    - SAMPLE_RATE in .env must be 16000
+
+  To verify mod_audio_stream is loaded:
+    fs_cli -x "module_exists mod_audio_stream"
+-->
+
+<include>
+  <context name="default">
+
+    <extension name="ai_voice_agent">
+      <!--
+        Match extension 9000.
+        Change the regex to whatever extension number you want, e.g. ^1000$ or ^AI$.
+      -->
+      <condition field="destination_number" expression="^9000$">
+
+        <!-- Answer the call immediately -->
+        <action application="answer"/>
+
+        <!-- Brief pause so Linphone's RTP negotiation settles before streaming starts -->
+        <action application="sleep" data="500"/>
+
+        <!--
+          Start mod_audio_stream.
+          Syntax: audio_stream <websocket_url> <sample_rate> <channels>
+          
+          - ws://127.0.0.1:8765/ws  : Pipecat WebSocket on same server (loopback)
+          - 16000                   : 16 kHz — best quality for Deepgram
+          - mono                    : single channel (phone calls are always mono)
+          
+          mod_audio_stream BLOCKS here until:
+            a) The WebSocket disconnects (Pipecat server stops)
+            b) Linphone hangs up
+            c) FreeSWITCH executes a hangup action
+        -->
+        <action application="audio_stream" data="ws://127.0.0.1:8765/ws 16000 mono"/>
+
+        <!-- After audio_stream returns, hang up the call cleanly -->
+        <action application="hangup"/>
+
+      </condition>
+    </extension>
+
+  </context>
+</include>

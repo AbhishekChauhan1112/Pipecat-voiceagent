@@ -1,0 +1,35 @@
+# ============================================================
+# Pipecat Telephony Voice Agent — Requirements
+# FreeSWITCH + mod_audio_stream + Deepgram + Groq + ElevenLabs
+# ============================================================
+
+# Core Pipecat framework with required service integrations
+pipecat-ai[deepgram,groq,elevenlabs,silero,websocket]>=0.0.105
+
+# FastAPI + Uvicorn WebSocket server (receives mod_audio_stream audio)
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+websockets>=12.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Async HTTP client used internally by pipecat services
+aiohttp>=3.9.0
+
+# Structured logging
+loguru>=0.7.2
+
+# Settings validation
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+
+# Numeric / audio processing
+numpy>=1.26.0
+
+# audioop-lts: backport of audioop for Python 3.13+
+# Safe to install on 3.11 too (ignored if built-in audioop is available)
+audioop-lts>=0.2.1
+
+# Type hints
+typing-extensions>=4.11.0
