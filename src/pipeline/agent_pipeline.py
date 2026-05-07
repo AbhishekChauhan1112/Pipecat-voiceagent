@@ -228,19 +228,47 @@ class TelephonyAgentPipeline:
         # ── Pipeline ──────────────────────────────────────────────────────────
         pipeline = Pipeline(
             [
-                transport.input(),      # 1. raw PCM from FreeSWITCH
-                dbg_after_transport,    #    ← debug: what enters the pipeline?
-                vad,                    # 2. Silero VAD — speech detection
-                dbg_after_vad,          #    ← debug: VAD events, speech start/stop
-                stt,                    # 3. Groq Whisper STT
-                dbg_after_stt,          #    ← debug: transcriptions
-                ctx.user(),             # 4. accumulate turns → LLM context
-                llm,                    # 5. Groq LLM
-                dbg_after_llm,          #    ← debug: LLM token stream
-                tts,                    # 6. ElevenLabs TTS
-                dbg_after_tts,          #    ← debug: TTS audio reaching transport
-                transport.output(),     # 8. raw PCM → FreeSWITCH → caller
-                ctx.assistant(),        # 7. store bot reply (passes audio through)
+                # 1. Incoming audio from FreeSWITCH websocket
+                transport.input(),
+
+                # Debug raw inbound audio
+                dbg_after_transport,
+
+                # 2. Voice Activity Detection
+                vad,
+
+                # Debug VAD behavior
+                dbg_after_vad,
+
+                # 3. Speech-to-Text
+                stt,
+
+                # Debug STT output
+                dbg_after_stt,
+
+                # 4. Add user utterances into conversation memory
+                ctx.user(),
+
+                # 5. Large Language Model
+                llm,
+
+                # Debug LLM streaming tokens
+                dbg_after_llm,
+
+                # 6. Store assistant responses BEFORE TTS/output
+                # IMPORTANT:
+                # Assistant aggregator MUST happen before TTS and transport.output()
+                # otherwise TTSAudioRawFrame propagation can fail.
+                ctx.assistant(),
+
+                # 7. Text-to-Speech synthesis
+                tts,
+
+                # Debug synthesized audio frames
+                dbg_after_tts,
+
+                # 8. Send audio back to FreeSWITCH caller
+                transport.output(),
             ]
         )
         logger.debug(f"[{sid}] Pipeline assembled with 8 stages + 5 debug observers")
