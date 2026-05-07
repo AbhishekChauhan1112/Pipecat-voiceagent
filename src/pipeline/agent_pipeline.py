@@ -38,7 +38,6 @@ from pipecat.frames.frames import LLMMessagesUpdateFrame
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
-from pipecat.processors.audio.vad_audio_processor import VADProcessor
 from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketParams,
     FastAPIWebsocketTransport,
@@ -105,21 +104,19 @@ class TelephonyAgentPipeline:
                 audio_in_enabled=True,
                 audio_out_enabled=True,
                 add_wav_header=False,
+                # vad_analyzer in transport params is deprecated in 0.0.108 but still works.
+                # To silence this warning, find VADProcessor path with:
+                #   find .venv -name '*.py' | xargs grep -l 'class VADProcessor'
+                vad_analyzer=SileroVADAnalyzer(
+                    params=VADParams(
+                        confidence=0.7,
+                        start_secs=0.2,
+                        stop_secs=0.8,
+                        min_volume=0.6,
+                    )
+                ),
                 serializer=serializer,
             ),
-        )
-
-        # VAD is no longer part of transport params in Pipecat 0.0.108.
-        # Use a standalone VADProcessor stage in the pipeline instead.
-        vad = VADProcessor(
-            vad_analyzer=SileroVADAnalyzer(
-                params=VADParams(
-                    confidence=0.7,
-                    start_secs=0.2,
-                    stop_secs=0.8,
-                    min_volume=0.6,
-                )
-            )
         )
 
         # ── AI Services ──────────────────────────────────────────────────────
@@ -131,13 +128,12 @@ class TelephonyAgentPipeline:
         pipeline = Pipeline(
             [
                 transport.input(),       # 1. raw PCM from FreeSWITCH
-                vad,                     # 2. Silero VAD — barge-in detection
-                stt,                     # 3. Deepgram streaming STT
-                ctx.user(),              # 4. accumulate turns → LLM context
-                llm,                     # 5. Groq streaming LLM
-                tts,                     # 6. ElevenLabs streaming TTS
-                ctx.assistant(),         # 7. store bot reply in memory
-                transport.output(),      # 8. raw PCM back to FreeSWITCH
+                stt,                     # 2. Deepgram streaming STT
+                ctx.user(),              # 3. accumulate turns → LLM context
+                llm,                     # 4. Groq streaming LLM
+                tts,                     # 5. ElevenLabs streaming TTS
+                ctx.assistant(),         # 6. store bot reply in memory
+                transport.output(),      # 7. raw PCM back to FreeSWITCH
             ]
         )
 
