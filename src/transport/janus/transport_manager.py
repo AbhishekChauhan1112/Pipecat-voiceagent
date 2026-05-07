@@ -28,9 +28,9 @@ class JanusTransportManager:
         self.rtc = RTCTransport(media_bridge=self.media_bridge)
 
         self.orchestrator = JanusOrchestrator()
-        self.orchestrator.room_manager.set_callbacks(
-            on_connect=self.connect_pipecat,
-            on_disconnect=self.disconnect_pipecat,
+        self.orchestrator.room_controller.set_callbacks(
+            on_pipecat_connect=self.connect_pipecat,
+            on_pipecat_disconnect=self.disconnect_pipecat,
         )
 
         self._pipeline_task = None
@@ -40,6 +40,7 @@ class JanusTransportManager:
         self._stop_event = asyncio.Event()
         self._state_lock = asyncio.Lock()
         self._call_active = False
+        self._media_frames_seen = 0
 
     async def start(self) -> None:
         await self.orchestrator.start()
@@ -91,6 +92,7 @@ class JanusTransportManager:
             await self.rtc.close()
             self._call_active = False
             logger.info("[IDLE] waiting for caller in room %s", ROOM_ID)
+            logger.info("[CLEANUP_COMPLETE] room=%s", ROOM_ID)
 
     async def _start_pipeline(self) -> None:
         pipeline = TelephonyAgentPipeline(config=self.config, media_bridge=self.media_bridge)
@@ -146,6 +148,9 @@ class JanusTransportManager:
                 sample_rate=AUDIO_SAMPLE_RATE,
             )
             await self._pipeline_task.queue_frames([frame])
+            self._media_frames_seen += 1
+            if self._media_frames_seen % 50 == 0:
+                logger.info("[MEDIA_FLOWING] inbound_frames=%s", self._media_frames_seen)
 
     @staticmethod
     def _drain_queue(queue: asyncio.Queue) -> None:
