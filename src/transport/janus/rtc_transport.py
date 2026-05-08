@@ -28,7 +28,7 @@ class SilentAudioTrack(MediaStreamTrack):
 
         frame = AudioFrame(
             format="s16",
-            layout="mono",
+            layout="stereo",
             samples=self.samples_per_frame,
         )
 
