@@ -1,4 +1,8 @@
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=Path(__file__).resolve().parents[3] / ".env", override=True)
 
 # Janus Server Configuration
 # If running this service on a different machine from Janus,
