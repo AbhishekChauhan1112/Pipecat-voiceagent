@@ -357,17 +357,11 @@ class RTCTransport:
             )
         logger.info("Created local SDP answer for SIP incoming call")
 
-        # ── Patch local SDP before sending to Janus ────────────────────────
-        # Replace aiortc's 0.0.0.0 placeholder with the real private EC2 IP
-        # so Janus can route RTP to the correct interface.
-        # NOTE: do NOT patch the opus channel count — aiortc and the remote
-        # must negotiate that through the SDP offer/answer exchange naturally.
         sdp = self.pc.localDescription.sdp
-        sdp = sdp.replace("IN IP4 0.0.0.0", "IN IP4 172.31.38.106")
 
-        print("[WEBRTC] PATCHED LOCAL SDP START")
+        print("[WEBRTC] LOCAL SDP (unpatched) START")
         print(sdp)
-        print("[WEBRTC] PATCHED LOCAL SDP END")
+        print("[WEBRTC] LOCAL SDP (unpatched) END")
 
         return {"type": self.pc.localDescription.type, "sdp": sdp}
 
