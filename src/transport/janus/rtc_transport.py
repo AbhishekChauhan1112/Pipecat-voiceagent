@@ -225,8 +225,18 @@ class RTCTransport:
     async def create_audio_only_answer_for_offer(self, sdp: str) -> dict:
         """Accept an incoming offer and create SDP answer with audio transceiver policy."""
         import traceback as _tb
-        if not self.pc:
-            raise RuntimeError("PeerConnection not initialized")
+
+        # ── Tear down any existing PC so each call starts fresh ────────────
+        if self.pc is not None:
+            try:
+                await self.pc.close()
+            except Exception:
+                pass
+            self.pc = None
+
+        self.pc = RTCPeerConnection()
+        self._setup_events()
+        print("[WEBRTC] fresh RTCPeerConnection created for incoming call")
 
         # ── PC / ICE / signaling state event hooks ─────────────────────────
         @self.pc.on("connectionstatechange")
@@ -313,13 +323,12 @@ class RTCTransport:
         logger.info("Created local SDP answer for SIP incoming call")
 
         # ── Patch local SDP before sending to Janus ────────────────────────
-        # 1. Downgrade Opus to mono: FreeSWITCH negotiates opus/48000/1 on
-        #    the SIP leg, so the answer must match or Janus rejects the call.
-        # 2. Replace aiortc's placeholder IP with the real private interface
-        #    so Janus can route RTP to the correct address.
+        # Replace aiortc's 0.0.0.0 placeholder with the real private EC2 IP
+        # so Janus can route RTP to the correct interface.
+        # NOTE: do NOT patch the opus channel count — aiortc and the remote
+        # must negotiate that through the SDP offer/answer exchange naturally.
         sdp = self.pc.localDescription.sdp
-        sdp = sdp.replace("opus/48000/2", "opus/48000/1")
-        sdp = sdp.replace("IN IP4 1.1.1.1", "IN IP4 172.31.38.106")
+        sdp = sdp.replace("IN IP4 0.0.0.0", "IN IP4 172.31.38.106")
 
         print("[WEBRTC] PATCHED LOCAL SDP START")
         print(sdp)
