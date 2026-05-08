@@ -10,71 +10,72 @@ import numpy as np
 from fractions import Fraction
 
 class ToneAudioTrack(AudioStreamTrack):
+    """Generates a stereo 440 Hz sine-wave at 48 kHz with a pure monotonic pts.
+
+    CRITICAL: next_timestamp() is deliberately NOT called here.
+    aiortc's next_timestamp() internally converts wall-clock nanoseconds to
+    RTP 32-bit timestamps, which overflows and corrupts pts after a few seconds
+    (observed: pts jumps from ~52800 to ~4295019136).
+    We drive our own pts counter starting from 0, incrementing by
+    samples_per_frame (960) every call.  Pacing is handled externally by
+    the aiortc sender loop.
+    """
+
     kind = "audio"
 
     def __init__(self):
         super().__init__()
 
         self.sample_rate = 48000
-        self.samples_per_frame = 960
+        self.samples_per_frame = 960  # 20 ms @ 48 kHz
 
         self.phase = 0
         self._pts = 0
 
         self.frequency = 440.0
 
-        print("[TONE_TRACK] initialized")
+        print("[TONE_TRACK] initialized — pure monotonic pts, NO next_timestamp()")
 
     async def recv(self):
-        # Use aiortc scheduler for pacing only — override pts manually
-        await self.next_timestamp()
-
+        # ── Tone generation ────────────────────────────────────────────────
         t = (
-            np.arange(self.samples_per_frame)
-            + self.phase
+            np.arange(self.samples_per_frame) + self.phase
         ) / self.sample_rate
 
-        mono = (
-            0.2
-            * np.sin(
-                2
-                * math.pi
-                * self.frequency
-                * t
-            )
+        mono = (0.2 * np.sin(2 * math.pi * self.frequency * t) * 32767).astype(
+            np.int16
         )
 
-        mono = (
-            mono * 32767
-        ).astype(np.int16)
+        # av.AudioFrame.from_ndarray with layout="stereo" expects shape
+        # (2, samples) — channels-first — when format is "s16p" (planar).
+        # For packed s16 interleaved, from_ndarray expects (samples, 2).
+        # We use s16 (packed) so shape must be (samples, channels) = (960, 2).
+        stereo = np.column_stack([mono, mono])  # shape: (960, 2)
 
-        # stereo shape: (samples, 2) — packed interleaved stereo for PyAV
-        stereo = np.column_stack(
-            [mono, mono]
-        )
-
+        # ── Build frame ────────────────────────────────────────────────────
         frame = av.AudioFrame.from_ndarray(
             stereo,
             format="s16",
-            layout="stereo"
+            layout="stereo",
         )
 
         frame.sample_rate = self.sample_rate
-        frame.pts = self._pts
         frame.time_base = Fraction(1, self.sample_rate)
+        frame.pts = self._pts
 
+        # ── Advance counters AFTER assigning pts ───────────────────────────
         self._pts += self.samples_per_frame
         self.phase += self.samples_per_frame
 
+        # ── Diagnostics ────────────────────────────────────────────────────
         print(
             "[FRAME_INFO]",
-            frame.layout.name,
-            frame.format.name,
-            frame.samples,
-            frame.sample_rate,
-            frame.pts,
+            frame.layout.name,   # expected: stereo
+            frame.format.name,   # expected: s16
+            frame.samples,       # expected: 960
+            frame.sample_rate,   # expected: 48000
+            frame.pts,           # expected: 0, 960, 1920, ...
         )
-        print(f"[TONE_FRAME] pts={frame.pts}")
 
         return frame
 
@@ -147,24 +148,9 @@ class RTCTransport:
             else:
                 logger.warning("[TRACK_IGNORED] kind=%s id=%s", track.kind, track.id)
 
-    async def _poll_stats(self):
-        while True:
-            try:
-                stats = await self.pc.getStats()
-                for stat in stats.values():
-                    if stat.type == "candidate-pair":
-                        if getattr(stat, "selected", False):
-                            print(
-                                f"[ICE_SELECTED] "
-                                f"state={stat.state} "
-                                f"bytesReceived={getattr(stat, 'bytesReceived', 0)} "
-                                f"packetsReceived={getattr(stat, 'packetsReceived', 0)} "
-                                f"bytesSent={getattr(stat, 'bytesSent', 0)} "
-                                f"packetsSent={getattr(stat, 'packetsSent', 0)}"
-                            )
-            except Exception:
-                traceback.print_exc()
-            await asyncio.sleep(2)
+    # NOTE: _poll_stats is defined once below (the complete version that
+    # also tracks inbound-rtp / remote-inbound-rtp stats).  This duplicate
+    # stub has been removed.
 
     async def _read_audio(self, track):
         print("[AUDIO] reader started")
