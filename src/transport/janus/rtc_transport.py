@@ -311,7 +311,21 @@ class RTCTransport:
                 f"currentDirection={t.currentDirection}"
             )
         logger.info("Created local SDP answer for SIP incoming call")
-        return {"type": self.pc.localDescription.type, "sdp": self.pc.localDescription.sdp}
+
+        # ── Patch local SDP before sending to Janus ────────────────────────
+        # 1. Downgrade Opus to mono: FreeSWITCH negotiates opus/48000/1 on
+        #    the SIP leg, so the answer must match or Janus rejects the call.
+        # 2. Replace aiortc's placeholder IP with the real private interface
+        #    so Janus can route RTP to the correct address.
+        sdp = self.pc.localDescription.sdp
+        sdp = sdp.replace("opus/48000/2", "opus/48000/1")
+        sdp = sdp.replace("IN IP4 1.1.1.1", "IN IP4 172.31.38.106")
+
+        print("[WEBRTC] PATCHED LOCAL SDP START")
+        print(sdp)
+        print("[WEBRTC] PATCHED LOCAL SDP END")
+
+        return {"type": self.pc.localDescription.type, "sdp": sdp}
 
     async def add_ice_candidate(self, candidate_info: dict):
         """Add a trickle ICE candidate received from Janus."""
