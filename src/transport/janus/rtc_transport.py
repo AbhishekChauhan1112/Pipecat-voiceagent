@@ -160,11 +160,10 @@ class RTCTransport:
                 frame = await track.recv()
                 frames += 1
                 print(
-                    f"[AUDIO_FRAME] "
-                    f"count={frames} "
-                    f"pts={frame.pts} "
-                    f"samples={frame.samples} "
-                    f"rate={frame.sample_rate}"
+                    f"[AUDIO_FRAME] samples={frame.samples} "
+                    f"rate={frame.sample_rate} "
+                    f"layout={frame.layout.name} "
+                    f"pts={frame.pts}"
                 )
                 if self.media_bridge:
                     await self.media_bridge.enqueue_inbound_frame(frame)
