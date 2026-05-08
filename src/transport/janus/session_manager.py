@@ -101,7 +101,14 @@ class JanusSessionManager:
         logger.warning("[PLUGIN_ATTACHED] plugin=%s handle_id=%s", plugin_name, handle_id)
         return handle_id
 
-    async def send_plugin_message(self, handle_id: int, *, body: dict, jsep: dict | None = None) -> dict:
+    async def send_plugin_message(
+        self,
+        handle_id: int,
+        *,
+        body: dict,
+        jsep: dict | None = None,
+        fire_and_forget: bool = False,
+    ) -> dict:
         payload: dict[str, Any] = {
             "janus": "message",
             "session_id": self.session_id,
@@ -110,6 +117,25 @@ class JanusSessionManager:
         }
         if jsep:
             payload["jsep"] = jsep
+
+        if fire_and_forget:
+            # Send without registering a transaction future — Janus will send
+            # an async 'ack' which we do not need to wait for.  This avoids
+            # [TX_TIMEOUT] on messages like 'accept' where the real response
+            # arrives later as a plugin event (e.g. 'accepted').
+            txid = self._txid()
+            payload["transaction"] = txid
+            if self.session_id and "session_id" not in payload:
+                payload["session_id"] = self.session_id
+            logger.warning(
+                "[PLUGIN_MESSAGE_FIRE_AND_FORGET] handle_id=%s request=%s txid=%s",
+                handle_id,
+                body.get("request"),
+                txid,
+            )
+            logger.warning("[JANUS_RAW_TX] %s", json.dumps(payload, indent=2))
+            await self.ws.send(json.dumps(payload))
+            return {"janus": "fire_and_forget", "transaction": txid}
 
         logger.warning("[PLUGIN_MESSAGE_SEND] handle_id=%s request=%s", handle_id, body.get("request"))
         response = await self.send_request(payload)

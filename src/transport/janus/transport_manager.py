@@ -129,8 +129,9 @@ class JanusTransportManager:
                         sip_handle,
                         body=body,
                         jsep=answer_jsep,
+                        fire_and_forget=True,   # Janus sends async 'ack'; no synchronous reply
                     )
-                    print("[SIP] accept sent")
+                    print("[SIP] accept sent — fire_and_forget response:", response)
                     logger.warning("[WEBRTC] SIP accept response call_id=%s response=%s", call_id, response)
 
                 except Exception as exc:

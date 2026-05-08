@@ -33,7 +33,14 @@ class JanusOrchestrator:
         self.sip_secret = config.SIP_SECRET
         self.sip_proxy = config.SIP_PROXY
 
-    async def send_plugin_message(self, handle_id: int, *, body: dict, jsep: dict | None = None) -> dict:
+    async def send_plugin_message(
+        self,
+        handle_id: int,
+        *,
+        body: dict,
+        jsep: dict | None = None,
+        fire_and_forget: bool = False,
+    ) -> dict:
         payload = {
             "janus": "message",
             "session_id": self.session.session_id,
@@ -43,8 +50,13 @@ class JanusOrchestrator:
         if jsep:
             payload["jsep"] = jsep
 
-        logger.warning(f"[JANUS_RAW_TX] {payload}")
-        return await self.session.send_plugin_message(handle_id, body=body, jsep=jsep)
+        logger.warning("[JANUS_RAW_TX] %s", payload)
+        return await self.session.send_plugin_message(
+            handle_id,
+            body=body,
+            jsep=jsep,
+            fire_and_forget=fire_and_forget,
+        )
 
     async def log_raw_rx(self, message: dict) -> None:
         logger.warning(f"[JANUS_RAW_RX] {message}")
