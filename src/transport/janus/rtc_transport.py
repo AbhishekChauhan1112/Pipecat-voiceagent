@@ -302,6 +302,31 @@ class RTCTransport:
         for sender in self.pc.getSenders():
             print("[SENDER]", sender, "track=", sender.track)
 
+        # ── Step 4b: set codec preferences (opus + telephone-event) ───────────
+        # Forces the answer SDP to include telephone-event/48000 PT 101 alongside
+        # opus PT 102, which Janus SIP + FreeSWITCH require for correct RTP flow.
+        try:
+            from aiortc.rtcrtpsender import RTCRtpSender
+
+            audio_transceiver = next(
+                (t for t in self.pc.getTransceivers() if t.kind == "audio"),
+                None,
+            )
+
+            if audio_transceiver:
+                capabilities = RTCRtpSender.getCapabilities("audio")
+                preferred_codecs = [
+                    c for c in capabilities.codecs
+                    if c.mimeType.lower() in ("audio/opus", "audio/telephone-event")
+                ]
+                print("[CODECS]", preferred_codecs)
+                audio_transceiver.setCodecPreferences(preferred_codecs)
+                print("[CODECS] preferences applied to audio transceiver")
+            else:
+                print("[CODECS] WARNING: no audio transceiver found, skipping codec preferences")
+        except Exception as e:
+            print("[CODECS_ERROR]", repr(e))
+
         # ── Step 5: createAnswer ───────────────────────────────────────────
         print("[WEBRTC] creating answer")
         try:
