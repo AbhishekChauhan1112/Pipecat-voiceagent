@@ -166,20 +166,10 @@ class RTCTransport:
 
         @self.pc.on("track")
         def on_track(track):
-            print(
-                f"[TRACK] "
-                f"kind={track.kind} "
-                f"id={track.id}"
-            )
+            print(f"[TRACK] kind={track.kind} id={track.id}")
+
             if track.kind == "audio":
-                for task in self._audio_reader_tasks:
-                    if getattr(task, "track_id", None) == track.id:
-                        return
-                print("[TASK] creating task")
-                task = asyncio.create_task(self._read_audio(track))
-                task.track_id = track.id
-                self._audio_reader_tasks.add(task)
-                task.add_done_callback(self._audio_reader_tasks.discard)
+                asyncio.create_task(self._read_audio(track))
             else:
                 logger.warning("[TRACK_IGNORED] kind=%s id=%s", track.kind, track.id)
 
@@ -189,22 +179,24 @@ class RTCTransport:
 
     async def _read_audio(self, track):
         print("[AUDIO] reader started")
-        frames = 0
+
         while True:
             try:
                 frame = await track.recv()
-                frames += 1
+
                 print(
-                    f"[AUDIO_FRAME] samples={frame.samples} "
+                    f"[AUDIO_FRAME] "
+                    f"samples={frame.samples} "
                     f"rate={frame.sample_rate} "
                     f"layout={frame.layout.name} "
                     f"pts={frame.pts}"
                 )
+
                 if self.media_bridge:
                     await self.media_bridge.enqueue_inbound_frame(frame)
+
             except Exception as e:
-                logger.error("[AUDIO_ERROR] %s", e)
-                traceback.print_exc()
+                print(f"[AUDIO_RECV_ERROR] {repr(e)}")
                 break
 
     def add_track(self, track):

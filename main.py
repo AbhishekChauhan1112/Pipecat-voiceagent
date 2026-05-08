@@ -49,6 +49,12 @@ def main() -> None:
     # ── Logging ───────────────────────────────────────────────────────────────
     setup_logging(log_level=log_level, log_file=config.log_file)
 
+    # ── aiortc / aioice verbose debug logging ─────────────────────────────────
+    import logging as _stdlib_logging
+    _stdlib_logging.basicConfig(level=_stdlib_logging.DEBUG)
+    _stdlib_logging.getLogger("aiortc").setLevel(_stdlib_logging.DEBUG)
+    _stdlib_logging.getLogger("aioice").setLevel(_stdlib_logging.DEBUG)
+
     logger.info("╔══════════════════════════════════════════════╗")
     logger.info("║   Pipecat Telephony Voice Agent  v1.0.0      ║")
     logger.info("╚══════════════════════════════════════════════╝")
