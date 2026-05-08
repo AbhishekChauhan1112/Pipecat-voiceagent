@@ -1,13 +1,48 @@
 import asyncio
 import logging
 import traceback
+import fractions
 
-from aiortc import RTCPeerConnection, RTCSessionDescription, AudioStreamTrack
+from aiortc import RTCPeerConnection, RTCSessionDescription, AudioStreamTrack, MediaStreamTrack
 from aiortc.sdp import candidate_from_sdp
 import av
+from av import AudioFrame
 import math
 import numpy as np
 from fractions import Fraction
+
+
+class SilentAudioTrack(MediaStreamTrack):
+    """Sends silent PCM frames so aiortc negotiates sendrecv instead of recvonly."""
+
+    kind = "audio"
+
+    def __init__(self):
+        super().__init__()
+        self.sample_rate = 48000
+        self.samples_per_frame = 960  # 20 ms @ 48 kHz
+        self.timestamp = 0
+
+    async def recv(self):
+        await asyncio.sleep(0.02)
+
+        frame = AudioFrame(
+            format="s16",
+            layout="mono",
+            samples=self.samples_per_frame,
+        )
+
+        frame.pts = self.timestamp
+        frame.sample_rate = self.sample_rate
+        frame.time_base = fractions.Fraction(1, self.sample_rate)
+
+        self.timestamp += self.samples_per_frame
+
+        for p in frame.planes:
+            p.update(b"\x00" * p.buffer_size)
+
+        return frame
+
 
 class ToneAudioTrack(AudioStreamTrack):
     """Generates a stereo 440 Hz sine-wave at 48 kHz with a pure monotonic pts.
@@ -267,9 +302,10 @@ class RTCTransport:
 
         # ── Step 4: addTrack ───────────────────────────────────────────────
         print("[WEBRTC] adding outbound track")
-        # self.outbound_track = ToneAudioTrack()
-        # self.pc.addTrack(self.outbound_track)
-        print("[WEBRTC] outbound track skipped (ToneAudioTrack commented out)")
+        self.outbound_track = SilentAudioTrack()
+        self.pc.addTrack(self.outbound_track)
+        print("[WEBRTC] SilentAudioTrack added")
+
 
         for sender in self.pc.getSenders():
             print("[SENDER]", sender, "track=", sender.track)
