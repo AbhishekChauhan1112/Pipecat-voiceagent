@@ -124,6 +124,7 @@ class SipBridge:
             self._accepted_event.set()
             logger.warning("[SIP_ACCEPTED] call_id=%s", self.call_state.call_id)
             await self.orchestrator.room_controller.on_sip_call_accepted(self.call_state)
+            await self.orchestrator.room_controller.on_sip_media_active(self.call_state)
             return
 
         if event == "media":
