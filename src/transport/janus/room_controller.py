@@ -48,13 +48,19 @@ class RoomController:
             self.state.sip_present = True
 
         if self._on_pipecat_connect:
-            logger.warning("[PIPECAT_CONNECT] room=%s", self.state.room_id)
+            logger.warning("[PIPECAT_CONNECT] scheduling as background task room=%s", self.state.room_id)
+            asyncio.create_task(self._run_connect())
+
+    async def _run_connect(self) -> None:
+        try:
             logger.warning("[PIPECAT_CONNECT_AWAIT] begin")
             await self._on_pipecat_connect()
             logger.warning("[PIPECAT_CONNECT_AWAIT] done")
             async with self._lock:
                 self.state.pipecat_present = True
                 logger.warning("[ROOM_ACTIVE] room=%s", self.state.room_id)
+        except Exception as exc:
+            logger.error("[PIPECAT_CONNECT_FAILED] %s", exc, exc_info=True)
 
     async def on_sip_call_hangup(self, call: SipCallState) -> None:
         logger.warning("[ROOM_EVENT] on_sip_call_hangup call_id=%s", call.call_id)
