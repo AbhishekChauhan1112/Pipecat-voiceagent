@@ -82,7 +82,10 @@ class JanusTransportManager:
         AudioBridge — aiortc will join it in connect_pipecat via join_room(rtc=...).
         """
         print("[SIP] incomingcall received call_id=", call_id)
-        print("[SIP] offer SDP (ignored by aiortc):", jsep.get("sdp", "")[:120], "...")
+        # Log SIP offer for debugging ONLY — never passed to aiortc or sent back to Janus
+        offer_sdp_preview = jsep.get("sdp", "")[:200]
+        print("[SIP] offer SDP (logged only, NOT consumed by aiortc):", offer_sdp_preview, "...")
+        logger.warning("[SIP_OFFER_PREVIEW] call_id=%s sdp_start=%s", call_id, offer_sdp_preview)
 
         sip_handle = self.orchestrator.sip_bridge.handle_id
         if not sip_handle:
@@ -90,16 +93,21 @@ class JanusTransportManager:
             print("[FATAL] sip_bridge.handle_id is None")
             return
 
-        print("[SIP] sending accept (fire_and_forget, no SDP consumed by aiortc)")
+        # Send bare accept — NO jsep, NO SDP, NO ICE candidates
+        # Passing SIP SDP back here causes Janus "Error setting ICE locally"
+        print("[SIP_ACCEPT_NO_JSEP] sending bare accept without any JSEP")
+        logger.warning("[SIP_ACCEPT_NO_JSEP] call_id=%s sip_handle=%s", call_id, sip_handle)
         try:
             response = await self.orchestrator.send_plugin_message(
                 sip_handle,
                 body={"request": "accept"},
-                jsep=jsep,          # echo SIP plugin's own JSEP back so it can answer
+                # jsep intentionally omitted — SIP plugin handles its own media
                 fire_and_forget=True,
             )
-            print("[SIP] accept sent:", response)
+            print("[SIP] accept sent (no JSEP):", response)
             logger.warning("[SIP] accept fire_and_forget response=%s", response)
+            print("[AUDIOBRIDGE_NEGOTIATION_START] SIP accepted; AudioBridge WebRTC will begin in connect_pipecat")
+            logger.warning("[AUDIOBRIDGE_NEGOTIATION_START] call_id=%s", call_id)
         except Exception as exc:
             logger.error("[SIP] accept failed: %s", exc)
             print("[FATAL_EXCEPTION]", exc)
