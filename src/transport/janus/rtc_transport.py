@@ -224,37 +224,66 @@ class RTCTransport:
 
     async def create_audio_only_answer_for_offer(self, sdp: str) -> dict:
         """Accept an incoming offer and create SDP answer with audio transceiver policy."""
+        import traceback as _tb
         if not self.pc:
             raise RuntimeError("PeerConnection not initialized")
 
+        # ── PC / ICE / signaling state event hooks ─────────────────────────
+        @self.pc.on("connectionstatechange")
+        async def on_connectionstatechange():
+            print("[PC_STATE]", self.pc.connectionState)
+            logger.warning("[PC_STATE] connectionState=%s", self.pc.connectionState)
+
+        @self.pc.on("iceconnectionstatechange")
+        async def on_iceconnectionstatechange():
+            print("[ICE_STATE]", self.pc.iceConnectionState)
+            logger.warning("[ICE_STATE] iceConnectionState=%s", self.pc.iceConnectionState)
+
+        @self.pc.on("signalingstatechange")
+        async def on_signalingstatechange():
+            print("[SIGNALING_STATE]", self.pc.signalingState)
+            logger.warning("[SIGNALING_STATE] signalingState=%s", self.pc.signalingState)
+
+        # ── Step 3: setRemoteDescription ───────────────────────────────────
         logger.warning("[SDP_REMOTE_OFFER] %s", sdp)
         offer = RTCSessionDescription(sdp=sdp, type="offer")
-        logger.info("Setting remote description (offer) for SIP incoming call...")
-        print("[WEBRTC] setRemoteDescription START")
-        await self.pc.setRemoteDescription(offer)
-        print("[WEBRTC] setRemoteDescription DONE")
+        print("[WEBRTC] setting remote description")
+        try:
+            await self.pc.setRemoteDescription(offer)
+        except Exception as e:
+            print("[FATAL_EXCEPTION] setRemoteDescription failed:", e)
+            _tb.print_exc()
+            raise
+        print("[WEBRTC] remote description set")
 
+        # ── Step 4: addTrack ───────────────────────────────────────────────
+        print("[WEBRTC] adding outbound track")
         self.outbound_track = ToneAudioTrack()
         self.pc.addTrack(self.outbound_track)
-        print(
-            "[WEBRTC] persistent outbound track stored",
-            self.outbound_track
-        )
+        print("[WEBRTC] outbound track added", self.outbound_track)
 
         for sender in self.pc.getSenders():
-            print(
-                "[SENDER]",
-                sender,
-                "track=",
-                sender.track,
-            )
+            print("[SENDER]", sender, "track=", sender.track)
 
-        print("[WEBRTC] createAnswer START")
-        answer = await self.pc.createAnswer()
-        print("[WEBRTC] createAnswer DONE")
-        print("[WEBRTC] setLocalDescription START")
-        await self.pc.setLocalDescription(answer)
-        print("[WEBRTC] setLocalDescription DONE")
+        # ── Step 5: createAnswer ───────────────────────────────────────────
+        print("[WEBRTC] creating answer")
+        try:
+            answer = await self.pc.createAnswer()
+        except Exception as e:
+            print("[FATAL_EXCEPTION] createAnswer failed:", e)
+            _tb.print_exc()
+            raise
+        print("[WEBRTC] answer created")
+
+        # ── Step 6: setLocalDescription ────────────────────────────────────
+        print("[WEBRTC] setting local description")
+        try:
+            await self.pc.setLocalDescription(answer)
+        except Exception as e:
+            print("[FATAL_EXCEPTION] setLocalDescription failed:", e)
+            _tb.print_exc()
+            raise
+        print("[WEBRTC] local description set")
 
         for transceiver in self.pc.getTransceivers():
             print(
