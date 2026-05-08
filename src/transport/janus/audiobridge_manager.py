@@ -29,7 +29,8 @@ class AudioBridgeManager:
         logger.warning("[AUDIOBRIDGE_HANDLER_REGISTERED] handle_id=%s", self.handle_id)
         return self.handle_id
 
-    async def join_room(self, *, display: str) -> None:
+    async def join_room(self, *, display: str, rtc=None) -> None:
+        """Join the AudioBridge room, performing full WebRTC negotiation if rtc is provided."""
         if not self.handle_id:
             raise RuntimeError("AudioBridge handle not attached")
 
@@ -38,16 +39,30 @@ class AudioBridgeManager:
             "room": config.ROOM_ID,
             "pin": config.ROOM_PIN,
             "display": display,
-            "group": "default",
         }
+        if config.ROOM_PIN:
+            payload_body["pin"] = config.ROOM_PIN
+
+        self._rtc = rtc  # stash for use in _on_plugin_event
         self._joined_event.clear()
 
+        # If rtc provided, create an offer now and include it in the join
+        jsep_offer = None
+        if rtc is not None:
+            print("[AUDIOBRIDGE_JOIN] creating WebRTC offer for AudioBridge")
+            jsep_offer = await rtc.create_offer()
+            print("[AUDIOBRIDGE_JOIN] offer created:", jsep_offer.get("type"))
+
         logger.warning("[AUDIOBRIDGE_JOIN] sending join request body=%s", json.dumps(payload_body, indent=2))
-        response = await self.orchestrator.session.send_plugin_message(self.handle_id, body=payload_body)
+        response = await self.orchestrator.session.send_plugin_message(
+            self.handle_id,
+            body=payload_body,
+            jsep=jsep_offer,
+        )
         logger.warning("[AUDIOBRIDGE_JOIN_RESPONSE] %s", json.dumps(response, indent=2))
 
         logger.warning("[AUDIOBRIDGE_JOIN_WAIT] waiting for async joined event")
-        await asyncio.wait_for(self._joined_event.wait(), timeout=10.0)
+        await asyncio.wait_for(self._joined_event.wait(), timeout=15.0)
         logger.warning("[AUDIOBRIDGE_JOINED] room=%s participant=%s", config.ROOM_ID, self.participant_id)
 
     async def leave_room(self) -> None:
@@ -97,8 +112,30 @@ class AudioBridgeManager:
 
         if event_type == "joined":
             self.participant_id = data.get("id")
+            jsep = message.get("jsep")
+            logger.warning("[AUDIOBRIDGE_JOINED] participant_id=%s jsep_type=%s", self.participant_id, jsep.get("type") if jsep else None)
+
+            if jsep and jsep.get("type") == "offer" and self._rtc is not None:
+                print("[AUDIOBRIDGE_JOIN] AudioBridge sent JSEP offer — performing WebRTC answer")
+                try:
+                    answer_jsep = await self._rtc.join_audiobridge(jsep["sdp"])
+                    print("[AUDIOBRIDGE_JOIN] answer created, sending configure")
+                    configure_body = {"request": "configure", "muted": False}
+                    configure_resp = await self.orchestrator.session.send_plugin_message(
+                        self.handle_id,
+                        body=configure_body,
+                        jsep=answer_jsep,
+                    )
+                    logger.warning("[AUDIOBRIDGE_CONFIGURE_RESPONSE] %s", json.dumps(configure_resp, indent=2))
+                    print("[AUDIOBRIDGE_JOIN] configure sent")
+                except Exception as e:
+                    import traceback
+                    print("[AUDIOBRIDGE_JOIN_ERROR]", repr(e))
+                    traceback.print_exc()
+            elif jsep:
+                logger.warning("[AUDIOBRIDGE_JOIN] JSEP present but rtc not available — skipping WebRTC negotiation")
+
             self._joined_event.set()
-            logger.warning("[AUDIOBRIDGE_JOINED] participant_id=%s", self.participant_id)
             return
 
         if event_type == "left":

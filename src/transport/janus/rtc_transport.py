@@ -248,11 +248,16 @@ class RTCTransport:
         answer = RTCSessionDescription(sdp=sdp, type=type)
         await self.pc.setRemoteDescription(answer)
 
-    async def create_audio_only_answer_for_offer(self, sdp: str) -> dict:
-        """Accept an incoming offer and create SDP answer with audio transceiver policy."""
+    async def join_audiobridge(self, offer_sdp: str) -> dict:
+        """Consume an AudioBridge JSEP offer and return a WebRTC answer.
+
+        This is the ONLY place aiortc consumes an SDP offer.
+        The SIP plugin SDP is NEVER consumed here — SIP plugin is call-control only.
+        AudioBridge acts as the actual WebRTC peer that forwards mixed room audio.
+        """
         import traceback as _tb
 
-        # ── Tear down any existing PC so each call starts fresh ────────────
+        # Close any existing PC so each call starts fresh
         if self.pc is not None:
             try:
                 await self.pc.close()
@@ -262,9 +267,9 @@ class RTCTransport:
 
         self.pc = RTCPeerConnection()
         self._setup_events()
-        print("[WEBRTC] fresh RTCPeerConnection created for incoming call")
+        print("[AUDIOBRIDGE_PC] fresh RTCPeerConnection created")
 
-        # ── PC / ICE / signaling state event hooks ─────────────────────────
+        # Per-call state event hooks
         @self.pc.on("connectionstatechange")
         async def on_connectionstatechange():
             print("[PC_STATE]", self.pc.connectionState)
@@ -280,72 +285,37 @@ class RTCTransport:
             print("[SIGNALING_STATE]", self.pc.signalingState)
             logger.warning("[SIGNALING_STATE] signalingState=%s", self.pc.signalingState)
 
-        # ── Step 3: setRemoteDescription ───────────────────────────────────
-        logger.warning("[SDP_REMOTE_OFFER] %s", sdp)
-        offer = RTCSessionDescription(sdp=sdp, type="offer")
-        print("[WEBRTC] setting remote description")
+        # Step 1: consume AudioBridge offer
+        logger.warning("[AUDIOBRIDGE_OFFER] %s", offer_sdp)
+        offer = RTCSessionDescription(sdp=offer_sdp, type="offer")
+        print("[AUDIOBRIDGE_PC] setting remote description (AudioBridge offer)")
         try:
             await self.pc.setRemoteDescription(offer)
         except Exception as e:
             print("[FATAL_EXCEPTION] setRemoteDescription failed:", e)
             _tb.print_exc()
             raise
-        print("[WEBRTC] remote description set")
+        print("[AUDIOBRIDGE_PC] remote description set")
 
-        # ── Step 4: addTrack ───────────────────────────────────────────────
-        print("[WEBRTC] adding outbound track")
-        self.outbound_track = SilentAudioTrack()
-        self.pc.addTrack(self.outbound_track)
-        print("[WEBRTC] SilentAudioTrack added")
-
-
-        for sender in self.pc.getSenders():
-            print("[SENDER]", sender, "track=", sender.track)
-
-        # ── Step 4b: set codec preferences (opus + telephone-event) ───────────
-        # Forces the answer SDP to include telephone-event/48000 PT 101 alongside
-        # opus PT 102, which Janus SIP + FreeSWITCH require for correct RTP flow.
-        try:
-            from aiortc.rtcrtpsender import RTCRtpSender
-
-            audio_transceiver = next(
-                (t for t in self.pc.getTransceivers() if t.kind == "audio"),
-                None,
-            )
-
-            if audio_transceiver:
-                capabilities = RTCRtpSender.getCapabilities("audio")
-                preferred_codecs = [
-                    c for c in capabilities.codecs
-                    if c.mimeType.lower() in ("audio/opus", "audio/telephone-event")
-                ]
-                print("[CODECS]", preferred_codecs)
-                audio_transceiver.setCodecPreferences(preferred_codecs)
-                print("[CODECS] preferences applied to audio transceiver")
-            else:
-                print("[CODECS] WARNING: no audio transceiver found, skipping codec preferences")
-        except Exception as e:
-            print("[CODECS_ERROR]", repr(e))
-
-        # ── Step 5: createAnswer ───────────────────────────────────────────
-        print("[WEBRTC] creating answer")
+        # Step 2: createAnswer (recvonly — no outbound track needed for AudioBridge)
+        print("[AUDIOBRIDGE_PC] creating answer")
         try:
             answer = await self.pc.createAnswer()
         except Exception as e:
             print("[FATAL_EXCEPTION] createAnswer failed:", e)
             _tb.print_exc()
             raise
-        print("[WEBRTC] answer created")
+        print("[AUDIOBRIDGE_PC] answer created")
 
-        # ── Step 6: setLocalDescription ────────────────────────────────────
-        print("[WEBRTC] setting local description")
+        # Step 3: setLocalDescription
+        print("[AUDIOBRIDGE_PC] setting local description")
         try:
             await self.pc.setLocalDescription(answer)
         except Exception as e:
             print("[FATAL_EXCEPTION] setLocalDescription failed:", e)
             _tb.print_exc()
             raise
-        print("[WEBRTC] local description set")
+        print("[AUDIOBRIDGE_PC] local description set")
 
         for transceiver in self.pc.getTransceivers():
             print(
@@ -353,34 +323,22 @@ class RTCTransport:
                 "kind=", transceiver.kind,
                 "direction=", transceiver.direction,
                 "currentDirection=", transceiver.currentDirection,
-                "sender_track=", transceiver.sender.track,
-                "receiver_track=", transceiver.receiver.track,
             )
 
+        # Step 4: wait for ICE gathering
         try:
-            await asyncio.wait_for(self._wait_for_ice_gathering_complete(), timeout=2.0)
+            await asyncio.wait_for(self._wait_for_ice_gathering_complete(), timeout=5.0)
         except asyncio.TimeoutError:
-            logger.warning("Timeout waiting for ICE gathering while creating SIP answer")
-
-        print("[WEBRTC] LOCAL SDP START")
-        print(self.pc.localDescription.sdp)
-        print("[WEBRTC] LOCAL SDP END")
-        for t in self.pc.getTransceivers():
-            print(
-                f"[TRANSCEIVER] "
-                f"kind={t.kind} "
-                f"direction={t.direction} "
-                f"currentDirection={t.currentDirection}"
-            )
-        logger.info("Created local SDP answer for SIP incoming call")
+            logger.warning("[AUDIOBRIDGE_PC] ICE gathering timeout — proceeding")
 
         sdp = self.pc.localDescription.sdp
-
-        print("[WEBRTC] LOCAL SDP (unpatched) START")
+        print("[AUDIOBRIDGE_PC] LOCAL SDP START")
         print(sdp)
-        print("[WEBRTC] LOCAL SDP (unpatched) END")
+        print("[AUDIOBRIDGE_PC] LOCAL SDP END")
 
         return {"type": self.pc.localDescription.type, "sdp": sdp}
+
+
 
     async def add_ice_candidate(self, candidate_info: dict):
         """Add a trickle ICE candidate received from Janus."""

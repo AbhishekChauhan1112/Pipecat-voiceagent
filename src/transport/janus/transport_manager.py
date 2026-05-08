@@ -62,85 +62,47 @@ class JanusTransportManager:
             if self._call_active:
                 return
 
-            logger.info("[CONNECTING] joining Janus room")
+            logger.info("[CONNECTING] joining Janus AudioBridge room as WebRTC participant")
             self.rtc.initialize()
 
-            # Pipecat joins AudioBridge only when SIP call is active.
-            await self.orchestrator.audiobridge.join_room(display="pipecat-voiceagent")
+            # aiortc creates an offer, joins AudioBridge, does full WebRTC negotiation
+            await self.orchestrator.audiobridge.join_room(
+                display="pipecat-voiceagent",
+                rtc=self.rtc,
+            )
             self._call_active = True
 
             await self._start_pipeline()
             logger.info("[CONNECTED] media active")
 
     async def _handle_incoming_sip_offer(self, call_id: str | None, jsep: dict, raw_message: dict) -> None:
-        """Handle incoming SIP JSEP offer, generate answer, and accept call."""
-        import traceback
+        """Accept the incoming SIP call. SDP is NOT consumed here.
+
+        The SIP plugin is call-control only. The actual WebRTC peer is the
+        AudioBridge — aiortc will join it in connect_pipecat via join_room(rtc=...).
+        """
+        print("[SIP] incomingcall received call_id=", call_id)
+        print("[SIP] offer SDP (ignored by aiortc):", jsep.get("sdp", "")[:120], "...")
+
+        sip_handle = self.orchestrator.sip_bridge.handle_id
+        if not sip_handle:
+            logger.error("[SIP] handle missing — cannot accept call")
+            print("[FATAL] sip_bridge.handle_id is None")
+            return
+
+        print("[SIP] sending accept (fire_and_forget, no SDP consumed by aiortc)")
         try:
-            # ── Step 0: event arrived ──────────────────────────────────────
-            print("[SIP] incomingcall received")
-            print("[SIP] event=", raw_message)
-            print("[SDP_OFFER]", jsep)
-
-            async with self._state_lock:
-                logger.warning("[WEBRTC] incoming SIP offer received call_id=%s", call_id)
-                try:
-                    # ── Step 1: (re)create PeerConnection ─────────────────
-                    print("[WEBRTC] creating RTCPeerConnection")
-                    self.rtc.initialize()
-                    print("[WEBRTC] pc created")
-                    logger.warning("[WEBRTC] RTCPeerConnection initialized")
-
-                    # ── Step 2: validate SDP ───────────────────────────────
-                    offer_sdp = jsep.get("sdp")
-                    if not offer_sdp:
-                        logger.error("[WEBRTC] missing SDP offer call_id=%s", call_id)
-                        print("[FATAL] jsep has no sdp field — aborting")
-                        return
-
-                    logger.warning("[WEBRTC] REMOTE SDP OFFER START")
-                    print("[WEBRTC] REMOTE SDP START")
-                    print(offer_sdp)
-                    print("[WEBRTC] REMOTE SDP END")
-                    logger.warning("%s", offer_sdp)
-                    logger.warning("[WEBRTC] REMOTE SDP OFFER END")
-
-                    # ── Step 3–6: setRemoteDescription / addTrack /
-                    #              createAnswer / setLocalDescription
-                    #    (all instrumented inside rtc_transport.py)
-                    print("[WEBRTC] calling create_audio_only_answer_for_offer")
-                    answer_jsep = await self.rtc.create_audio_only_answer_for_offer(offer_sdp)
-                    print("[WEBRTC] create_audio_only_answer_for_offer DONE")
-                    logger.warning("[WEBRTC] SDP answer created call_id=%s", call_id)
-
-                    # ── Step 7: look up SIP handle ────────────────────────
-                    sip_handle = self.orchestrator.sip_bridge.handle_id
-                    if not sip_handle:
-                        logger.error("[WEBRTC] SIP handle missing call_id=%s", call_id)
-                        print("[FATAL] sip_bridge.handle_id is None — cannot send accept")
-                        return
-
-                    print("[SIP] sip_handle=", sip_handle)
-
-                    # ── Step 8: send accept ───────────────────────────────
-                    body = {"request": "accept"}
-                    logger.warning("[WEBRTC] sending SIP accept call_id=%s", call_id)
-                    print("[SIP] sending accept")
-                    response = await self.orchestrator.send_plugin_message(
-                        sip_handle,
-                        body=body,
-                        jsep=answer_jsep,
-                        fire_and_forget=True,   # Janus sends async 'ack'; no synchronous reply
-                    )
-                    print("[SIP] accept sent — fire_and_forget response:", response)
-                    logger.warning("[WEBRTC] SIP accept response call_id=%s response=%s", call_id, response)
-
-                except Exception as exc:
-                    logger.error("[WEBRTC] incoming offer handling failed call_id=%s error=%s", call_id, exc)
-                    print("[FATAL_EXCEPTION]", exc)
-                    traceback.print_exc()
-
-        except Exception as e:
-            print("[FATAL_EXCEPTION]", e)
+            response = await self.orchestrator.send_plugin_message(
+                sip_handle,
+                body={"request": "accept"},
+                jsep=jsep,          # echo SIP plugin's own JSEP back so it can answer
+                fire_and_forget=True,
+            )
+            print("[SIP] accept sent:", response)
+            logger.warning("[SIP] accept fire_and_forget response=%s", response)
+        except Exception as exc:
+            logger.error("[SIP] accept failed: %s", exc)
+            print("[FATAL_EXCEPTION]", exc)
             traceback.print_exc()
 
     async def disconnect_pipecat(self) -> None:
