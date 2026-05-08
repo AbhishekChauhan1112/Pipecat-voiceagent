@@ -268,9 +268,9 @@ class RTCTransport:
 
         # ── Step 4: addTrack ───────────────────────────────────────────────
         print("[WEBRTC] adding outbound track")
-        self.outbound_track = ToneAudioTrack()
-        self.pc.addTrack(self.outbound_track)
-        print("[WEBRTC] outbound track added", self.outbound_track)
+        # self.outbound_track = ToneAudioTrack()
+        # self.pc.addTrack(self.outbound_track)
+        print("[WEBRTC] outbound track skipped (ToneAudioTrack commented out)")
 
         for sender in self.pc.getSenders():
             print("[SENDER]", sender, "track=", sender.track)
