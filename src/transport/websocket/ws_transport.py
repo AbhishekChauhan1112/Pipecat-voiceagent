@@ -66,8 +66,7 @@ class WebSocketTransportManager:
             self._handle_connection,
             WS_HOST,
             WS_PORT,
-            ping_interval=20,
-            ping_timeout=60,
+            ping_interval=None,  # mod_audio_stream closes connection on WebSocket pings
         )
         logger.info("[WS] Listening on ws://%s:%d", WS_HOST, WS_PORT)
         await self._stop_event.wait()
