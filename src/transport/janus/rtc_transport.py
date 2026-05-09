@@ -248,6 +248,78 @@ class RTCTransport:
         answer = RTCSessionDescription(sdp=sdp, type=type)
         await self.pc.setRemoteDescription(answer)
 
+    async def generate_sip_answer(self, sip_offer_sdp: str) -> dict:
+        """Generate a valid SDP answer for the Janus SIP plugin accept request.
+
+        Uses a SEPARATE temporary RTCPeerConnection that is NOT self.pc.
+        self.pc is exclusively reserved for the AudioBridge WebRTC peer.
+
+        The temporary PC is closed after extracting the answer — Janus SIP
+        plugin handles the actual SIP-side WebRTC transport internally.
+        We only need to produce a valid answer SDP for signaling.
+        """
+        import traceback as _tb
+
+        print("[AIORTC_CREATE_ANSWER] creating temporary SIP signaling PC")
+        logger.warning("[AIORTC_CREATE_ANSWER] starting SIP offer/answer negotiation")
+
+        sip_pc = RTCPeerConnection()
+        try:
+            # Consume SIP offer in the temporary PC only
+            sip_offer = RTCSessionDescription(sdp=sip_offer_sdp, type="offer")
+            print("[AIORTC_CREATE_ANSWER] setRemoteDescription (SIP offer)")
+            await sip_pc.setRemoteDescription(sip_offer)
+
+            # Generate answer
+            print("[AIORTC_CREATE_ANSWER] createAnswer")
+            answer = await sip_pc.createAnswer()
+
+            print("[AIORTC_CREATE_ANSWER] setLocalDescription")
+            await sip_pc.setLocalDescription(answer)
+
+            # Wait for ICE gathering (short timeout — SIP plugin needs fast response)
+            try:
+                deadline = 3.0
+
+                async def _wait():
+                    while sip_pc.iceGatheringState != "complete":
+                        await asyncio.sleep(0.05)
+
+                await asyncio.wait_for(_wait(), timeout=deadline)
+            except asyncio.TimeoutError:
+                logger.warning("[AIORTC_CREATE_ANSWER] ICE gathering timeout — proceeding")
+
+            local = sip_pc.localDescription
+            logger.warning(
+                "[AIORTC_LOCAL_DESCRIPTION_READY] type=%s sdp_start=%s",
+                local.type,
+                local.sdp[:300],
+            )
+            print("[AIORTC_LOCAL_DESCRIPTION_READY] type=", local.type)
+            print("[AIORTC_LOCAL_DESCRIPTION_READY] sdp (first 300):", local.sdp[:300])
+
+            # Defensive check
+            if local.type != "answer":
+                raise RuntimeError(
+                    f"[AIORTC_CREATE_ANSWER] expected type='answer' got '{local.type}'"
+                )
+
+            return {"type": local.type, "sdp": local.sdp}
+
+        except Exception as e:
+            print("[AIORTC_CREATE_ANSWER_ERROR]", repr(e))
+            _tb.print_exc()
+            raise
+        finally:
+            # Close temp PC — AudioBridge PC (self.pc) is unaffected
+            try:
+                await sip_pc.close()
+                print("[AIORTC_CREATE_ANSWER] temporary SIP PC closed")
+            except Exception:
+                pass
+
+
+
     async def join_audiobridge(self, offer_sdp: str) -> dict:
         """Consume an AudioBridge JSEP offer and return a WebRTC answer.
 

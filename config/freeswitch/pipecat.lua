@@ -35,10 +35,10 @@ log("INFO", "session started: " .. uuid)
 
 -- Subscribe to custom events fired by mod_audio_stream on this channel.
 -- "CUSTOM" catches all Event-Subclass variants we need.
-session:setHangupHook(function()
+function onHangup(s, status, arg)
     log("INFO", "hangup hook fired for " .. uuid)
-    return "true"
-end)
+end
+session:setHangupHook("onHangup")
 
 -- Start audio streaming to the Pipecat WebSocket server
 local api = freeswitch.API()

@@ -82,10 +82,9 @@ class JanusTransportManager:
         AudioBridge — aiortc will join it in connect_pipecat via join_room(rtc=...).
         """
         print("[SIP] incomingcall received call_id=", call_id)
-        # Log SIP offer for debugging ONLY — never passed to aiortc or sent back to Janus
-        offer_sdp_preview = jsep.get("sdp", "")[:200]
-        print("[SIP] offer SDP (logged only, NOT consumed by aiortc):", offer_sdp_preview, "...")
-        logger.warning("[SIP_OFFER_PREVIEW] call_id=%s sdp_start=%s", call_id, offer_sdp_preview)
+        offer_sdp = jsep.get("sdp", "")
+        logger.warning("[SIP_OFFER_PREVIEW] call_id=%s sdp_start=%s", call_id, offer_sdp[:200])
+        print("[SIP] offer SDP (signaling only, NOT consumed by AudioBridge PC):", offer_sdp[:200], "...")
 
         sip_handle = self.orchestrator.sip_bridge.handle_id
         if not sip_handle:
@@ -93,21 +92,44 @@ class JanusTransportManager:
             print("[FATAL] sip_bridge.handle_id is None")
             return
 
-        # Send bare accept — NO jsep, NO SDP, NO ICE candidates
-        # Passing SIP SDP back here causes Janus "Error setting ICE locally"
-        print("[SIP_ACCEPT_NO_JSEP] sending bare accept without any JSEP")
-        logger.warning("[SIP_ACCEPT_NO_JSEP] call_id=%s sip_handle=%s", call_id, sip_handle)
+        if not offer_sdp:
+            logger.error("[SIP] missing SDP in incomingcall jsep call_id=%s", call_id)
+            print("[FATAL] jsep has no sdp field")
+            return
+
         try:
+            # ── Step 1: generate a valid SDP answer via a temporary signaling PC ──
+            # The SIP offer is consumed ONLY in a throw-away RTCPeerConnection.
+            # self.pc (AudioBridge peer) is NEVER touched in this path.
+            print("[AIORTC_CREATE_ANSWER] generating SDP answer from SIP offer")
+            logger.warning("[AIORTC_CREATE_ANSWER] call_id=%s", call_id)
+            answer_jsep = await self.rtc.generate_sip_answer(offer_sdp)
+
+            # ── Step 2: defensive validation ──────────────────────────────────────
+            if answer_jsep.get("type") != "answer":
+                raise RuntimeError(
+                    f"[SIP_ACCEPT] expected answer type, got: {answer_jsep.get('type')}"
+                )
+            logger.warning(
+                "[AIORTC_LOCAL_DESCRIPTION_READY] type=%s sdp_start=%s",
+                answer_jsep["type"],
+                answer_jsep["sdp"][:300],
+            )
+
+            # ── Step 3: send SIP accept with aiortc-generated SDP answer ──────────
+            print("[SIP_ACCEPT_WITH_ANSWER] sending accept with aiortc answer JSEP")
+            logger.warning("[SIP_ACCEPT_WITH_ANSWER] call_id=%s sip_handle=%s", call_id, sip_handle)
             response = await self.orchestrator.send_plugin_message(
                 sip_handle,
                 body={"request": "accept"},
-                # jsep intentionally omitted — SIP plugin handles its own media
+                jsep=answer_jsep,      # aiortc-generated answer, NOT the echoed offer
                 fire_and_forget=True,
             )
-            print("[SIP] accept sent (no JSEP):", response)
+            print("[SIP] accept sent with answer:", response)
             logger.warning("[SIP] accept fire_and_forget response=%s", response)
-            print("[AUDIOBRIDGE_NEGOTIATION_START] SIP accepted; AudioBridge WebRTC will begin in connect_pipecat")
+            print("[AUDIOBRIDGE_NEGOTIATION_START] SIP accepted; AudioBridge WebRTC begins in connect_pipecat")
             logger.warning("[AUDIOBRIDGE_NEGOTIATION_START] call_id=%s", call_id)
+
         except Exception as exc:
             logger.error("[SIP] accept failed: %s", exc)
             print("[FATAL_EXCEPTION]", exc)
