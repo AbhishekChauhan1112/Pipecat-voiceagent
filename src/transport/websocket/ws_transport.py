@@ -127,9 +127,17 @@ class WebSocketTransportManager:
         self, ws: WebSocketServerProtocol, task: PipelineTask
     ) -> None:
         """Receive binary stereo PCM from FreeSWITCH, extract caller (left) channel."""
+        msg_count = 0
+        print("[WS_RX] _receive_audio loop started", flush=True)
         async for message in ws:
+            msg_count += 1
+            if msg_count <= 5 or msg_count % 200 == 0:
+                print(
+                    f"[WS_RX] msg #{msg_count} type={type(message).__name__} "
+                    f"len={len(message)}",
+                    flush=True,
+                )
             if not isinstance(message, bytes):
-                # Text frames are metadata/control; log and skip
                 logger.debug("[WS_RX] text frame: %s", message[:120])
                 continue
 
@@ -143,6 +151,7 @@ class WebSocketTransportManager:
                 sample_rate=SAMPLE_RATE,
             )
             await task.queue_frames([frame])
+        print(f"[WS_RX] _receive_audio loop exited after {msg_count} messages", flush=True)
 
     async def _send_audio(
         self, ws: WebSocketServerProtocol, media_bridge: MediaBridge
