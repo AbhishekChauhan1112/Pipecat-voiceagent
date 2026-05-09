@@ -44,6 +44,7 @@ htmlcov/
 silero_vad.onnx
 *.onnx
 
-# Local Janus transport repo
+# Local repos / reference material
 janusWebrtctransport/
+mod_audio_stream/
 freeswitch.md

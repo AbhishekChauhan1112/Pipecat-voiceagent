@@ -1,12 +1,19 @@
 """
 main.py — Pipecat Telephony Voice Agent entry point.
 
-Starts the Janus WebRTC transport manager which bridges:
-    FreeSWITCH RTP → Janus AudioBridge → aiortc → Pipecat pipeline.
+Supports two transports:
+  --transport websocket  (default)
+      FreeSWITCH mod_audio_stream → WebSocket ws://127.0.0.1:8765 → Pipecat
+      Start with: python main.py --transport websocket
+
+  --transport janus
+      FreeSWITCH → Janus AudioBridge → aiortc → Pipecat
+      Start with: python main.py --transport janus
 
 Usage:
-        python main.py                        # reads .env
-        python main.py --log-level DEBUG      # verbose output for debugging
+        python main.py                              # websocket transport (mod_audio_stream)
+        python main.py --transport janus            # Janus/aiortc transport
+        python main.py --log-level DEBUG            # verbose output
 """
 
 import argparse
@@ -17,13 +24,17 @@ from loguru import logger
 
 from src.config import get_config
 from src.logging_utils import setup_logging
-from src.transport.janus.config import ROOM_ID
-from src.transport.janus.transport_manager import run_manager
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Pipecat Telephony Voice Agent (Janus + Deepgram + Groq + ElevenLabs)"
+        description="Pipecat Telephony Voice Agent"
+    )
+    p.add_argument(
+        "--transport",
+        choices=["websocket", "janus"],
+        default="websocket",
+        help="websocket = mod_audio_stream (default); janus = Janus AudioBridge/aiortc",
     )
     p.add_argument(
         "--log-level",
@@ -49,12 +60,6 @@ def main() -> None:
     # ── Logging ───────────────────────────────────────────────────────────────
     setup_logging(log_level=log_level, log_file=config.log_file)
 
-    # ── aiortc / aioice verbose debug logging ─────────────────────────────────
-    import logging as _stdlib_logging
-    _stdlib_logging.basicConfig(level=_stdlib_logging.DEBUG)
-    _stdlib_logging.getLogger("aiortc").setLevel(_stdlib_logging.DEBUG)
-    _stdlib_logging.getLogger("aioice").setLevel(_stdlib_logging.DEBUG)
-
     logger.info("╔══════════════════════════════════════════════╗")
     logger.info("║   Pipecat Telephony Voice Agent  v1.0.0      ║")
     logger.info("╚══════════════════════════════════════════════╝")
@@ -63,14 +68,30 @@ def main() -> None:
     logger.info(f"  LLM          : Groq {config.groq_model}")
     logger.info(f"  TTS          : ElevenLabs {config.elevenlabs_model}")
     logger.info(f"  Sample rate  : {config.sample_rate} Hz")
-    logger.info("  Transport    : Janus AudioBridge via aiortc")
-    logger.info(f"  Room         : {ROOM_ID}")
-    logger.info("")
-    logger.info("  Waiting for Linphone to call via FreeSWITCH…")
+    logger.info(f"  Transport    : {args.transport}")
 
     # ── Run ───────────────────────────────────────────────────────────────────
     try:
-        asyncio.run(run_manager(config))
+        if args.transport == "websocket":
+            from src.transport.websocket.ws_transport import run_ws_manager
+            logger.info("  Listening on : ws://0.0.0.0:8765")
+            logger.info("")
+            logger.info("  Waiting for FreeSWITCH mod_audio_stream connection…")
+            asyncio.run(run_ws_manager(config))
+
+        else:
+            import logging as _stdlib_logging
+            _stdlib_logging.basicConfig(level=_stdlib_logging.DEBUG)
+            _stdlib_logging.getLogger("aiortc").setLevel(_stdlib_logging.DEBUG)
+            _stdlib_logging.getLogger("aioice").setLevel(_stdlib_logging.DEBUG)
+
+            from src.transport.janus.config import ROOM_ID
+            from src.transport.janus.transport_manager import run_manager
+            logger.info(f"  Room         : {ROOM_ID}")
+            logger.info("")
+            logger.info("  Waiting for Linphone to call via FreeSWITCH…")
+            asyncio.run(run_manager(config))
+
     except KeyboardInterrupt:
         logger.info("Service stopped.")
 
